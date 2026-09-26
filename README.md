@@ -6,6 +6,6 @@ The site is contained in `index.html`, including its people profiles and embedde
 
 Open `index.html` in a browser, or serve this folder with a local static server, to review changes. Some external services require internet access. Saved planning edits are browser-local; the repository does not synchronize those edits between people.
 
-Repository access does not grant Vercel access. The existing Vercel project is `atlas-hackathon-planner` in `alexhutchinson-3563s-projects`. Review a preview before deploying production changes. This repository has not been connected to automatic Vercel deployments.
+Repository access does not grant Vercel access. The existing Vercel project is `atlas-hackathon-planner` in `alexhutchinson-3563s-projects`. Review a preview before deploying production changes. This repository is connected to the existing Vercel project. Pushes to `main` trigger production deployments at the live URL. Push changes to a separate branch to receive a preview, review it, then merge into `main` to publish. Commit authors must satisfy the Vercel team access requirements.
 
 Do not commit environment files, access tokens, or the `.vercel` directory. The HTML includes contact information; keep the repository private.
