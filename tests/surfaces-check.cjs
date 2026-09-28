@@ -108,12 +108,31 @@ const base = process.env.ATLAS_URL || "http://127.0.0.1:8765/";
     await page.waitForFunction(() => AtlasSurfaces.state().paused);
     await page.locator('[data-view="people"]').click();
     await page.waitForFunction(() => AtlasSurfaces.state().paused);
+    assert.equal(
+      await page
+        .locator(".depth-spin")
+        .first()
+        .evaluate((el) => getComputedStyle(el).animationPlayState),
+      "paused",
+      "shared pause stops distributed CSS sculptures",
+    );
+    assert.equal(
+      await page.locator('.depth-mark:not([aria-hidden="true"])').count(),
+      0,
+    );
     await page.locator("[data-profile]").first().click();
     assert(await page.locator("#personDialog").evaluate((el) => el.open));
     await page.keyboard.press("Escape");
     await page.locator("[data-motion-toggle]").click();
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.waitForFunction(() => AtlasSurfaces.state().paused);
+    assert.equal(
+      await page
+        .locator(".depth-spin")
+        .first()
+        .evaluate((el) => getComputedStyle(el).animationName),
+      "none",
+    );
     assert.deepEqual(errors, []);
     console.log(
       "PASS: untouched hero scope, utility layout, task edits, all main pages at four viewport sizes, profile dialog and shared motion preference.",

@@ -967,3 +967,321 @@ body:has(.planning-surface) {
     height: 100px;
   }
 }
+/* Raised working surfaces use a visible bevel and stacked shadow to read as solid glass. */
+.atlas-surface [data-depth-card] {
+  position: relative;
+  box-shadow:
+    inset 0 1px 0 #e0f3ff47,
+    inset 1px 0 0 #b0d6ff15,
+    inset 0 -2px 0 #031022aa,
+    0 5px 0 -1px #0b233c,
+    0 6px 0 -1px #7bb7f03d,
+    0 18px 35px #0005;
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s;
+}
+.atlas-surface [data-depth-card]:hover {
+  box-shadow:
+    inset 0 1px 0 #f1faff66,
+    inset 1px 0 0 #b0d6ff2b,
+    inset 0 -2px 0 #031022aa,
+    0 8px 0 -1px #0b233c,
+    0 9px 0 -1px #8ec8ff55,
+    0 24px 42px #0006,
+    0 0 28px #65adff16;
+}
+/* Each object has real CSS 3D faces; every face is decorative and ignores hit testing. */
+.depth-mark {
+  position: absolute;
+  right: 17px;
+  top: 16px;
+  width: 42px;
+  height: 42px;
+  perspective: 260px;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+.depth-mark::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  width: 30px;
+  height: 8px;
+  border-radius: 50%;
+  background: #010c2099;
+  filter: blur(4px);
+}
+.depth-spin {
+  position: relative;
+  width: 23px;
+  height: 23px;
+  transform-style: preserve-3d;
+  transform: rotateX(-22deg) rotateY(35deg);
+  animation: depth-turn 18s linear infinite;
+  animation-delay: var(--depth-delay, 0s);
+  animation-play-state: paused;
+}
+.depth-prism i {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #cbecffb3;
+  background: linear-gradient(135deg, #bce8ff80, #3a7db588);
+  box-shadow: inset 0 0 9px #c8f1ff35;
+  backface-visibility: visible;
+}
+.depth-prism i:nth-child(1) {
+  transform: translateZ(11.5px);
+}
+.depth-prism i:nth-child(2) {
+  transform: rotateY(180deg) translateZ(11.5px);
+}
+.depth-prism i:nth-child(3) {
+  transform: rotateY(90deg) translateZ(11.5px);
+}
+.depth-prism i:nth-child(4) {
+  transform: rotateY(-90deg) translateZ(11.5px);
+}
+.depth-prism i:nth-child(5) {
+  transform: rotateX(90deg) translateZ(11.5px);
+}
+.depth-prism i:nth-child(6) {
+  transform: rotateX(-90deg) translateZ(11.5px);
+}
+.depth-orbits .depth-spin {
+  width: 34px;
+  height: 34px;
+  animation-duration: 23s;
+}
+.depth-orbits i {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #acdfffba;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #79c4ff55;
+}
+.depth-orbits i:nth-child(1) {
+  transform: rotateY(65deg);
+}
+.depth-orbits i:nth-child(2) {
+  transform: rotateX(65deg);
+}
+.depth-orbits i:nth-child(3) {
+  transform: rotateX(-45deg) rotateY(35deg);
+}
+.depth-orbits b {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 25%,
+    white,
+    #a9e2ff 25%,
+    #2665b1 70%
+  );
+  box-shadow: 0 0 12px #a1dbff88;
+}
+[data-depth-visible="true"] > .depth-mark .depth-spin,
+[data-depth-visible="true"] > summary > .depth-mark .depth-spin {
+  animation-play-state: running;
+}
+@keyframes depth-turn {
+  from {
+    transform: rotateX(-22deg) rotateY(35deg) rotateZ(0);
+  }
+  to {
+    transform: rotateX(338deg) rotateY(395deg) rotateZ(0);
+  }
+}
+.atlas-surface .metric-card > span:not(.depth-mark) {
+  display: block;
+  padding-right: 42px;
+}
+.atlas-surface .metric-card::after {
+  opacity: 0.35;
+}
+.atlas-surface .person-top {
+  padding-right: 35px;
+}
+.atlas-surface .command-panel .panel-heading {
+  padding-right: 45px;
+}
+.atlas-surface :is(.outcome-card, .chain-card) h4 {
+  padding-right: 48px;
+}
+.atlas-surface .people-metric .depth-mark {
+  width: 28px;
+  height: 28px;
+  right: 9px;
+  top: 9px;
+  scale: 0.58;
+  transform-origin: right top;
+  opacity: 0.7;
+}
+.atlas-surface .people-metric {
+  padding-right: 24px;
+}
+.atlas-surface .dash-metric {
+  padding-right: 45px;
+}
+.atlas-surface .dash-metric .depth-mark {
+  scale: 0.7;
+  transform-origin: right top;
+}
+.atlas-surface .workspace-utilities summary::before {
+  display: none;
+}
+.atlas-surface .workspace-utilities summary > .depth-mark {
+  position: relative;
+  inset: auto;
+  flex: none;
+  margin-right: 5px;
+}
+/* Buttons and navigation are tactile, with a shallow edge and a pressed state. */
+.atlas-surface
+  :is(
+    .btn,
+    .act,
+    .person-bottom button,
+    .direct-links button,
+    .deck-pagination button,
+    .vbtn,
+    .people-tabs button,
+    .deck-tabs button,
+    .transport-category-btn
+  ) {
+  box-shadow:
+    inset 0 1px 0 #e8f5ff2e,
+    0 3px 0 #020e2080,
+    0 5px 12px #0002;
+  transition:
+    translate 0.15s,
+    box-shadow 0.15s,
+    background 0.2s;
+}
+.atlas-surface
+  :is(
+    .btn,
+    .act,
+    .person-bottom button,
+    .direct-links button,
+    .deck-pagination button,
+    .vbtn,
+    .people-tabs button,
+    .deck-tabs button,
+    .transport-category-btn
+  ):active {
+  translate: 0 2px;
+  box-shadow:
+    inset 0 1px 3px #0003,
+    0 1px 0 #020e2080;
+}
+.atlas-surface
+  :is(
+    .sheet,
+    .panel,
+    .register,
+    .dash-section,
+    .outcome-sec,
+    .oi-grp,
+    .transport-map-pane,
+    .transport-pickup-pane
+  ) {
+  box-shadow:
+    inset 0 1px 0 #c9eaff38,
+    0 5px 0 -1px #112b46,
+    0 6px 0 -1px #85c3ff30,
+    0 22px 44px #0004;
+}
+.atlas-surface .person-photo,
+.atlas-surface .person-avatar {
+  box-shadow:
+    inset 0 1px 0 #ffffff55,
+    3px 4px 0 #34618b55,
+    7px 10px 16px #0005;
+}
+/* Large editing panels remain level; perspective is limited to compact cards and utility tiles. */
+@media (hover: hover) and (pointer: fine) {
+  .atlas-surface
+    [data-depth-card]:not(.command-panel):not(:focus-within):hover {
+    transform: perspective(1100px) rotateX(var(--tilt-x, -1deg))
+      rotateY(var(--tilt-y, 1deg)) translateY(-4px);
+  }
+}
+.atlas-surface [data-depth-card]:focus-within {
+  transform: none !important;
+}
+@media (max-width: 700px) {
+  .depth-mark {
+    right: 12px;
+    top: 12px;
+    scale: 0.8;
+    transform-origin: right top;
+  }
+  .atlas-surface .people-metric .depth-mark {
+    display: none;
+  }
+  .atlas-surface .people-metric {
+    padding-right: 13px;
+  }
+  .atlas-surface .metric-card > span:not(.depth-mark) {
+    padding-right: 29px;
+  }
+  .atlas-surface .metric-card:last-child {
+    padding-right: 45px;
+  }
+  .atlas-surface .metric-card:last-child > .depth-mark {
+    top: auto;
+    bottom: 15px;
+    scale: 0.7;
+  }
+  .atlas-surface .command-panel .panel-heading {
+    padding-right: 34px;
+  }
+  .atlas-surface .workspace-utilities summary > .depth-mark {
+    scale: 0.85;
+    transform-origin: center;
+  }
+}
+/* The existing pause preference controls every new rotation, lift and highlight. */
+.motion-paused .atlas-surface .depth-spin {
+  animation-play-state: paused !important;
+}
+.motion-paused .atlas-surface [data-depth-card] {
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .atlas-surface .depth-spin {
+    animation: none !important;
+  }
+  .atlas-surface [data-depth-card] {
+    transform: none !important;
+    transition: none;
+  }
+  .atlas-surface button {
+    transition: none !important;
+    translate: none !important;
+  }
+}
+@media print {
+  .depth-mark {
+    display: none;
+  }
+}
+/* Workstream rows have shallow depth while retaining a stable reading plane. */
+.atlas-surface .deck-row {
+  box-shadow:
+    inset 0 1px 0 #c7e5ff18,
+    0 3px 0 -1px #061628,
+    0 5px 9px #0002;
+}
+.atlas-surface .deck-row:hover {
+  border-color: #b1daff77;
+  box-shadow:
+    inset 0 1px 0 #e1f4ff38,
+    0 3px 0 -1px #061628,
+    0 7px 12px #0003;
+}

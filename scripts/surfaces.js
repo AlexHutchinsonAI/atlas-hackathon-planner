@@ -111,7 +111,7 @@ function mountSculpture(heading) {
   holder.dataset.renderer = "webgl";
   const scene = new THREE.Scene(),
     camera = new THREE.PerspectiveCamera(38, 1, 0.1, 50);
-  camera.position.set(0, 0.25, 6.8);
+  camera.position.set(0, 0.25, 5.6);
   scene.add(new THREE.AmbientLight("#a4d7ff", 2.8));
   const key = new THREE.DirectionalLight("#e1f6ff", 4);
   key.position.set(3, 5, 4);
@@ -170,6 +170,22 @@ function mountSculpture(heading) {
   }
   const center = new THREE.Mesh(new THREE.IcosahedronGeometry(0.22, 1), silver);
   object.add(center);
+  // Satellite crystals add a second moving layer to each working-page sculpture.
+  const satellites = new THREE.Group();
+  scene.add(satellites);
+  for (let i = 0; i < 5; i++) {
+    const crystal = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.095, 0),
+      silver,
+    );
+    const angle = (i * Math.PI * 2) / 5;
+    crystal.position.set(
+      Math.cos(angle) * 1.7,
+      Math.sin(angle) * 1.25,
+      Math.sin(angle * 2) * 0.6,
+    );
+    satellites.add(crystal);
+  }
   let visible = true,
     disposed = false,
     lost = false,
@@ -184,6 +200,8 @@ function mountSculpture(heading) {
     object.rotation.y = time * 0.13;
     object.rotation.z = Math.sin(time * 0.3) * 0.12;
     object.rotation.x = paused() ? 0.12 : 0.12 + Math.sin(time * 0.18) * 0.12;
+    satellites.rotation.y = -time * 0.22;
+    satellites.rotation.z = time * 0.08;
     renderer.render(scene, camera);
   }
   function sync() {
@@ -249,6 +267,50 @@ function mountSculpture(heading) {
   };
 }
 
+// CSS sculptures provide distributed depth without creating a WebGL context for every card.
+const depthTargets =
+  ".atlas-surface .metric-card,.atlas-surface .person-card,.atlas-surface .people-metric,.atlas-surface .command-panel,.atlas-surface .outcome-card,.atlas-surface .chain-card,.atlas-surface .workspace-utilities > details,.atlas-surface .dash-metric";
+const depthTracked = new Set();
+const depthVisibility = new IntersectionObserver(
+  (entries) =>
+    entries.forEach(({ target, isIntersecting }) => {
+      target.dataset.depthVisible = String(isIntersecting);
+    }),
+  { threshold: 0.01 },
+);
+function decorateDepth() {
+  depthTracked.forEach((panel) => {
+    if (!panel.isConnected) {
+      depthVisibility.unobserve(panel);
+      depthTracked.delete(panel);
+    }
+  });
+  document.querySelectorAll(depthTargets).forEach((panel, index) => {
+    if (
+      panel.querySelector(
+        ":scope > .depth-mark, :scope > summary > .depth-mark",
+      )
+    )
+      return;
+    const mark = document.createElement("span");
+    const isOrbit = panel.matches(".command-panel,.person-card,.chain-card");
+    mark.className = `depth-mark ${isOrbit ? "depth-orbits" : "depth-prism"}`;
+    mark.setAttribute("aria-hidden", "true");
+    mark.style.setProperty("--depth-delay", `${index * -0.71}s`);
+    mark.innerHTML = isOrbit
+      ? '<span class="depth-spin"><i></i><i></i><i></i><b></b></span>'
+      : '<span class="depth-spin">' + "<i></i>".repeat(6) + "</span>";
+    const mount =
+      panel.tagName === "DETAILS"
+        ? panel.querySelector(":scope > summary")
+        : panel;
+    mount.prepend(mark);
+    panel.dataset.depthCard = "true";
+    depthTracked.add(panel);
+    depthVisibility.observe(panel);
+  });
+}
+
 // Entering panels reveal once. Offscreen panels stay fully readable if enhancement is unavailable.
 const revealed = new WeakSet();
 const pendingReveals = new Set();
@@ -265,6 +327,7 @@ const reveal = new IntersectionObserver(
 function refresh() {
   refreshFrame = 0;
   mountSculpture(headingForPage());
+  decorateDepth();
   // Release unseen panels removed by filtering or navigation.
   pendingReveals.forEach((panel) => {
     if (!panel.isConnected) {
@@ -303,16 +366,14 @@ new MutationObserver((records) => {
 reduced.addEventListener("change", () => active?.sync?.());
 document.addEventListener("visibilitychange", () => active?.sync?.());
 
-// A restrained pointer light and two-degree tilt add depth to cards, never to tables or forms.
+// Pointer perspective applies only to decorative cards; focusing a form keeps its panel level.
 let pointerFrame = 0,
   lit = null;
 document.addEventListener(
   "pointermove",
   (event) => {
     if (paused() || event.pointerType !== "mouse") return;
-    const card = event.target.closest(
-      ".atlas-surface .metric-card,.atlas-surface .person-card,.atlas-surface .people-metric,.atlas-surface .command-panel",
-    );
+    const card = event.target.closest("[data-depth-card]");
     if (lit !== card) {
       if (lit) {
         lit.style.removeProperty("--tilt-x");
@@ -320,7 +381,7 @@ document.addEventListener(
       }
       lit = card;
     }
-    if (!card || pointerFrame) return;
+    if (!card || pointerFrame || card.querySelector(":focus-visible")) return;
     pointerFrame = requestAnimationFrame(() => {
       pointerFrame = 0;
       if (!card.isConnected) return;
@@ -329,8 +390,14 @@ document.addEventListener(
         y = (event.clientY - r.top) / r.height;
       card.style.setProperty("--glass-x", `${x * 100}%`);
       card.style.setProperty("--glass-y", `${y * 100}%`);
-      card.style.setProperty("--tilt-x", `${(y - 0.5) * -4}deg`);
-      card.style.setProperty("--tilt-y", `${(x - 0.5) * 4}deg`);
+      card.style.setProperty(
+        "--tilt-x",
+        `${(Math.min(1, Math.max(0, y)) - 0.5) * -7}deg`,
+      );
+      card.style.setProperty(
+        "--tilt-y",
+        `${(Math.min(1, Math.max(0, x)) - 0.5) * 7}deg`,
+      );
     });
   },
   { passive: true },

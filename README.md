@@ -38,9 +38,9 @@ Pause motion or the system's reduced-motion preference turns the scene into a st
 
 ## Working-page design
 
-The `.atlas-surface` scope covers the lower dashboard, command detail screens and operations pages. The original sphere markup, scene and stylesheet remain unchanged. Glass cards have restrained pointer lighting and tilt; tables and form rows stay stationary. Four workspace utilities use two columns on desktop and expand to full width when opened.
+The `.atlas-surface` scope covers the lower dashboard, command detail screens and operations pages. The original sphere markup, scene and stylesheet remain unchanged. Glass cards have pointer lighting, perspective tilt, layered bevels and rotating CSS glass cubes or orbital emblems; tables and form rows stay stationary. Four workspace utilities use two columns on desktop and expand to full width when opened.
 
-A separate small Three.js scene renders one orbital sculpture on the active working page. People uses a connected polyhedron, Transport an orbital globe, and planning pages a continuous knot. The shared Pause motion control and reduced-motion preference stop these scenes and card effects. Rendering stops when the sculpture is offscreen or the tab is hidden. Navigation releases GPU resources; a CSS orbital fallback remains available without WebGL.
+A separate small Three.js scene renders one orbital sculpture on the active working page. People uses a connected polyhedron, Transport an orbital globe, and planning pages a continuous knot. The shared Pause motion control and reduced-motion preference stop these scenes and card effects. Rendering stops when the sculpture is offscreen or the tab is hidden. CSS sculptures pause offscreen and stay decorative to assistive technology. Page sculptures include orbiting crystal satellites. Navigation releases GPU resources; a CSS orbital fallback remains available without WebGL.
 
 ## Local review
 
