@@ -1,0 +1,279 @@
+/* Shared brand chrome and restrained cinematic motion. Content remains usable without JavaScript. */
+.mission-nav {
+  height: 66px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  background: rgba(5, 15, 36, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: white;
+  border-bottom: 1px solid #b8d2ff12;
+}
+.logo-home {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: none;
+  flex: none;
+}
+.logo-home img {
+  width: 149px;
+  height: auto;
+}
+.nav-divider {
+  width: 1px;
+  height: 25px;
+  background: #ffffff24;
+}
+.product-name {
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  font-weight: 650;
+  color: #fff;
+}
+.product-name small {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #91b7f1;
+  margin-left: 4px;
+}
+.nav-tools {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-left: auto;
+}
+.nav-link {
+  font-size: 12px;
+  color: #bfd2ee;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  padding: 8px 0;
+}
+.nav-link:hover {
+  color: #fff;
+}
+.motion-toggle {
+  font-size: 10px;
+  padding: 8px 12px;
+  background: #ffffff08;
+  color: #bcd2f3;
+  border: 1px solid #a5c2f338;
+  border-radius: 24px;
+  white-space: nowrap;
+}
+/* Soft stage lighting follows the pointer without moving or obscuring the working controls. */
+.command-hero {
+  background:
+    radial-gradient(
+      ellipse at var(--pointer-x, 75%) var(--pointer-y, 40%),
+      #3262af75,
+      transparent 48%
+    ),
+    linear-gradient(110deg, #06152d, #173b73);
+  border-color: #719ed535;
+  box-shadow:
+    inset 0 1px 0 #c9e2ff20,
+    0 20px 60px #030c2318;
+}
+.command-hero h1 {
+  letter-spacing: -0.055em;
+}
+.orbital-scene {
+  translate: 0 var(--hero-shift, 0px);
+}
+.core-face {
+  background: linear-gradient(135deg, #7dc7ffaf, #1454d88a 48%, #142e784d);
+  border-color: #a4deffb0;
+  box-shadow:
+    inset 0 1px 12px #c7edff25,
+    0 0 22px #287cef20;
+}
+.ring-one {
+  box-shadow:
+    0 0 16px #4d91fb55,
+    inset 0 0 20px #4e94f520;
+}
+.command-home {
+  animation: surface-enter 0.55s cubic-bezier(0.16, 0.7, 0.2, 1) both;
+}
+/* Reveals are progressive enhancement: the default is always fully visible. */
+@keyframes surface-enter {
+  from {
+    opacity: 0.4;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal-ready {
+  transition:
+    opacity 0.55s ease,
+    translate 0.65s cubic-bezier(0.16, 0.7, 0.2, 1);
+}
+.reveal-ready:not(.is-revealed) {
+  opacity: 0;
+  translate: 0 12px;
+}
+.is-revealed {
+  opacity: 1;
+  translate: 0 0;
+}
+.profile-open dialog[open] {
+  animation: profile-enter 0.3s cubic-bezier(0.16, 0.7, 0.2, 1);
+}
+@keyframes profile-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+button,
+a,
+input,
+select,
+textarea,
+summary {
+  touch-action: manipulation;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #4386fb;
+  outline-offset: 3px;
+}
+.motion-paused .orbit-system,
+.motion-paused .orb-core,
+.document-hidden .orbit-system,
+.document-hidden .orb-core {
+  animation-play-state: paused !important;
+}
+.motion-paused .reveal-ready {
+  opacity: 1;
+  translate: 0 0;
+  transition: none;
+}
+.motion-paused .orbital-scene {
+  translate: 0 0;
+}
+@media (max-width: 850px) {
+  .mission-nav {
+    gap: 14px;
+  }
+  .nav-tools {
+    gap: 14px;
+  }
+  .product-name {
+    font-size: 12px;
+  }
+  .product-name small {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .mission-nav {
+    height: 62px;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+  .logo-home img {
+    width: 110px;
+  }
+  .nav-divider,
+  .product-name {
+    display: none;
+  }
+  .nav-tools {
+    gap: 11px;
+  }
+  .nav-link,
+  .nav-tools > .nav-link {
+    display: block;
+    font-size: 10px;
+  }
+  .nav-tools > .nav-link[href*="direction"] {
+    display: none;
+  }
+  .motion-toggle {
+    font-size: 0;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    flex: none;
+  }
+  .motion-toggle::before {
+    content: "Ⅱ";
+    font-size: 11px;
+  }
+  .motion-toggle[aria-pressed="true"]::before {
+    content: "▷";
+  }
+  .command-hero h1 {
+    font-size: 29px;
+  }
+  .command-hero p {
+    font-size: 11px;
+  }
+}
+@media (max-width: 360px) {
+  .logo-home img {
+    width: 95px;
+  }
+  .nav-tools {
+    gap: 8px;
+  }
+  .nav-link,
+  .nav-tools > .nav-link {
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-ready {
+    opacity: 1 !important;
+    translate: 0 0 !important;
+  }
+  .orbital-scene {
+    translate: 0 0 !important;
+  }
+  .motion-toggle {
+    display: none;
+  }
+}
+@media print {
+  .mission-nav,
+  .views,
+  .orbital-scene,
+  .motion-toggle {
+    display: none !important;
+  }
+  .reveal-ready {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .command-home {
+    animation: none;
+  }
+}
