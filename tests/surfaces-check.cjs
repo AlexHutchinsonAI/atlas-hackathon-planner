@@ -82,6 +82,10 @@ const base = process.env.ATLAS_URL || "http://127.0.0.1:8765/";
           ),
           `overflow: ${route || "workspace"} at ${width}`,
         );
+        // Scene mounting follows the synchronous page render on the next animation frame.
+        await page.waitForFunction(() =>
+          document.querySelector(".surface-orbit canvas"),
+        );
         assert.equal(
           await page.locator(".surface-orbit").count(),
           1,
