@@ -1,0 +1,969 @@
+/* Working surfaces only. The approved sphere journey and its controls are deliberately outside this scope. */
+.atlas-surface {
+  --ink: #e4efff;
+  --muted: #a2b8d5;
+  --slate: #a2b8d5;
+  --line: #98c7ff26;
+  --rule: #98c7ff2c;
+  --rule-soft: #98c7ff18;
+  --paper: #071326;
+  --card: #0e233d;
+  --sea: #8fcaff;
+  --sea-soft: #214870;
+  --plum: #c0b3ff;
+  --plum-soft: #343054;
+  --go: #83dfc3;
+  --go-soft: #123d3d;
+  --amber: #efc98b;
+  color: var(--ink);
+  color-scheme: dark;
+}
+body.atlas-operations,
+body:has(.planning-surface) {
+  background:
+    radial-gradient(ellipse at 88% 15%, #103868 0, transparent 46%),
+    radial-gradient(ellipse at 7% 70%, #152648 0, transparent 50%), #030d1c;
+  background-attachment: fixed;
+  color: #e4efff;
+}
+/* Ambient pools of light show through the glass without moving or covering the data. */
+.workspace-shell.atlas-surface {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 95% 15%, #16447955, transparent 43%),
+    radial-gradient(ellipse at 0% 85%, #24396660, transparent 48%);
+}
+.atlas-surface .surface-heading {
+  position: relative;
+  isolation: isolate;
+  min-height: 144px;
+  padding-right: 240px;
+}
+.atlas-surface .surface-heading > :not(.surface-orbit) {
+  position: relative;
+  z-index: 1;
+}
+.atlas-surface .surface-heading.workspace-heading {
+  display: block;
+  margin-bottom: 24px;
+}
+.atlas-surface .workspace-heading > p {
+  margin-top: 14px;
+}
+.surface-orbit {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 230px;
+  height: 170px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.surface-orbit canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* The fallback is also the initial artwork while the locally served 3D module loads. */
+.surface-orbit::before,
+.surface-orbit::after {
+  content: "";
+  position: absolute;
+  inset: 22px 50px;
+  border: 1px solid #a6dcff66;
+  border-radius: 50%;
+  transform: rotate(-28deg) scaleX(0.55);
+  box-shadow:
+    inset 0 0 28px #4f9dff2b,
+    0 0 30px #368aff18;
+}
+.surface-orbit::after {
+  transform: rotate(45deg) scaleX(0.7);
+}
+.surface-orbit[data-renderer="webgl"]::before,
+.surface-orbit[data-renderer="webgl"]::after {
+  display: none;
+}
+/* Glass has a bright upper edge and a translucent blue body; the spotlight follows the pointer. */
+.atlas-surface
+  :is(
+    .command-panel,
+    .metric-card,
+    .person-card,
+    .people-metric,
+    .brief,
+    .sheet,
+    .panel,
+    .register,
+    .dash-card,
+    .dash-section,
+    .outcome-card,
+    .chain-card,
+    .transport-card,
+    .goal-box,
+    .oi-grp,
+    .action-group,
+    .operating-status,
+    .outcome-hero,
+    .outcome-sec,
+    .source-card,
+    .st-sec,
+    .ex-sec,
+    .bl,
+    .transport-below
+  ) {
+  background:
+    radial-gradient(
+      ellipse at var(--glass-x, 80%) var(--glass-y, 0%),
+      #659ee523,
+      transparent 62%
+    ),
+    linear-gradient(135deg, #193854b5, #08192cd9);
+  border: 1px solid #a5ceff33;
+  color: var(--ink);
+  border-radius: 22px;
+  box-shadow:
+    inset 0 1px 0 #e6f7ff18,
+    inset 0 -1px 0 #04102155,
+    0 16px 42px #00000022;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.atlas-surface
+  :is(
+    .command-panel,
+    .person-card,
+    .metric-card,
+    .people-metric,
+    .outcome-card,
+    .chain-card
+  ) {
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s,
+    transform 0.3s;
+}
+.atlas-surface
+  :is(
+    .command-panel,
+    .person-card,
+    .metric-card,
+    .people-metric,
+    .outcome-card,
+    .chain-card
+  ):hover {
+  border-color: #b5dfff66;
+  box-shadow:
+    inset 0 1px 0 #ffffff26,
+    0 16px 42px #0003,
+    0 0 32px #337ecc10;
+}
+.atlas-surface
+  :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    strong,
+    .row-title,
+    .item-title,
+    .stream-title,
+    .person-name,
+    .nm,
+    .panel-heading h2
+  ) {
+  color: #e8f3ff;
+}
+.atlas-surface :is(h1, h2) {
+  letter-spacing: -0.045em;
+}
+.atlas-surface
+  :is(
+    .hint,
+    .small,
+    .row-sub,
+    .item-note,
+    .person-title,
+    .person-bottom > span,
+    .person-contacts,
+    .directory-caption,
+    .people-pagination,
+    .profile-status,
+    .st-date,
+    .bl-intro,
+    .p-sub,
+    .stream-info > small,
+    .live-label,
+    .deck-pagination,
+    .workspace-heading > p
+  ) {
+  color: #a1bad9;
+}
+.atlas-surface :is(.eyebrow, .people-kicker, .outcome-kicker, .idx) {
+  color: #8fc8ff;
+}
+.atlas-surface a:not(.logo-home) {
+  color: #a2d3ff;
+}
+.atlas-surface :is(input, select, textarea) {
+  background: #071a2dc7;
+  color: #e3f1ff;
+  border: 1px solid #94c9ff3b;
+  border-radius: 9px;
+}
+.atlas-surface :is(input, textarea)::placeholder {
+  color: #88a5c8;
+}
+.atlas-surface :is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 2px solid #ade3ff;
+  outline-offset: 4px;
+}
+.atlas-surface
+  :is(
+    .btn,
+    .act,
+    .ghost,
+    .filter,
+    .arrow,
+    .people-pagination button,
+    .profile-close,
+    .person-bottom button,
+    .direct-links button,
+    .deck-pagination button,
+    .dash-utils button
+  ) {
+  color: #cce7ff;
+  background: linear-gradient(145deg, #28598088, #16365588);
+  border: 1px solid #a2d6ff38;
+  box-shadow: inset 0 1px 0 #fff1;
+  border-radius: 10px;
+}
+.atlas-surface :is(.btn.primary, .act, .person-bottom button):hover {
+  background: #2c6498;
+}
+.atlas-surface :is(.btn.primary, .act) {
+  background: linear-gradient(135deg, #2b6ac0, #1b4788);
+  color: white;
+}
+.atlas-surface :is(.tag, .role-chip, .chip, .readiness-dot, .due-chip) {
+  border-color: #91bfff2b;
+}
+.atlas-surface .role-chip {
+  background: #83bfff16;
+  color: #afd7ff;
+}
+.atlas-surface .person-avatar {
+  background: linear-gradient(135deg, #2f5c85, #112a48);
+  color: #c3e5ff;
+  border: 1px solid #acd7ff38;
+}
+/* The lower dashboard becomes a compact collection of cards, retaining every existing shortcut. */
+.atlas-surface .metric-strip {
+  gap: 14px;
+}
+.atlas-surface .metric-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 136px;
+  padding: 22px;
+}
+.atlas-surface .metric-card::after {
+  content: "";
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  right: -35px;
+  top: -42px;
+  border: 1px solid #9bd4ff24;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 15px #80bfff06,
+    0 0 0 30px #80bfff04;
+  pointer-events: none;
+}
+.atlas-surface .metric-card > span,
+.atlas-surface .metric-card footer {
+  color: #9ab8db;
+}
+.atlas-surface .metric-card strong {
+  color: #e5f4ff;
+}
+.atlas-surface .metric-card small {
+  color: #97bde8;
+}
+.atlas-surface .mini-track {
+  background: #6c9bc228;
+}
+.atlas-surface .mini-track i {
+  background: linear-gradient(90deg, #3b7ffc, #9ddfff);
+  box-shadow: 0 0 10px #70beff66;
+}
+.atlas-surface .command-panel {
+  padding: 24px;
+}
+.atlas-surface .deck-tools {
+  margin-bottom: 5px;
+}
+.atlas-surface .deck-search,
+.atlas-surface .people-search-wrap {
+  background: #06192cc2;
+  border: 1px solid #a1cfff38;
+  box-shadow: inset 0 2px 8px #0002;
+}
+.atlas-surface .deck-search input,
+.atlas-surface .people-search-wrap input {
+  background: transparent;
+  border: 0;
+}
+.atlas-surface .deck-tabs {
+  border: 0;
+  gap: 5px;
+  margin: 10px 0 14px;
+  padding: 5px;
+  border-radius: 12px;
+  background: #06172c9c;
+}
+.atlas-surface .deck-tabs button {
+  flex: 1;
+  padding: 9px 5px;
+  color: #adc7e7;
+}
+.atlas-surface .deck-tabs button[aria-pressed="true"] {
+  background: linear-gradient(140deg, #366b9aaa, #274b7388);
+  box-shadow:
+    inset 0 1px 0 #d3ecff40,
+    0 3px 10px #0002;
+  color: white;
+}
+.atlas-surface .deck-results {
+  display: grid;
+  gap: 8px;
+}
+.atlas-surface .deck-row {
+  min-height: 72px;
+  padding: 12px 14px;
+  border: 1px solid #8fbdee20;
+  border-radius: 13px;
+  background: linear-gradient(110deg, #81bfff08, #183c5f33);
+  transition:
+    background 0.25s,
+    border-color 0.25s;
+}
+.atlas-surface .deck-row:hover {
+  background: #659eda16;
+  border-color: #a1d1ff55;
+}
+.atlas-surface .stream-title {
+  font-size: 13px;
+}
+.atlas-surface .direct-links button {
+  padding: 7px 9px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.atlas-surface .direct-links button span {
+  color: #b0d9ff;
+}
+.atlas-surface .timeline-entry {
+  padding: 17px 0;
+}
+.atlas-surface .date-tile {
+  background: linear-gradient(145deg, #3672ac66, #19395666);
+  border: 1px solid #a4d2ff2e;
+  border-radius: 13px;
+  box-shadow: inset 0 1px 0 #fff2;
+  color: #d0edff;
+}
+.atlas-surface .date-tile small {
+  color: #a0c9ef;
+}
+.atlas-surface .reference-shortcut {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at right top, #72b7ff66, transparent 70%),
+    linear-gradient(135deg, #204874, #12304f);
+  border: 1px solid #9ccfff66;
+  border-radius: 20px;
+  min-height: 106px;
+  box-shadow:
+    inset 0 1px 0 #e8f6ff26,
+    0 10px 35px #0003;
+}
+.atlas-surface .reference-shortcut b {
+  border: 1px solid #aad5ff66;
+  border-radius: 50%;
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+}
+/* Disclosure tools are two columns at desktop size, reducing the long stack in the old dashboard. */
+.atlas-surface .workspace-utilities {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 22px;
+  align-items: start;
+}
+.atlas-surface .workspace-utilities > details {
+  margin: 0;
+  overflow: hidden;
+}
+.atlas-surface .workspace-utilities > details[open] {
+  grid-column: 1/-1;
+}
+.atlas-surface .workspace-utilities summary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 78px;
+  padding: 18px 22px;
+  color: #d2e8ff;
+  list-style: none;
+  cursor: pointer;
+}
+.atlas-surface .workspace-utilities summary::-webkit-details-marker {
+  display: none;
+}
+.atlas-surface .workspace-utilities summary::before {
+  content: "+";
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid #aed7ff44;
+  background: #73b7ff0c;
+  font-size: 22px;
+  font-weight: 300;
+}
+.atlas-surface .workspace-utilities details[open] > summary::before {
+  content: "−";
+}
+.atlas-surface .workspace-utilities summary::after {
+  content: "↗";
+  margin-left: auto;
+  color: #8bbff1;
+}
+.atlas-surface .workspace-utilities summary:hover {
+  background: #98c9ff0a;
+}
+.atlas-surface .brief summary {
+  color: #c2ddfb;
+}
+.atlas-surface .brief > :not(summary) {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+/* Inner task pages inherit the same material, with readable editing rows and fixed-size controls. */
+.planning-surface {
+  padding-top: 20px;
+}
+.atlas-surface .compact-heading h1 {
+  font-size: clamp(30px, 4vw, 54px);
+}
+.atlas-surface .crumb,
+.atlas-surface .crumb button {
+  color: #a9c8ed;
+}
+.atlas-surface
+  :is(
+    .row,
+    .item-row,
+    .check-row,
+    .step,
+    .readiness-panel,
+    .notice,
+    .metric-edit,
+    .filter-panel,
+    .review
+  ) {
+  background: transparent;
+  border-color: #97c9ff24;
+  color: #c3dcf8;
+}
+.atlas-surface :is(.sheet, .readiness-panel) {
+  overflow: hidden;
+}
+.atlas-surface :is(.row, .item-row) {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.atlas-surface :is(.row:hover, .item-row:hover) {
+  background: #679fea0a;
+}
+.atlas-surface .steps {
+  background: #0c223b99;
+  border: 1px solid #9ac7ff33;
+  border-radius: 14px;
+  padding: 5px;
+}
+.atlas-surface .step.on {
+  background: #2b5688;
+  color: #e8f4ff;
+  border-radius: 9px;
+}
+.atlas-surface
+  :is(.field, .metric-edit strong, .readiness-heading, .check-row h3) {
+  color: #c9e2ff;
+}
+.atlas-surface :is(.row-number, .item-number, .row-index) {
+  color: #85a8d1;
+}
+/* People profiles, filters and dialogs retain their existing data and keyboard behavior. */
+.atlas-operations .wrap {
+  padding-bottom: 45px;
+}
+.atlas-operations .mission-nav {
+  transform: translateZ(0);
+  isolation: isolate;
+  background: #030d1ced;
+}
+.atlas-operations .views {
+  background: #0c233ac9;
+  box-shadow:
+    inset 0 1px 0 #d1ecff13,
+    0 12px 35px #0002;
+}
+.atlas-surface .people-metric {
+  padding: 16px 13px;
+  border-radius: 16px;
+}
+.atlas-surface .people-metric b {
+  color: #d5edff;
+}
+.atlas-surface .people-metric span {
+  color: #afc9e7;
+}
+.atlas-surface .people-metric.on {
+  background: linear-gradient(130deg, #3471acaa, #244a7888);
+  border-color: #abd7ff88;
+  box-shadow:
+    inset 0 1px 0 #fff3,
+    0 0 25px #438edf22;
+}
+.atlas-surface .people-tabs {
+  background: #0b2037b8;
+  border-color: #9acbff30;
+}
+.atlas-surface .people-tabs button {
+  color: #a6c9ee;
+}
+.atlas-surface .people-tabs button.on {
+  background: #35629388;
+  color: #e2f3ff;
+}
+.atlas-surface .person-card {
+  padding: 20px;
+  border-radius: 21px;
+}
+.atlas-surface .person-photo {
+  border-radius: 16px;
+  border: 1px solid #d2eaff4d;
+  box-shadow: 0 4px 15px #0003;
+}
+.atlas-surface .person-bottom {
+  border-color: #92bfff26;
+}
+.atlas-surface .person-bottom button {
+  padding: 8px 12px;
+}
+.atlas-surface .person-contacts a {
+  color: #9eccff;
+}
+.atlas-surface .directory-empty {
+  background: #0f2945;
+  color: #adc8e7;
+}
+.atlas-operations #personDialog {
+  background:
+    radial-gradient(ellipse at right top, #28507788, transparent 60%), #0b1d32f7;
+  border-color: #aed7ff55;
+  color: #daebff;
+  box-shadow:
+    inset 0 1px 0 #fff2,
+    0 30px 120px #0009;
+}
+.atlas-operations #personDialog :is(p, small, .profile-status) {
+  color: #aac3e1;
+}
+.atlas-operations #personDialog :is(h2, h3) {
+  color: #e1f2ff;
+}
+.atlas-operations #personDialog a {
+  color: #a5d9ff;
+}
+.atlas-operations #personDialog .profile-close {
+  background: #315473;
+  color: white;
+}
+.atlas-operations #personDialog .profile-contact {
+  border-color: #9ec6ed33;
+}
+/* Tables stay flat and stationary. Only their enclosing panels use depth and motion. */
+.atlas-surface
+  :is(
+    table,
+    th,
+    td,
+    .register,
+    .reg-head,
+    .p-top,
+    .p-body,
+    .reg-add,
+    .reg-list,
+    .move,
+    .m-body,
+    .ab-head,
+    .ab-body,
+    .oi,
+    .oi-grp h3,
+    .goal,
+    .goal-body,
+    .goal-head
+  ) {
+  background-color: transparent;
+  color: var(--ink);
+  border-color: var(--rule);
+}
+.atlas-surface th {
+  background: #163555;
+  color: #b7d5f5;
+}
+.atlas-surface td {
+  border-color: #8fbdee20;
+}
+.atlas-surface :is(.r, .reg-list button) {
+  background: transparent;
+  color: #c4ddfa;
+  border-color: #9fcaff20;
+}
+.atlas-surface :is(.r:hover, .reg-list button:hover, .r.sel, .r.on) {
+  background: #7db6fa18;
+}
+.atlas-surface
+  :is(
+    .source-note,
+    .warn,
+    .notice,
+    .outcome-rule,
+    .transport-planning-note,
+    .review-summary
+  ) {
+  background: #82b7ff0c;
+  border-color: #8cbeef40;
+  color: #afc8e6;
+}
+.atlas-surface
+  :is(
+    .dash-head,
+    .outcome-hero,
+    .people-hero,
+    .school-hero,
+    .st-hero,
+    .ex-hero,
+    .bl-head
+  ) {
+  background: transparent;
+  color: var(--ink);
+}
+.atlas-surface
+  :is(
+    .dash-head p,
+    .outcome-hero p,
+    .transport-map-head p,
+    .profile-copy,
+    .chain-note
+  ) {
+  color: #abc3df;
+}
+.atlas-surface :is(.dash-section, .outcome-sec, .oi-grp, .ex-sec, .st-sec) {
+  padding: 22px;
+  margin-top: 18px;
+}
+.atlas-surface
+  :is(
+    .dash-kpi,
+    .outcome-metric,
+    .seq-node,
+    .chain-step,
+    .dash-attention,
+    .dash-health-row,
+    .population-table-wrap
+  ) {
+  background: #18365388;
+  border-color: #9ecaff2b;
+  color: #cbe2fc;
+  border-radius: 12px;
+}
+.atlas-surface .atlas-page-intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 12px 0 22px;
+}
+.atlas-surface .atlas-page-intro h2 {
+  font-size: clamp(30px, 3.4vw, 46px);
+  margin: 5px 0 10px;
+  line-height: 1.1;
+}
+.atlas-surface .atlas-page-intro p {
+  color: #a9c4e3;
+  margin: 0;
+  max-width: 660px;
+}
+/* Map tiles, popup text and attribution retain their native contrast and provider styling. */
+.atlas-surface .transport-map-page {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--ink);
+}
+.atlas-surface
+  :is(.transport-map-pane, .transport-pickup-pane, .transport-route-panel) {
+  background: #0c233c;
+  border: 1px solid #94c7ff3d;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.atlas-surface .transport-category-btn {
+  background: #163653;
+  border-color: #99cfff33;
+  color: #b8d6f6;
+}
+.atlas-surface .transport-category-btn.on {
+  background: #2f649b;
+  color: white;
+}
+.atlas-surface .transport-toolbar :is(button, select) {
+  background: #183959;
+  color: #d3eaff;
+  border: 1px solid #91bfff44;
+}
+.atlas-surface
+  :is(
+    .transport-map-copy,
+    .transport-pickup-label,
+    .transport-category-legend,
+    .route-disclaimer
+  ) {
+  color: #aec8e5;
+}
+.atlas-surface .leaflet-container {
+  color: #183254;
+  color-scheme: light;
+}
+.atlas-surface .leaflet-container :is(a, strong, h3) {
+  color: #174b83;
+}
+.atlas-surface .leaflet-popup-content-wrapper {
+  background: #fff;
+  color: #183254;
+}
+/* Reveal only new panels. Reduced motion and the shared pause button always make content immediate. */
+@keyframes surface-arrive {
+  from {
+    opacity: 0;
+    translate: 0 13px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.atlas-surface .surface-reveal {
+  animation: surface-arrive 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@media (hover: hover) and (pointer: fine) {
+  .atlas-surface :is(.metric-card, .person-card, .people-metric):hover {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg)) translateY(-3px);
+  }
+}
+@media (max-width: 1100px) {
+  .atlas-surface .surface-heading {
+    padding-right: 190px;
+  }
+  .surface-orbit {
+    width: 185px;
+    height: 155px;
+  }
+  .atlas-surface .command-panel {
+    padding: 19px;
+  }
+  .atlas-surface .deck-row {
+    flex-wrap: wrap;
+  }
+  .atlas-surface .direct-links {
+    margin-left: 0;
+  }
+}
+@media (max-width: 700px) {
+  .atlas-surface .surface-heading {
+    min-height: 116px;
+    padding-right: 100px;
+  }
+  .surface-orbit {
+    width: 110px;
+    height: 125px;
+    right: -10px;
+    opacity: 0.8;
+  }
+  .atlas-surface .surface-heading h2,
+  .atlas-surface .compact-heading h1 {
+    font-size: 30px;
+  }
+  .atlas-surface .surface-heading > p {
+    white-space: normal;
+    font-size: 11px;
+  }
+  .atlas-surface .workspace-utilities {
+    grid-template-columns: 1fr;
+  }
+  .atlas-surface .metric-card {
+    min-height: 120px;
+    padding: 16px;
+  }
+  .atlas-surface .command-panel {
+    padding: 15px;
+  }
+  .atlas-surface .deck-row {
+    padding: 12px;
+  }
+  .atlas-surface .deck-tabs {
+    flex-wrap: wrap;
+  }
+  .atlas-surface .deck-tabs button {
+    font-size: 10px;
+    flex: 1 0 25%;
+  }
+  .atlas-surface .workspace-utilities summary {
+    min-height: 72px;
+    padding: 16px;
+    font-size: 12px;
+  }
+  .atlas-surface .person-card {
+    padding: 15px;
+  }
+  .atlas-surface .surface-heading.directory-heading {
+    display: block;
+  }
+  .atlas-surface .directory-heading > p {
+    margin-top: 12px;
+  }
+  .atlas-surface :is(.dash-section, .outcome-sec, .oi-grp) {
+    padding: 15px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .atlas-surface .surface-reveal {
+    animation: none;
+  }
+  .atlas-surface :is(.metric-card, .person-card, .people-metric) {
+    transform: none !important;
+    transition: none;
+  }
+}
+.motion-paused .atlas-surface .surface-reveal {
+  animation: none;
+}
+.motion-paused .atlas-surface :is(.metric-card, .person-card, .people-metric) {
+  transform: none !important;
+  transition: none;
+}
+@media print {
+  .surface-orbit {
+    display: none;
+  }
+  .atlas-surface {
+    color: #10264d;
+    --ink: #10264d;
+  }
+}
+/* Match the dashboard's more specific legacy metric rule without altering its hero. */
+.workspace-shell.atlas-surface .metric-card {
+  background:
+    radial-gradient(
+      ellipse at var(--glass-x, 80%) var(--glass-y, 0%),
+      #659ee52b,
+      transparent 65%
+    ),
+    linear-gradient(135deg, #193854b5, #08192cd9);
+}
+.atlas-surface .row-number,
+.atlas-surface .item-number {
+  background: #4382b62b;
+  border: 1px solid #9dcfff30;
+  border-radius: 9px;
+  color: #a9d6ff;
+}
+.atlas-surface .row-index {
+  border-color: #89bafa40;
+}
+.atlas-surface .transport-planning-note b,
+.atlas-surface .transport-toolbar label {
+  color: #bbd9f8;
+}
+.atlas-surface .transport-pickup-pane > :not(#transportActiveTable) {
+  margin-left: 14px;
+  margin-right: 14px;
+}
+.atlas-surface .dash-metrics {
+  gap: 10px;
+  background: transparent;
+  border: 0;
+}
+.atlas-surface .dash-metric {
+  border: 1px solid #a5ceff33;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #204368aa, #102740aa);
+  box-shadow: inset 0 1px 0 #ffffff14;
+}
+.atlas-surface .deck-search:has(input:focus-visible),
+.atlas-surface .people-search-wrap:has(input:focus-visible) {
+  outline: 2px solid #ade3ff;
+  outline-offset: 3px;
+}
+.atlas-surface .deck-search input:focus-visible,
+.atlas-surface .people-search-wrap input:focus-visible {
+  outline: none;
+}
+/* Long explanatory headers get full reading width on phones; art stays beside the title. */
+@media (max-width: 700px) {
+  .atlas-surface :is(.outcome-hero, .transport-map-head).surface-heading {
+    padding-right: 20px;
+  }
+  .atlas-surface :is(.outcome-hero, .transport-map-head).surface-heading h2 {
+    padding-right: 85px;
+  }
+  .atlas-surface :is(.outcome-hero, .transport-map-head) .surface-orbit {
+    top: 35px;
+    right: 5px;
+    transform: none;
+  }
+  .atlas-surface .outcome-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .atlas-surface .outcome-metric {
+    padding: 13px;
+  }
+  .atlas-surface .metric-card {
+    min-height: 96px;
+  }
+  .atlas-surface .metric-card:last-child {
+    min-height: 76px;
+  }
+}
+@media (max-width: 700px) {
+  .atlas-surface :is(.outcome-hero, .transport-map-head) .surface-orbit {
+    top: 10px;
+    width: 100px;
+    height: 100px;
+  }
+}

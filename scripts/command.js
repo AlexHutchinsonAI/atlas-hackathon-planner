@@ -316,6 +316,8 @@
   function shell(inner) {
     document.body.classList.toggle("motion-paused", motionPaused);
     document.body.classList.toggle("sphere-dashboard", ui.screen === "home");
+    if (ui.screen !== "home")
+      inner = `<section class="atlas-surface planning-surface">${inner}</section>`;
     app.innerHTML = `<nav class="mission-nav" aria-label="Main navigation"><button class="logo-home" data-action="home" aria-label="Intellibus Atlas dashboard"><img src="assets/intellibus-logo.svg" alt="Intellibus" width="166" height="31"></button><span class="nav-divider"></span><span class="product-name">ATLAS <small>2027</small></span><div class="nav-tools"><button class="nav-link" data-action="home">Overview</button><button class="nav-link workspace-nav" data-action="workspace">Workspace</button><a class="nav-link" href="atlas-reference.html#people">People</a><a class="nav-link" href="atlas-reference.html#transport">Transport</a><a class="nav-link" href="atlas-reference.html#direction">Operations</a><button class="motion-toggle" data-action="toggle-motion" aria-pressed="${motionPaused}" aria-label="${motionPaused ? "Play decorative motion" : "Pause decorative motion"}" title="Pause or resume decorative animation">${motionPaused ? "Play motion" : "Pause motion"}</button></div></nav>${inner}`;
     window.AtlasSphere?.mount();
   }
@@ -507,7 +509,7 @@
     const items = data.workstreams.flatMap(allItems),
       done = items.filter((it) => it.status === "Done").length,
       waiting = items.filter((it) => it.status === "Waiting").length;
-    shell(`<div class="command-home">${window.AtlasSphereView({ workstreams: data.workstreams.length, registrations: data.command.metrics.find((m) => m.id === "registrations")?.target || 0, attendance: data.command.metrics.find((m) => m.id === "attendance")?.target || 0, hackers: data.command.metrics.find((m) => m.id === "hackers")?.target || 0 })}<section class="workspace-shell" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">YOUR COMMAND CENTER</p><h2>Make what’s next <span>happen.</span></h2></div><p>${done} / ${items.length} planning items done <span>·</span> ${waiting} waiting</p></header>
+    shell(`<div class="command-home">${window.AtlasSphereView({ workstreams: data.workstreams.length, registrations: data.command.metrics.find((m) => m.id === "registrations")?.target || 0, attendance: data.command.metrics.find((m) => m.id === "attendance")?.target || 0, hackers: data.command.metrics.find((m) => m.id === "hackers")?.target || 0 })}<section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">YOUR COMMAND CENTER</p><h2>Make what’s next <span>happen.</span></h2></div><p>${done} / ${items.length} planning items done <span>·</span> ${waiting} waiting</p></header>
       <section class="metric-strip" aria-label="Event targets">${data.command.metrics
         .map((m) => {
           const known =
@@ -538,7 +540,7 @@
               })
               .join("")
           : '<p class="small">Add a date to a milestone to see it here.</p>'
-      }</section><a class="reference-shortcut" href="atlas-reference.html#people"><span>PEOPLE · PHOTOS · TRANSPORT<strong>Explore people & operations</strong></span><b>↗</b></a></aside></div>
+      }</section><a class="reference-shortcut" href="atlas-reference.html#people"><span>PEOPLE · PHOTOS · TRANSPORT<strong>Explore people & operations</strong></span><b>↗</b></a></aside></div><div class="workspace-utilities">
       <details class="brief numbers-panel" data-persist="numbers"><summary>Update target & current numbers</summary><div class="command-settings"><p>Enter verified counts. A dash means no current figure has been entered.</p><div class="metric-edit-grid">${data.command.metrics.map((m) => `<div class="metric-edit"><strong>${esc(m.name)}</strong><small>${esc(m.source)}</small><label class="field">Target<input type="number" min="1" step="1" data-metric-target="${esc(m.id)}" value="${esc(m.target)}"></label><label class="field">Current<input type="number" min="0" step="1" data-metric-current="${esc(m.id)}" value="${m.current == null ? "" : esc(m.current)}" placeholder="Not entered"></label></div>`).join("")}</div></div></details>
       <details class="brief command-goal"><summary>Overall event goal</summary><p>Deliver the Atlas Agentic AI Hackathon with 3,000 total attendees, 2,200 physical hackers and 500+ solutions or experiences. Validate the Guinness attempt against its official rules.</p></details>
       <details class="brief all-workstreams" data-persist="all-workstreams" ${ui.search || ui.tag ? "open" : ""}><summary>All workstreams · ${data.workstreams.length}</summary><div class="all-workstream-tools"><button class="btn" type="button" data-action="show-home-filter">${ui.search || ui.tag ? "Filter · on" : "Filter"}</button><button class="btn" type="button" data-action="show-add-workstream">+ Add workstream</button></div>
@@ -546,7 +548,7 @@
       ${ui.homeFiltersOpen ? `<section class="filter-panel"><label class="field">Find a workstream<input id="search" type="search" placeholder="Search workstreams" value="${esc(ui.search)}"></label><label class="field">See tasks by tag<select id="globalTag">${tagOptions(tags, ui.tag)}</select></label></section>` : ""}
       ${ui.tag ? `<section class="sheet tag-results">${tagged.length ? tagged.map(({ w, l, it }) => `<button class="tag-result" type="button" data-action="open-tag-item" data-ws="${esc(w.id)}" data-list="${esc(l.id)}"><span>${esc(it.text)}</span><small>${esc(w.title)} · ${esc(l.title)}</small></button>`).join("") : '<p class="empty">No tasks have this tag yet.</p>'}</section>` : ""}
       <section class="sheet" id="homeRows">${list.length ? list.map((w, i) => plainRow(w.id, w.title, "", i, list.length, "workstream", "open-workstream", readinessDots(w))).join("") : '<p class="empty">No matching workstream. Try another word.</p>'}</section></details>
-      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></section></div>`);
+      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></div></section></div>`);
   }
   function areaView() {
     const id = ui.areaId,

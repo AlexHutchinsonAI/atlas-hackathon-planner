@@ -9,6 +9,7 @@ Source for [atlas-hackathon-planner.vercel.app](https://atlas-hackathon-planner.
 - `scripts/sphere-view.js`: accessible dashboard markup and navigation shortcuts.
 - `scripts/sphere.js`: the Three.js scene, native-scroll camera, scene lifecycle and motion preferences.
 - `styles/sphere.css`: responsive glass dashboard, cinematic stages and static fallbacks.
+- `styles/surfaces.css` and `scripts/surfaces.js`: scoped glass surfaces and small orbital sculptures for the workspace and operations pages.
 - `vendor/three/`: pinned Three.js 0.180.0 ES modules and MIT license, served locally.
 - `scripts/command.js`: dashboard navigation, filtering, editing and persistence.
 - `scripts/operations.js`: the original operations workflows, with the redesigned directory and profile dialog.
@@ -35,11 +36,17 @@ The surrounding cards open the existing people, competition and transport workfl
 
 Pause motion or the system's reduced-motion preference turns the scene into a still and removes the extra scroll distance. Browsers without WebGL receive a CSS globe and the same functional HTML controls. Rendering pauses offscreen and in background tabs, resolution is capped, and GPU resources are released when navigating away. No map API key, rendering service or new backend is needed.
 
+## Working-page design
+
+The `.atlas-surface` scope covers the lower dashboard, command detail screens and operations pages. The original sphere markup, scene and stylesheet remain unchanged. Glass cards have restrained pointer lighting and tilt; tables and form rows stay stationary. Four workspace utilities use two columns on desktop and expand to full width when opened.
+
+A separate small Three.js scene renders one orbital sculpture on the active working page. People uses a connected polyhedron, Transport an orbital globe, and planning pages a continuous knot. The shared Pause motion control and reduced-motion preference stop these scenes and card effects. Rendering stops when the sculpture is offscreen or the tab is hidden. Navigation releases GPU resources; a CSS orbital fallback remains available without WebGL.
+
 ## Local review
 
 Run `python3 -m http.server 8765 --bind 127.0.0.1` in this directory, then open `http://127.0.0.1:8765/`. Maps and external source links require network access. Motion can be paused and respects reduced-motion preferences.
 
-With Playwright available in the development environment, run `node tests/browser-check.cjs` and `node tests/sphere-check.cjs`. Set `ATLAS_URL` to review a different deployment and `BROWSER_CHANNEL` if Chrome is not the browser to use. The checks use a fresh browser context and do not alter real users' saved plans.
+With Playwright available in the development environment, run `node tests/browser-check.cjs`, `node tests/sphere-check.cjs`, and `node tests/surfaces-check.cjs`. Set `ATLAS_URL` to review a different deployment and `BROWSER_CHANNEL` if Chrome is not the browser to use. The checks use a fresh browser context and do not alter real users' saved plans.
 
 ## Deployment
 
