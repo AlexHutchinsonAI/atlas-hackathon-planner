@@ -315,7 +315,9 @@
   // Render the shared Intellibus navigation around the current planning view.
   function shell(inner) {
     document.body.classList.toggle("motion-paused", motionPaused);
-    app.innerHTML = `<nav class="mission-nav" aria-label="Main navigation"><button class="logo-home" data-action="home" aria-label="Intellibus Atlas dashboard"><img src="assets/intellibus-logo.svg" alt="Intellibus" width="166" height="31"></button><span class="nav-divider"></span><span class="product-name">ATLAS <small>2027</small></span><div class="nav-tools"><button class="nav-link" data-action="home">Overview</button><a class="nav-link" href="atlas-reference.html#people">People</a><a class="nav-link" href="atlas-reference.html#transport">Transport</a><a class="nav-link" href="atlas-reference.html#direction">Operations</a><button class="motion-toggle" data-action="toggle-motion" aria-pressed="${motionPaused}" title="Pause or resume decorative animation">${motionPaused ? "Play motion" : "Pause motion"}</button></div></nav>${inner}`;
+    document.body.classList.toggle("sphere-dashboard", ui.screen === "home");
+    app.innerHTML = `<nav class="mission-nav" aria-label="Main navigation"><button class="logo-home" data-action="home" aria-label="Intellibus Atlas dashboard"><img src="assets/intellibus-logo.svg" alt="Intellibus" width="166" height="31"></button><span class="nav-divider"></span><span class="product-name">ATLAS <small>2027</small></span><div class="nav-tools"><button class="nav-link" data-action="home">Overview</button><button class="nav-link workspace-nav" data-action="workspace">Workspace</button><a class="nav-link" href="atlas-reference.html#people">People</a><a class="nav-link" href="atlas-reference.html#transport">Transport</a><a class="nav-link" href="atlas-reference.html#direction">Operations</a><button class="motion-toggle" data-action="toggle-motion" aria-pressed="${motionPaused}" aria-label="${motionPaused ? "Play decorative motion" : "Pause decorative motion"}" title="Pause or resume decorative animation">${motionPaused ? "Play motion" : "Pause motion"}</button></div></nav>${inner}`;
+    window.AtlasSphere?.mount();
   }
   function number(n) {
     return String(n).padStart(2, "0");
@@ -505,7 +507,7 @@
     const items = data.workstreams.flatMap(allItems),
       done = items.filter((it) => it.status === "Done").length,
       waiting = items.filter((it) => it.status === "Waiting").length;
-    shell(`<div class="command-home"><header class="command-hero"><div class="hero-copy"><div class="command-overline"><span class="signal-light"></span> INTELLIBUS · ATLAS AGENTIC AI HACKATHON</div><h1>The future. <span>In motion.</span></h1><p>23–24 Jan 2027 <span> / </span> Montego Bay <span> / </span> 24-hour hackathon</p><div class="hero-chips"><span>${data.workstreams.length} workstreams</span><span>${done} / ${items.length} items done</span><span>${waiting} waiting</span></div></div><div class="orbital-scene" aria-hidden="true"><div class="orbit-system"><div class="orbit ring-one"></div><div class="orbit ring-two"></div><div class="orbit ring-three"></div><div class="orb-core"><div class="core-face front">A</div><div class="core-face back">A</div><div class="core-face left"></div><div class="core-face right"></div><div class="core-face top"></div><div class="core-face bottom"></div></div><i class="satellite"></i></div><span class="orbit-label">ATLAS / 2027</span></div></header>
+    shell(`<div class="command-home">${window.AtlasSphereView({ workstreams: data.workstreams.length, registrations: data.command.metrics.find((m) => m.id === "registrations")?.target || 0, attendance: data.command.metrics.find((m) => m.id === "attendance")?.target || 0, hackers: data.command.metrics.find((m) => m.id === "hackers")?.target || 0 })}<section class="workspace-shell" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">YOUR COMMAND CENTER</p><h2>Make what’s next <span>happen.</span></h2></div><p>${done} / ${items.length} planning items done <span>·</span> ${waiting} waiting</p></header>
       <section class="metric-strip" aria-label="Event targets">${data.command.metrics
         .map((m) => {
           const known =
@@ -544,7 +546,7 @@
       ${ui.homeFiltersOpen ? `<section class="filter-panel"><label class="field">Find a workstream<input id="search" type="search" placeholder="Search workstreams" value="${esc(ui.search)}"></label><label class="field">See tasks by tag<select id="globalTag">${tagOptions(tags, ui.tag)}</select></label></section>` : ""}
       ${ui.tag ? `<section class="sheet tag-results">${tagged.length ? tagged.map(({ w, l, it }) => `<button class="tag-result" type="button" data-action="open-tag-item" data-ws="${esc(w.id)}" data-list="${esc(l.id)}"><span>${esc(it.text)}</span><small>${esc(w.title)} · ${esc(l.title)}</small></button>`).join("") : '<p class="empty">No tasks have this tag yet.</p>'}</section>` : ""}
       <section class="sheet" id="homeRows">${list.length ? list.map((w, i) => plainRow(w.id, w.title, "", i, list.length, "workstream", "open-workstream", readinessDots(w))).join("") : '<p class="empty">No matching workstream. Try another word.</p>'}</section></details>
-      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></div>`);
+      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></section></div>`);
   }
   function areaView() {
     const id = ui.areaId,
@@ -731,6 +733,15 @@
     }
     if (action === "quick-list")
       return nav("list", button.dataset.ws, button.dataset.list);
+    // The workspace shortcut bypasses the cinematic scroll without changing any data.
+    if (action === "workspace") {
+      if (ui.screen !== "home") nav("home");
+      document
+        .getElementById("workspace")
+        ?.scrollIntoView({ block: "start", behavior: "instant" });
+      document.getElementById("deck-search")?.focus({ preventScroll: true });
+      return;
+    }
     if (action === "home") return nav("home");
     if (action === "open-area") return nav("area", null, null, id);
     if (action === "open-attention") {

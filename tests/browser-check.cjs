@@ -99,12 +99,8 @@ const base = process.env.ATLAS_URL || "http://127.0.0.1:8765/";
     }
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(base);
-    assert.equal(
-      await page
-        .locator(".orb-core")
-        .evaluate((el) => getComputedStyle(el).animationName),
-      "none",
-    );
+    await page.waitForFunction(() => window.AtlasSphere?.state()?.static);
+    assert.equal(await page.locator(".sphere-progress").isVisible(), false);
     assert.deepEqual(errors, []);
     console.log(
       "PASS: saved counts, directory totals, search, profiles, pagination, operations, mobile and motion.",

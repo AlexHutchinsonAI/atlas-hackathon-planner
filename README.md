@@ -6,6 +6,10 @@ Source for [atlas-hackathon-planner.vercel.app](https://atlas-hackathon-planner.
 
 - `index.html`: the planning command center, verified targets, searchable workstreams and editable lists.
 - `atlas-reference.html#people`: the redesigned people directory. The route is retained so existing bookmarks still work. `#transport`, `#direction`, `#outcomes`, `#notebook`, `#web` and `#open` open the other operations sections.
+- `scripts/sphere-view.js`: accessible dashboard markup and navigation shortcuts.
+- `scripts/sphere.js`: the Three.js scene, native-scroll camera, scene lifecycle and motion preferences.
+- `styles/sphere.css`: responsive glass dashboard, cinematic stages and static fallbacks.
+- `vendor/three/`: pinned Three.js 0.180.0 ES modules and MIT license, served locally.
 - `scripts/command.js`: dashboard navigation, filtering, editing and persistence.
 - `scripts/operations.js`: the original operations workflows, with the redesigned directory and profile dialog.
 - `scripts/experience.js`: shared progressive reveals, hero lighting and decorative-motion preference. It does not change planning records.
@@ -23,11 +27,19 @@ The command plan and operations records retain their original, separate browser 
 
 The directory displays 8 records per page on desktop and 4 on phones. Category counters act as filters. Search matches names, roles, organizations, statuses and contact fields; profiles open in a native dialog with keyboard focus containment and Escape dismissal. Transport retains Leaflet/OpenStreetMap attribution, OSRM routes and the source pickup tables. Additional planning tables are collapsed below the main map.
 
+## Inside Atlas experience
+
+The overview is a real WebGL scene: a transparent sphere containing curved neural connections, metallic orbital ribbons and a procedural skyline. Native scrolling moves the camera from the overview through the shell into the network; reverse scrolling retraces that path. Stage buttons provide an alternate way to move between the three views. The Workspace shortcut and `index.html#workspace` bypass the introduction.
+
+The surrounding cards open the existing people, competition and transport workflows. Target cards use the saved command-plan targets; they are not attendance claims. The underlying workspace retains the original search, edits and import/export behavior.
+
+Pause motion or the system's reduced-motion preference turns the scene into a still and removes the extra scroll distance. Browsers without WebGL receive a CSS globe and the same functional HTML controls. Rendering pauses offscreen and in background tabs, resolution is capped, and GPU resources are released when navigating away. No map API key, rendering service or new backend is needed.
+
 ## Local review
 
 Run `python3 -m http.server 8765 --bind 127.0.0.1` in this directory, then open `http://127.0.0.1:8765/`. Maps and external source links require network access. Motion can be paused and respects reduced-motion preferences.
 
-With Playwright available in the development environment, run `node tests/browser-check.cjs`. Set `ATLAS_URL` to review a different deployment and `BROWSER_CHANNEL` if Chrome is not the browser to use. The checks use a fresh browser context and do not alter real users' saved plans.
+With Playwright available in the development environment, run `node tests/browser-check.cjs` and `node tests/sphere-check.cjs`. Set `ATLAS_URL` to review a different deployment and `BROWSER_CHANNEL` if Chrome is not the browser to use. The checks use a fresh browser context and do not alter real users' saved plans.
 
 ## Deployment
 
