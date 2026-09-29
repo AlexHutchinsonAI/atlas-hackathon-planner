@@ -1,0 +1,336 @@
+/* The camera has five chapters; all content below it remains ordinary, selectable HTML. */
+.sphere-journey.sphere-enhanced:not(.sphere-static) {
+  height: calc(100svh + 2600px);
+}
+.sphere-atoms,
+.sphere-field {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px;
+}
+.sphere-atoms h2,
+.sphere-field h2 {
+  font-size: clamp(2.7rem, 6.8vw, 6.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.065em;
+  margin: 18px 0;
+  color: #eff8ff;
+}
+.sphere-atoms h2 span,
+.sphere-field h2 span {
+  color: #a8d2ff;
+}
+.sphere-atoms > p:last-child,
+.sphere-field > p {
+  max-width: 480px;
+  color: #b7cde5;
+}
+.sphere-progress {
+  max-width: calc(100% - 24px);
+}
+.sphere-progress button {
+  white-space: nowrap;
+}
+/* Tinted layers, a fine illuminated rim, and restrained shadows give readable glass depth. */
+.depth-flow {
+  position: relative;
+  padding: 0 5.2% 70px;
+  max-width: 1512px;
+  margin: auto;
+  background:
+    radial-gradient(ellipse at 95% 25%, #144b872b, transparent 48%),
+    radial-gradient(ellipse at 5% 65%, #3862bc22, transparent 45%);
+}
+.depth-chapter {
+  position: relative;
+  margin: 0 0 90px;
+  scroll-margin-top: 88px;
+  min-width: 0;
+}
+.depth-heading {
+  position: relative;
+  padding: 40px 0 22px;
+}
+.depth-heading > span {
+  color: #8dbcf1;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.2em;
+}
+.depth-heading h2 {
+  color: #eff7ff;
+  font-size: clamp(30px, 4vw, 56px);
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+  margin: 16px 0 12px;
+}
+.depth-heading p,
+.journey-footer {
+  color: #adc2dc;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.depth-heading a,
+.journey-footer a {
+  color: #abd9ff;
+}
+.glass-scroll {
+  position: relative;
+  max-height: 72svh;
+  overflow: auto;
+  padding: 26px;
+  border: 1px solid #aed6ff40;
+  border-radius: 26px;
+  background:
+    linear-gradient(135deg, #8dc9ff13, #254f8c1a 50%, #bbdcff0b), #081b31df;
+  backdrop-filter: blur(22px) saturate(135%);
+  box-shadow:
+    inset 0 1px 0 #e0f2ff22,
+    0 20px 70px #0004;
+  scrollbar-color: #739ac1 #0a1b2e;
+  scrollbar-width: thin;
+  scroll-padding: 24px;
+}
+.glass-scroll:focus-visible {
+  outline: 2px solid #bde6ff;
+  outline-offset: 5px;
+}
+.glass-scroll .review-table-wrap {
+  overflow: visible;
+}
+.glass-scroll .review-record,
+.glass-scroll .review-summary article {
+  background: #9bbfff09;
+  border-color: #accfff24;
+}
+.operations-flow {
+  display: block;
+  width: 100%;
+  height: 6200px;
+  border: 0;
+  color-scheme: dark;
+  background: transparent;
+}
+.journey-footer {
+  padding: 35px 0;
+  border-top: 1px solid #b3d8ff24;
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+}
+.operations-continuous .wrap {
+  max-width: 1512px;
+}
+.operations-continuous .operations-chapters {
+  display: block;
+}
+.operations-continuous #peoplePagination {
+  display: none;
+}
+.operations-continuous .people-hero {
+  margin-top: 0;
+}
+.operations-continuous #notebookView {
+  max-height: 72svh;
+}
+.operations-continuous .glass-scroll .surface-heading {
+  min-height: 0;
+}
+/* Embedded operations shares its actual document height, keeping the outer page scroll continuous. */
+html.journey-embedded,
+.journey-embedded body {
+  background: transparent !important;
+}
+.journey-embedded .wrap {
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+.journey-embedded .mission-nav,
+.journey-embedded #views,
+.journey-embedded .operating-status,
+.journey-embedded .team-bar {
+  display: none !important;
+}
+.journey-embedded .depth-chapter {
+  margin-bottom: 64px;
+}
+.journey-embedded .atlas-surface::before,
+.journey-embedded .atlas-surface::after {
+  display: none;
+}
+@media (max-width: 700px) {
+  .sphere-progress {
+    gap: 6px;
+    bottom: 24px;
+  }
+  .sphere-progress i {
+    width: 10px;
+  }
+  .sphere-progress button {
+    font-size: 10px;
+    padding: 8px 3px;
+  }
+  .depth-flow {
+    padding-inline: 16px;
+  }
+  .depth-heading {
+    padding-top: 24px;
+  }
+  .depth-chapter {
+    margin-bottom: 48px;
+  }
+  .glass-scroll {
+    padding: 16px;
+    border-radius: 20px;
+    max-height: 70svh;
+  }
+  .glass-scroll .review-table-wrap {
+    overflow-x: auto;
+  }
+  .journey-footer {
+    flex-direction: column;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sphere-journey.sphere-enhanced:not(.sphere-static) {
+    height: max(600px, calc(100svh - 66px));
+  }
+}
+/* A full task library supplements the compact dashboard; editing uses the existing task workflow. */
+.task-library > section {
+  padding-bottom: 28px;
+}
+.task-library h3 {
+  font-size: 24px;
+  color: #eef8ff;
+  margin: 0 0 18px;
+}
+.task-library h4 {
+  color: #91b8e2;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 22px 0 10px;
+}
+.library-task {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 20px;
+  text-align: left;
+  padding: 13px 4px;
+  border: 0;
+  border-bottom: 1px solid #b8dfff1c;
+  background: transparent;
+  color: #d6e8ff;
+  font: inherit;
+  cursor: pointer;
+}
+.library-task small {
+  min-width: 100px;
+  color: #93b4d6;
+  text-align: right;
+}
+.library-task:hover {
+  background: #add9ff0b;
+}
+@media (max-width: 600px) {
+  .library-task {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .library-task small {
+    text-align: left;
+  }
+}
+/* A slow orbit behind each chapter heading carries the sphere's depth into the data without moving text. */
+.depth-heading::after {
+  content: "";
+  position: absolute;
+  right: 3%;
+  top: 8px;
+  width: 145px;
+  height: 145px;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 1px solid #a5d5ff59;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #d2eeff38,
+    #508cdf12 45%,
+    transparent 70%
+  );
+  box-shadow:
+    inset 6px 0 20px #a9ddff22,
+    inset -8px -6px 24px #256de52b,
+    0 0 45px #1e67d322;
+  transform: perspective(600px) rotateY(-35deg) rotateX(20deg);
+  animation: chapter-orbit 14s ease-in-out infinite alternate;
+  z-index: -1;
+}
+.depth-heading {
+  isolation: isolate;
+}
+.depth-chapter:nth-child(even) .depth-heading::after {
+  animation-delay: -7s;
+  width: 120px;
+  height: 120px;
+}
+@keyframes chapter-orbit {
+  to {
+    transform: perspective(600px) rotateY(35deg) rotateX(-15deg)
+      translateY(10px);
+  }
+}
+.motion-paused .depth-heading::after {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .depth-heading::after {
+    animation: none;
+  }
+}
+@media (max-width: 700px) {
+  .depth-heading::after {
+    width: 85px;
+    height: 85px;
+    right: 0;
+    opacity: 0.65;
+  }
+}
+/* An embedded viewport has the height of its document, so cap data panels independently to avoid resize feedback. */
+html.journey-embedded {
+  background: #030d1c !important;
+  overflow-x: clip;
+  min-height: 0;
+}
+.journey-embedded body {
+  min-height: 0;
+  overflow-x: clip;
+}
+.journey-embedded .glass-scroll,
+.journey-embedded #notebookView {
+  max-height: min(72svh, 720px);
+}
+@media (max-width: 700px) {
+  .journey-embedded .glass-scroll,
+  .journey-embedded #notebookView {
+    max-height: 560px;
+  }
+}
+.workspace-shell .command-panel,
+.workspace-shell .metric-card,
+.workspace-shell .brief {
+  background: linear-gradient(135deg, #b0dfff12, #416cac0c), #0a1e34dc;
+  backdrop-filter: blur(18px) saturate(125%);
+  border-color: #aad6ff36;
+  box-shadow:
+    inset 0 1px 0 #d3ecff17,
+    0 15px 40px #0002;
+}

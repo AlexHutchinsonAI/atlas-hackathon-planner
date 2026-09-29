@@ -454,6 +454,36 @@ function mount() {
   });
   interior.add(new THREE.LineSegments(deepLineGeo, deepMaterial));
 
+  // Reuse a small set of geometry/materials for the atomic tunnel instead of adding another canvas.
+  const atomic = new THREE.Group();
+  atomic.position.set(center.x, center.y, -9);
+  const atomGeo = new THREE.SphereGeometry(0.16, 12, 10);
+  const orbitGeo = new THREE.TorusGeometry(0.8, 0.009, 5, 64);
+  const atomMaterial = new THREE.MeshBasicMaterial({ color: "#b9edff" });
+  const orbitMaterial = new THREE.MeshBasicMaterial({
+    color: "#559dff",
+    transparent: true,
+    opacity: 0.45,
+  });
+  for (let i = 0; i < 18; i++) {
+    const atom = new THREE.Group();
+    const angle = i * 2.399;
+    const radius = i === 0 ? 0.4 : 1.5 + (i % 4) * 0.6;
+    atom.position.set(
+      Math.cos(angle) * radius,
+      Math.sin(angle) * radius,
+      -i * 0.85,
+    );
+    atom.add(new THREE.Mesh(atomGeo, atomMaterial));
+    for (let j = 0; j < 3; j++) {
+      const orbit = new THREE.Mesh(orbitGeo, orbitMaterial);
+      orbit.rotation.set(j * 1.04, j * 0.72, i * 0.4);
+      atom.add(orbit);
+    }
+    atomic.add(atom);
+  }
+  scene.add(atomic);
+
   let progress = 0,
     lastDraw = 0,
     disposed = false,
@@ -469,13 +499,24 @@ function mount() {
 
   // Inactive phase controls are inert, not merely transparent, so keyboard focus never disappears.
   function setPhase(p) {
-    const phase = p < 0.29 ? "overview" : p < 0.68 ? "enter" : "inside";
+    const phase =
+      p < 0.18
+        ? "overview"
+        : p < 0.4
+          ? "enter"
+          : p < 0.62
+            ? "inside"
+            : p < 0.84
+              ? "atoms"
+              : "field";
     root.dataset.phase = phase;
     root.dataset.progress = p.toFixed(3);
     const opacity = [
-      1 - smooth(0.12, 0.29, p),
-      smooth(0.27, 0.38, p) * (1 - smooth(0.58, 0.68, p)),
-      smooth(0.67, 0.8, p),
+      1 - smooth(0.1, 0.18, p),
+      smooth(0.17, 0.23, p) * (1 - smooth(0.34, 0.4, p)),
+      smooth(0.39, 0.46, p) * (1 - smooth(0.56, 0.62, p)),
+      smooth(0.61, 0.68, p) * (1 - smooth(0.78, 0.84, p)),
+      smooth(0.83, 0.91, p),
     ];
     layers.forEach((layer, i) => {
       layer.style.opacity = opacity[i];
@@ -484,7 +525,8 @@ function mount() {
       layer.style.visibility = opacity[i] < 0.01 ? "hidden" : "visible";
     });
     root.querySelectorAll("[data-sphere-step]").forEach((button, i) => {
-      const current = i === ["overview", "enter", "inside"].indexOf(phase);
+      const current =
+        i === ["overview", "enter", "inside", "atoms", "field"].indexOf(phase);
       button.setAttribute("aria-current", current ? "step" : "false");
     });
     root.style.setProperty("--journey-progress", p);
@@ -524,21 +566,29 @@ function mount() {
     startPosition.set(narrow ? 1.5 : 0, narrow ? 2.8 : 1.8, narrow ? 15 : 12.8);
     startLook.set(narrow ? 2.8 : 0, narrow ? 1.5 : 1.15, 0);
     endPosition.set(center.x + 0.14, center.y + 0.14, 0.8);
-    const travel = smooth(0.04, 0.94, progress);
+    const intro = Math.min(1, progress / 0.6);
+    const travel = smooth(0.04, 0.94, intro);
     camera.position.copy(startPosition).lerp(endPosition, travel);
     look
       .copy(startLook)
       .lerp(
         new THREE.Vector3(center.x, center.y + 0.3, -6),
-        smooth(0.08, 0.74, progress),
+        smooth(0.08, 0.74, intro),
       );
+    // Continue down the same axis: native reverse scrolling retraces both microscopic layers.
+    const depth = smooth(0.6, 1, progress);
+    camera.position.z -= depth * 19;
+    look.z -= depth * 24;
     camera.lookAt(look);
+    atomic.visible = progress > 0.52;
+    atomic.rotation.z = isStatic ? 0 : Math.sin(time * 0.16) * 0.08;
+
     ribbons.rotation.y = isStatic ? 0 : Math.sin(time * 0.13) * 0.045;
     coreHalo.material.opacity =
       0.7 + (isStatic ? 0 : Math.sin(time * 1.1) * 0.13);
-    city.visible = progress < 0.6;
-    platform.visible = progress < 0.7;
-    floor.visible = progress < 0.75;
+    city.visible = intro < 0.6;
+    platform.visible = intro < 0.7;
+    floor.visible = intro < 0.75;
     deepMaterial.opacity = 0.07 + smooth(0.4, 0.8, progress) * 0.25;
     scene.fog.density = 0.023 + progress * 0.007;
     renderer.render(scene, camera);
@@ -572,7 +622,7 @@ function mount() {
   const onClick = (event) => {
     const step = event.target.closest("[data-sphere-step]");
     if (step) goTo(Number(step.dataset.sphereStep));
-    if (event.target.closest("[data-sphere-enter]")) goTo(0.48);
+    if (event.target.closest("[data-sphere-enter]")) goTo(0.28);
   };
   root.addEventListener("click", onClick);
   window.addEventListener("scroll", updateProgress, { passive: true });

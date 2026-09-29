@@ -398,6 +398,17 @@
   window.AtlasReview = {
     init,
     render,
+    flow() {
+      model();
+      return (
+        tabs
+          .map(
+            ([key, label], i) =>
+              `<section class="depth-chapter" id="journey-${key}"><header class="depth-heading"><span>0${i + 2} / THE PLAN</span><h2>${label}</h2><p>Scroll inside to explore. Keep scrolling at the edge to continue.</p></header><div class="glass-scroll" tabindex="0" role="region" aria-label="${label}">${key === "progress" ? '<div id="review-content">' + progress() + "</div>" : key === "owners" ? owners() : key === "recruitment" ? recruitment() : key === "dependencies" ? dependencies() : register(key).replaceAll("<details ", "<details open ")}</div></section>`,
+          )
+          .join("") + '<p id="review-message" role="status"></p>'
+      );
+    },
     open(tab) {
       active = tabs.some(([key]) => key === tab) ? tab : "progress";
       api.open();

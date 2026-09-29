@@ -587,7 +587,19 @@
       ${ui.homeFiltersOpen ? `<section class="filter-panel"><label class="field">Find a workstream<input id="search" type="search" placeholder="Search workstreams" value="${esc(ui.search)}"></label><label class="field">See tasks by tag<select id="globalTag">${tagOptions(tags, ui.tag)}</select></label></section>` : ""}
       ${ui.tag ? `<section class="sheet tag-results">${tagged.length ? tagged.map(({ w, l, it }) => `<button class="tag-result" type="button" data-action="open-tag-item" data-ws="${esc(w.id)}" data-list="${esc(l.id)}"><span>${esc(it.text)}</span><small>${esc(w.title)} · ${esc(l.title)}</small></button>`).join("") : '<p class="empty">No tasks have this tag yet.</p>'}</section>` : ""}
       <section class="sheet" id="homeRows">${list.length ? list.map((w, i) => plainRow(w.id, w.title, "", i, list.length, "workstream", "open-workstream", readinessDots(w))).join("") : '<p class="empty">No matching workstream. Try another word.</p>'}</section></details>
-      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></div></section></div>`);
+      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></div></section><div class="depth-flow"><section class="depth-chapter" id="journey-tasks"><header class="depth-heading"><span>01 / EVERY DETAIL</span><h2>The entire plan. In view.</h2><p>All workstreams and tasks, in one scrollable library. Select a task to edit it.</p></header><div class="glass-scroll task-library" tabindex="0" role="region" aria-label="Complete task library">${data.workstreams
+        .map(
+          (w) =>
+            `<section><h3>${esc(w.title)}</h3>${allLists(w)
+              .map(
+                (l) =>
+                  `<h4>${esc(l.title)}</h4>${(l.items || []).map((it) => `<button class="library-task" data-action="open-attention" data-ws="${esc(w.id)}" data-list="${esc(l.id)}" data-item="${esc(it.id)}"><span>${esc(it.text)}</span><small>${esc(it.status || "Not started")}${it.date ? " · " + esc(it.date) : ""}</small></button>`).join("")}`,
+              )
+              .join("")}</section>`,
+        )
+        .join(
+          "",
+        )}</div></section>${window.AtlasReview.flow()}<section class="depth-chapter" id="journey-operations"><header class="depth-heading"><span>08 / THE COLLECTIVE</span><h2>People. Places. Possibilities.</h2><p>Explore the people, transport and operations below.</p><a href="atlas-reference.html?flow=1">Open the full operations journey ↗</a></header><iframe class="operations-flow" title="Atlas people and operations, continuous scroll" src="atlas-reference.html?flow=1&embedded=1" loading="lazy"></iframe></section><footer class="journey-footer"><p>Atlas Agentic AI Hackathon 2027</p><a href="#workspace">Back to your workspace ↑</a></footer></div></div>`);
   }
   function areaView() {
     const id = ui.areaId,
@@ -687,6 +699,12 @@
   // Refresh the selected screen while retaining expanded panels and edit context.
   function render(keepScroll = false) {
     const y = window.scrollY;
+    // Restore each data viewport after a save so an edit deep in a roster does not jump to its first row.
+    const regionScroll = keepScroll
+      ? [...app.querySelectorAll(".depth-chapter[id] > .glass-scroll")].map(
+          (el) => [el.parentElement.id, el.scrollTop, el.scrollLeft],
+        )
+      : [];
     const openItems = keepScroll
       ? [...app.querySelectorAll(".item-row[data-id]")]
           .filter((row) => row.querySelector("details.item-more")?.open)
@@ -720,6 +738,15 @@
           row.querySelector("details.item-more").open = true;
       for (const panel of app.querySelectorAll("details[data-persist]"))
         if (openPanels.includes(panel.dataset.persist)) panel.open = true;
+      for (const [id, top, left] of regionScroll) {
+        const region = document
+          .getElementById(id)
+          ?.querySelector(".glass-scroll");
+        if (region) {
+          region.scrollTop = top;
+          region.scrollLeft = left;
+        }
+      }
       window.scrollTo(0, y);
     }
   }

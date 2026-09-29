@@ -1,6 +1,16 @@
 /* People, event operations and Leaflet transport workflows. */
 
 "use strict";
+const continuousOperations = new URLSearchParams(location.search).has("flow");
+const flowSections = [
+  ["people", "peopleView", "People & rosters"],
+  ["direction", "directionView", "Operations overview"],
+  ["outcomes", "outcomesView", "Outcomes"],
+  ["notebook", "notebookView", "Workstreams"],
+  ["web", "webView", "Website readiness"],
+  ["transport", "transportPageView", "Transport"],
+  ["open", "openView", "Actions"],
+];
 
 /* ---------- seed: register from the preliminary planning document ---------- */
 const SEED = [
@@ -2614,7 +2624,7 @@ function initTransportMap() {
   }
   try {
     transportLeafletMap = L.map(mapEl, {
-      scrollWheelZoom: true,
+      scrollWheelZoom: !continuousOperations,
       touchZoom: true,
       doubleClickZoom: true,
       boxZoom: true,
@@ -2858,7 +2868,11 @@ function applyPeopleFilter() {
           .includes(q))
     );
   });
-  const size = matchMedia("(max-width:600px)").matches ? 4 : 8,
+  const size = continuousOperations
+      ? Math.max(1, filtered.length)
+      : matchMedia("(max-width:600px)").matches
+        ? 4
+        : 8,
     pages = Math.max(1, Math.ceil(filtered.length / size));
   peoplePage = Math.min(peoplePage, pages - 1);
   el("peopleGrid").innerHTML = filtered.length
@@ -3054,6 +3068,42 @@ function renderOutcomes() {
 
 // Switch operational sections while preserving their existing local storage models.
 function showView(v) {
+  // The continuous view uses real sections and native nested scrolling; existing tabs remain available elsewhere.
+  if (continuousOperations) {
+    if (!document.body.classList.contains("operations-continuous")) {
+      document.body.classList.add("operations-continuous");
+      const host = document.createElement("div");
+      host.className = "operations-chapters";
+      el("views").after(host);
+      flowSections.forEach(([key, id, label], i) => {
+        const section = el(id),
+          chapter = document.createElement("section");
+        chapter.className = "depth-chapter";
+        chapter.id = "flow-" + key;
+        chapter.innerHTML = `<header class="depth-heading"><span>${String(i + 1).padStart(2, "0")} / OPERATIONS</span><h2>${label}</h2></header>`;
+        section.hidden = false;
+        section.classList.add("glass-scroll");
+        section.tabIndex = 0;
+        section.setAttribute("role", "region");
+        section.setAttribute("aria-label", label);
+        chapter.append(section);
+        host.append(chapter);
+      });
+      renderPeople();
+      renderDirection();
+      renderOutcomes();
+      renderWeb();
+      renderTransportPage();
+      renderOpen();
+      // In the scroll journey, details start expanded so reading does not require disclosure clicks.
+      host.querySelectorAll("details").forEach((detail) => {
+        detail.open = true;
+      });
+    }
+    document.getElementById("flow-" + v)?.scrollIntoView({ block: "start" });
+    return;
+  }
+
   if (
     ![
       "direction",

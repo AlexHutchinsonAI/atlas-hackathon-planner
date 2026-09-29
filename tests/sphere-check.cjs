@@ -21,8 +21,10 @@ const base = process.env.ATLAS_URL || "http://127.0.0.1:8765/";
     await ready();
     const start = await page.evaluate(() => AtlasSphere.state().camera);
     for (const [step, phase] of [
-      ["0.48", "enter"],
-      ["0.88", "inside"],
+      ["0.28", "enter"],
+      ["0.52", "inside"],
+      ["0.73", "atoms"],
+      ["0.96", "field"],
       ["0", "overview"],
     ]) {
       await page.locator(`[data-sphere-step="${step}"]`).click();
