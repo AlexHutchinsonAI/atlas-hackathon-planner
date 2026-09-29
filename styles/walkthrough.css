@@ -266,3 +266,25 @@
     flex: 1 1 100%;
   }
 }
+/* Compact the working header so actions and records arrive sooner without shrinking type. */
+.workspace-shell.atlas-surface {
+  padding-top: 28px;
+}
+.atlas-surface .surface-heading.workspace-heading {
+  min-height: 106px;
+  margin-bottom: 14px;
+}
+.atlas-surface .workspace-heading > p {
+  font-size: 15px;
+  white-space: normal;
+}
+.atlas-surface .workspace-heading .surface-orbit {
+  height: 125px;
+  width: 180px;
+}
+.atlas-surface .headline-metrics .metric-card {
+  padding: 16px 20px;
+}
+.review-shortcuts {
+  margin-block: 10px 14px;
+}
