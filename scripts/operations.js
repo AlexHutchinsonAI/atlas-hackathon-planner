@@ -1485,6 +1485,24 @@ function buildPeople() {
     p.responsibilities = [...new Set([...p.responsibilities, ...rs])];
     if (!p.status) p.status = "Internal";
   });
+  // Merge verified contact details at read time so saved planning edits and current roles survive.
+  const identity = (name) => canonName(name).toLowerCase().replace(/[^a-z0-9]/g, "");
+  (window.ATLAS_PEOPLE_ENRICHMENT || []).forEach((record) => {
+    const existing = [...M.values()].find((person) => identity(person.name) === identity(record.name));
+    const p = existing || get(record.name);
+    if (!existing && record.role) {
+      p.roles.push(record.role);
+      p.roleStatuses[record.role] = "To Confirm";
+      p.status = "To Confirm";
+      p.source = record.source || "Verified contact source";
+    }
+    // Do not overwrite a saved email, current title or role with historical roster data.
+    p.email = p.email || record.email || "";
+    p.title = p.title || record.title || "";
+    p.organization = p.organization || record.organization || "";
+    p.linkedin = record.linkedin || (/^https?:\/\/(?:www\.)?linkedin\.com\/in\//i.test(p.link) ? p.link : "");
+    if (!p.link && p.linkedin) p.link = p.linkedin;
+  });
   M.forEach((p) => {
     p.roles = [...new Set(p.roles)];
     p.responsibilities = [...new Set(p.responsibilities)];
@@ -1522,7 +1540,7 @@ function personCard(p) {
   const photo = p.photo
     ? `<img class="person-photo" src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy" width="64" height="64">`
     : `<div class="person-avatar" aria-label="No headshot">${esc(initials(p.name))}</div>`;
-  return `<article class="person-card" data-person-card><div class="person-top">${photo}<div><h3 class="person-name">${esc(p.name)}</h3><p class="person-title">${esc(p.title || p.organization || "Role details pending")}</p></div></div><div class="role-chips">${p.roles.map((r) => `<span class="role-chip">${esc(r)} · ${esc(p.roleStatuses[r] || "To Confirm")}</span>`).join("")}</div><div class="person-contacts">${p.email ? `<a href="mailto:${esc(p.email)}" title="${esc(p.email)}">${esc(p.email)}</a>` : "<span>Email not yet supplied</span>"}${p.phone ? `<a href="tel:${esc(p.phone.replace(/[^+0-9]/g, ""))}">${esc(p.phone)}</a>` : "<span>Phone not yet supplied</span>"}</div><div class="person-bottom"><span>${p.photo ? "Source profile" : "Headshot needed"}</span><button type="button" data-profile="${esc(p.name)}" aria-label="View profile for ${esc(p.name)}">Profile <span aria-hidden="true">↗</span></button></div></article>`;
+  return `<article class="person-card" data-person-card><div class="person-top">${photo}<div><h3 class="person-name">${esc(p.name)}</h3><p class="person-title">${esc(p.title || p.organization || "Role details pending")}</p></div></div><div class="role-chips">${p.roles.map((r) => `<span class="role-chip">${esc(r)} · ${esc(p.roleStatuses[r] || "To Confirm")}</span>`).join("")}</div><div class="person-contacts">${p.email ? `<a href="mailto:${esc(p.email)}" title="${esc(p.email)}">${esc(p.email)}</a>` : "<span>Email not yet supplied</span>"}${p.phone ? `<a href="tel:${esc(p.phone.replace(/[^+0-9]/g, ""))}">${esc(p.phone)}</a>` : "<span>Phone not yet supplied</span>"}${p.linkedin ? `<a href="${esc(p.linkedin)}" target="_blank" rel="noopener">LinkedIn profile ↗</a>` : ""}</div><div class="person-bottom"><span>${p.photo ? "Source profile" : "Headshot needed"}</span><button type="button" data-profile="${esc(p.name)}" aria-label="View profile for ${esc(p.name)}">Profile <span aria-hidden="true">↗</span></button></div></article>`;
 }
 
 // Open full source details in a native, keyboard-accessible dialog without leaving the directory.
@@ -1545,7 +1563,7 @@ function openPersonProfile(name) {
     ["Publication readiness", p.publication],
     ["Notes", p.notes],
   ];
-  dialog.innerHTML = `<form method="dialog"><button class="profile-close" aria-label="Close profile">×</button></form><div class="profile-heading">${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" width="96" height="96">` : `<span class="person-avatar">${esc(initials(p.name))}</span>`}<div><p class="people-kicker">${esc(p.roles.join(" · "))}</p><h2 id="profileTitle">${esc(p.name)}</h2><p>${esc(p.title || p.organization || "Working roster")}</p></div></div><p class="profile-status">${esc(p.status || "Working")} · ${esc(personStage(p))}</p><div class="profile-contact">${p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ""}${p.phone ? `<a href="tel:${esc(p.phone.replace(/[^+0-9]/g, ""))}">${esc(p.phone)}</a>` : ""}${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">Source profile ↗</a>` : ""}</div>${paragraphs
+  dialog.innerHTML = `<form method="dialog"><button class="profile-close" aria-label="Close profile">×</button></form><div class="profile-heading">${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" width="96" height="96">` : `<span class="person-avatar">${esc(initials(p.name))}</span>`}<div><p class="people-kicker">${esc(p.roles.join(" · "))}</p><h2 id="profileTitle">${esc(p.name)}</h2><p>${esc(p.title || p.organization || "Working roster")}</p></div></div><p class="profile-status">${esc(p.status || "Working")} · ${esc(personStage(p))}</p><div class="profile-contact">${p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ""}${p.phone ? `<a href="tel:${esc(p.phone.replace(/[^+0-9]/g, ""))}">${esc(p.phone)}</a>` : ""}${p.linkedin ? `<a href="${esc(p.linkedin)}" target="_blank" rel="noopener">LinkedIn profile ↗</a>` : ""}${p.link && p.link !== p.linkedin ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">Source profile ↗</a>` : ""}</div>${paragraphs
     .filter(([, v]) => v)
     .map(
       ([label, value]) =>
