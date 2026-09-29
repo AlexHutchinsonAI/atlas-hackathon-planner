@@ -1,0 +1,4 @@
+/* White glass controls keep the original venue photography unobstructed. */
+body{color:#153652;background:#edf8ff}body:after{background:linear-gradient(0deg,#10294022,transparent 35%)}
+aside,.embedded aside{background:linear-gradient(135deg,#fffffff2,#e6f4ffe8);border-color:#acd0e9;box-shadow:0 18px 50px #143b5a20,inset 0 1px #fff;color:#153652}
+aside :is(h2,p,label,summary),#status,.eyebrow{color:#254d6b}select,button{background:#f5fbff;color:#163b59;border-color:#9ec8e5}button:hover{background:#cceaff}details{border-color:#b9d6ea}details a{color:#2267a5}header{background:#fffffff0;color:#153652}header a{color:#2267a5}button:focus-visible,select:focus-visible{outline-color:#2267a5}

@@ -34,7 +34,7 @@ function glowTexture() {
 // Build reflective studio lighting locally; no HDR download or third-party rendering service is required.
 function reflectionEnvironment(renderer) {
   const room = new THREE.Scene();
-  room.background = new THREE.Color("#071a35");
+  room.background = new THREE.Color("#d9efff");
   const shapes = [
     [-5, 3, 2, 1, 9, 2],
     [5, 4, -2, 2, 10, 1],
@@ -91,7 +91,7 @@ function mount() {
   renderer.toneMappingExposure = 1.35;
   holder.appendChild(renderer.domElement);
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2("#05132a", 0.014);
+  scene.fog = new THREE.FogExp2("#eaf7ff", 0.014);
   const camera = new THREE.PerspectiveCamera(42, 1, 0.04, 150);
   const environment = reflectionEnvironment(renderer);
   scene.environment = environment.texture;
@@ -360,7 +360,7 @@ function mount() {
   const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(150, 150),
     new THREE.MeshStandardMaterial({
-      color: "#061429",
+      color: "#d5eaff",
       metalness: 0.92,
       roughness: 0.2,
     }),
