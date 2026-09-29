@@ -15,7 +15,7 @@ const base = process.env.ATLAS_URL || "http://127.0.0.1:8765/";
   try {
     // Fresh browser storage ensures these edits never touch a user's working copy.
     await page.goto(base);
-    assert.equal(await page.locator(".metric-card").count(), 5);
+    assert.equal(await page.locator(".metric-card").count(), 2);
     await page.locator(".numbers-panel summary").click();
     await page.locator('[data-metric-current="registrations"]').fill("123");
     await page.locator('[data-metric-current="registrations"]').blur();

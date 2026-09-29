@@ -1,0 +1,15 @@
+{
+  "name": "atlas-hackathon-planner",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/permissions.test.cjs"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "@clerk/backend": "3.20.1",
+    "@neondatabase/serverless": "1.1.0"
+  }
+}

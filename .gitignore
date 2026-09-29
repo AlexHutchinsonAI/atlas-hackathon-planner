@@ -3,3 +3,9 @@
 .vercel/
 node_modules/
 .DS_Store
+.vercel
+.env*
+
+# Marketplace-installed development skills are not application assets.
+.agents/
+skills-lock.json

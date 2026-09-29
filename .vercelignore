@@ -1,0 +1,6 @@
+.env*
+.agents/
+skills-lock.json
+**/* 2.*
+tests/
+.git/

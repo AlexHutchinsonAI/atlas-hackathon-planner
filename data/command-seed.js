@@ -15463,3 +15463,6 @@ const STARTER_DATA = {
     ],
   },
 };
+
+// The API uses the same baseline as the browser when initializing an empty shared plan.
+if (typeof module !== "undefined") module.exports = STARTER_DATA;

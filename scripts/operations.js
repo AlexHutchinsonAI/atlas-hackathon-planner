@@ -379,7 +379,9 @@ let saveTimer = null,
 function save(id) {
   planOf(id).updatedAt = new Date().toISOString();
   try {
-    localStorage.setItem(LS, JSON.stringify(plans));
+    localStorage.setItem(operationsStorageKey(), JSON.stringify(plans));
+    if (window.AtlasTeam?.active)
+      window.AtlasTeam.changed(operationsSnapshot());
   } catch (e) {}
   if (!db) return;
   clearTimeout(saveTimer);
@@ -436,7 +438,12 @@ function rebuildWS() {
 }
 function saveCustom() {
   try {
-    localStorage.setItem(LS + "-ws", JSON.stringify(custom));
+    localStorage.setItem(
+      operationsStorageKey() + "-ws",
+      JSON.stringify(custom),
+    );
+    if (window.AtlasTeam?.active)
+      window.AtlasTeam.changed(operationsSnapshot());
   } catch (e) {}
   if (db)
     db.doc("meta/custom")
@@ -1369,6 +1376,7 @@ function buildPeople() {
       M.set(n, {
         name: n,
         roles: [],
+        roleStatuses: {},
         responsibilities: [],
         title: "",
         organization: "",
@@ -1397,6 +1405,7 @@ function buildPeople() {
         : "Judge",
     );
     p.status = js.status || p.status || "To Confirm";
+    p.roleStatuses[p.roles.at(-1)] = js.status || "To Confirm";
     p.email = js.email || p.email;
     p.phone = js.phone || p.phone;
     p.link = js.link || (jp && jp.link) || p.link;
@@ -1410,6 +1419,7 @@ function buildPeople() {
   SPEAKER_PROFILES.forEach((x) => {
     const p = get(x.name);
     p.roles.push("Speaker");
+    p.roleStatuses.Speaker = x.status || "To Confirm";
     p.title = p.title || x.title;
     p.status = x.status || p.status;
     p.bio = p.bio || x.bio;
@@ -1425,6 +1435,7 @@ function buildPeople() {
     const p = get(n),
       cp = COACH_PROFILE_MAP[n] || {};
     p.roles.push("Coach");
+    p.roleStatuses.Coach = st || "To Confirm";
     if (!p.status || p.status === "Tentative" || p.status === "To Confirm")
       p.status = st;
     p.notes = p.notes || "January 2027 coach consideration: " + st;
@@ -1447,6 +1458,7 @@ function buildPeople() {
   NETWORK_CONTACTS.forEach((c) => {
     const p = get(c.name);
     p.roles.push("Network Contact");
+    p.roleStatuses["Network Contact"] = "Network prospect";
     p.title = p.title || c.title;
     p.organization = p.organization || c.organization;
     p.category = p.category || c.category;
@@ -1459,6 +1471,7 @@ function buildPeople() {
   Object.entries(ownerPeople()).forEach(([n, rs]) => {
     const p = get(n);
     p.roles.push("Internal Owner");
+    p.roleStatuses["Internal Owner"] = "Internal assignment";
     p.responsibilities = [...new Set([...p.responsibilities, ...rs])];
     if (!p.status) p.status = "Internal";
   });
@@ -1499,7 +1512,7 @@ function personCard(p) {
   const photo = p.photo
     ? `<img class="person-photo" src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy" width="64" height="64">`
     : `<div class="person-avatar" aria-label="No headshot">${esc(initials(p.name))}</div>`;
-  return `<article class="person-card" data-person-card><div class="person-top">${photo}<div><h3 class="person-name">${esc(p.name)}</h3><p class="person-title">${esc(p.title || p.organization || "Role details pending")}</p></div></div><div class="role-chips">${p.roles.map((r) => `<span class="role-chip">${esc(r)}</span>`).join("")}</div><div class="person-contacts">${p.email ? `<a href="mailto:${esc(p.email)}" title="${esc(p.email)}">${esc(p.email)}</a>` : "<span>Email not yet supplied</span>"}${p.phone ? `<a href="tel:${esc(p.phone.replace(/[^+0-9]/g, ""))}">${esc(p.phone)}</a>` : "<span>Phone not yet supplied</span>"}</div><div class="person-bottom"><span>${esc(p.status || "Working roster")}</span><button type="button" data-profile="${esc(p.name)}" aria-label="View profile for ${esc(p.name)}">Profile <span aria-hidden="true">↗</span></button></div></article>`;
+  return `<article class="person-card" data-person-card><div class="person-top">${photo}<div><h3 class="person-name">${esc(p.name)}</h3><p class="person-title">${esc(p.title || p.organization || "Role details pending")}</p></div></div><div class="role-chips">${p.roles.map((r) => `<span class="role-chip">${esc(r)} · ${esc(p.roleStatuses[r] || "To Confirm")}</span>`).join("")}</div><div class="person-contacts">${p.email ? `<a href="mailto:${esc(p.email)}" title="${esc(p.email)}">${esc(p.email)}</a>` : "<span>Email not yet supplied</span>"}${p.phone ? `<a href="tel:${esc(p.phone.replace(/[^+0-9]/g, ""))}">${esc(p.phone)}</a>` : "<span>Phone not yet supplied</span>"}</div><div class="person-bottom"><span>${p.photo ? "Source profile" : "Headshot needed"}</span><button type="button" data-profile="${esc(p.name)}" aria-label="View profile for ${esc(p.name)}">Profile <span aria-hidden="true">↗</span></button></div></article>`;
 }
 
 // Open full source details in a native, keyboard-accessible dialog without leaving the directory.
@@ -1508,6 +1521,12 @@ function openPersonProfile(name) {
   if (!p) return;
   const dialog = el("personDialog");
   const paragraphs = [
+    [
+      "Status by role",
+      Object.entries(p.roleStatuses)
+        .map(([role, status]) => `${role}: ${status}`)
+        .join(" · "),
+    ],
     ["Profile", p.bio],
     ["Programme fit", p.fit],
     ["Organization", [p.organization, p.category].filter(Boolean).join(" · ")],
@@ -2803,7 +2822,7 @@ function renderPeople() {
   }
   el("peopleView").innerHTML =
     hero +
-    `<div class="directory-tools">${tabs}<label class="people-search-wrap"><span aria-hidden="true">⌕</span><input id="peopleSearch" type="search" aria-label="Search people" placeholder="Search name, role, company or contact…" value="${esc(peopleQuery)}"></label></div><div class="directory-caption"><span id="peopleResultCount" role="status"></span><span>Working roster · confirmation status shown on each profile</span></div><div class="people-grid" id="peopleGrid"></div><div id="peoplePagination" class="people-pagination"></div><dialog id="personDialog" aria-labelledby="profileTitle"></dialog>`;
+    `<div class="directory-tools">${tabs}<label class="people-search-wrap"><span aria-hidden="true">⌕</span><input id="peopleSearch" type="search" aria-label="Search people" placeholder="Search everyone: name, role, company or contact…" value="${esc(peopleQuery)}"></label></div><div class="directory-caption"><span id="peopleResultCount" role="status"></span><span>Prospects and source records · roster counts are not confirmed attendance</span></div><div class="people-grid" id="peopleGrid"></div><div id="peoplePagination" class="people-pagination"></div><dialog id="personDialog" aria-labelledby="profileTitle"></dialog>`;
   bindPeople();
   applyPeopleFilter();
 }
@@ -2876,6 +2895,15 @@ function bindPeople() {
   if (search)
     search.oninput = (e) => {
       peopleQuery = e.target.value;
+      // A name search always covers the entire roster, even after choosing a role tab.
+      if (peopleQuery.trim()) {
+        peopleRole = "All";
+        document.querySelectorAll("[data-prole]").forEach((b) => {
+          const on = b.dataset.prole === "All";
+          b.classList.toggle("on", on);
+          b.setAttribute("aria-pressed", String(on));
+        });
+      }
       peoplePage = 0;
       applyPeopleFilter();
     };
@@ -3278,7 +3306,12 @@ function renderRefs() {
 
 function saveExec() {
   try {
-    localStorage.setItem(LS + "-exec", JSON.stringify(execState));
+    localStorage.setItem(
+      operationsStorageKey() + "-exec",
+      JSON.stringify(execState),
+    );
+    if (window.AtlasTeam?.active)
+      window.AtlasTeam.changed(operationsSnapshot());
   } catch (e) {}
   if (db)
     db.doc("meta/exec")
@@ -3534,7 +3567,12 @@ let webState = {},
 
 function persist(key, obj) {
   try {
-    localStorage.setItem(LS + "-" + key, JSON.stringify(obj));
+    localStorage.setItem(
+      operationsStorageKey() + "-" + key,
+      JSON.stringify(obj),
+    );
+    if (window.AtlasTeam?.active)
+      window.AtlasTeam.changed(operationsSnapshot());
   } catch (e) {}
   if (db)
     db.doc("meta/" + key)
@@ -4590,3 +4628,40 @@ if (window.claude && typeof window.claude.use === "function") {
     .catch(() => {});
 }
 void useLocal;
+
+// Preserve the legacy record model while giving it authenticated, versioned team persistence.
+function operationsStorageKey() {
+  return LS + (window.AtlasTeam?.active ? "-shared-draft" : "");
+}
+function operationsSnapshot() {
+  return {
+    plans,
+    custom,
+    execState,
+    webState,
+    judgeState,
+    actState,
+    qState,
+    reviewState,
+    ambassadorState,
+    goalState,
+  };
+}
+window.AtlasTeam.init({
+  endpoint: "/api/team-operations",
+  replace(value) {
+    plans = value.plans || {};
+    custom = value.custom || [];
+    execState = value.execState || { goals: {}, decisions: {} };
+    webState = value.webState || {};
+    judgeState = value.judgeState || {};
+    actState = value.actState || {};
+    qState = value.qState || {};
+    reviewState = value.reviewState || {};
+    ambassadorState = value.ambassadorState || {};
+    goalState = value.goalState || {};
+    rebuildWS();
+    renderAll();
+    setStatus("Shared operations · managers approve changes");
+  },
+});

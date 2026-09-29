@@ -1,6 +1,6 @@
 # Intellibus Atlas Planner
 
-Source for [atlas-hackathon-planner.vercel.app](https://atlas-hackathon-planner.vercel.app/). This is a static application: no build step or new backend is required.
+Source for [atlas-hackathon-planner.vercel.app](https://atlas-hackathon-planner.vercel.app/). The interface is static HTML/CSS/JavaScript. Optional Vercel API functions provide Clerk-verified team access and Neon-backed shared plans; no frontend build step is required.
 
 ## Screens and source structure
 
@@ -51,3 +51,28 @@ With Playwright available in the development environment, run `node tests/browse
 ## Deployment
 
 The existing Vercel project is `atlas-hackathon-planner` in `alexhutchinson-3563s-projects`. A branch push creates a preview; `main` deploys production. Review changes before publishing. Do not commit environment files, credentials or `.vercel/`. Repository membership and Vercel access are separate.
+
+## Walkthrough update — 29 September 2026
+
+The sphere heading now reads **Atlas Agentic AI Hackathon 2027**. The scene geometry and camera animation remain unchanged. Larger working text, two configurable headline measures, all-role people search, per-role roster statuses and completed-task grouping implement the walkthrough feedback.
+
+Delivery views provide all attention items, accountable versus supporting ownership, a recruitment funnel, acyclic workstream dependencies, unresolved decisions and website readiness. Forecasts preserve unknown values and are not summed across overlapping audiences. Decision/readiness changes require an owner, date and evidence. Progress remains explicitly unweighted until a scoring model is approved. Source data and existing personal browser saves are preserved.
+
+### Team connection
+
+Clerk (Hobby) and Neon (Free) were provisioned through the existing Vercel project. No paid upgrade was selected. Clerk's company-domain allowlist is configured. The server additionally requires a currently verified primary `@intellibus.com` email; test addresses cannot access shared plans.
+
+- `scripts/team.js` connects explicitly to a shared baseline; it never automatically uploads an old personal draft. Personal and shared draft storage keys are separate.
+- `api/team-plan.js` applies server-side owner/manager permissions and optimistic revision checks. A conflict stops saves and asks the editor to export/reload; it never silently overwrites a concurrent save.
+- `api/team-operations.js` retains the separate operations model. All authorized company users may read it; managers approve shared operations/roster changes.
+- `ATLAS_MANAGER_EMAILS` must contain the explicitly approved manager emails, comma-separated. It defaults to no managers. Owners are assigned with their verified company email, not their display name.
+- Clerk production requires a custom domain/DNS and live keys. Production requests fail closed while only development keys exist. `/api/team-config` exposes no secrets and reports team access disabled until ready. Configure `ATLAS_ALLOWED_ORIGINS` for any custom domain.
+- Live email login and multi-person synchronization cannot be marked verified until the production domain and manager setup are complete. Do not use `pk_test` credentials as production auth.
+
+Database schema (already initialized): `atlas_plans(scope text primary key, body jsonb not null, revision integer not null default 0, updated_at timestamptz not null default now(), updated_by text)`. Preview and production documents use distinct scope values.
+
+Run `npm test` for authorization checks and `node tests/walkthrough-check.cjs` for the new browser flows. Existing browser, sphere and surfaces checks remain applicable. Tests use isolated contexts and do not change a user's saved plan.
+
+### Remaining decisions
+
+The two headline measures can be selected in target/current-number settings; registrations and participation confirmations are provisional defaults. Meeting proposals (wave times, targets/buffers, fair scope, contracts, confirmed speakers, medical/food/volunteer coverage) are pending records, not invented commitments. Private HR, other projects and personal transcript content were not added to the site.

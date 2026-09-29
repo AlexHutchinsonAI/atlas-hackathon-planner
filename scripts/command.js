@@ -56,6 +56,23 @@
   const uid = () =>
     Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 9);
   let data = load();
+  // Add unknown live measures without changing existing targets or saved counts.
+  function ensureLiveMeasures() {
+    for (const [id, name] of [
+      ["confirmations", "Participation confirmations"],
+      ["invitations", "Invitations sent"],
+    ])
+      if (!data.command.metrics.some((m) => m.id === id))
+        data.command.metrics.push({
+          id,
+          name,
+          target: null,
+          current: null,
+          source: "Meeting measure; definition and target pending review",
+        });
+    data.command.headlines ||= ["registrations", "confirmations"];
+  }
+  ensureLiveMeasures();
   let ui = {
     screen: "home",
     areaId: null,
@@ -195,7 +212,11 @@
   // Persist edits under the original browser storage key so upgrades retain user work.
   function save() {
     try {
-      localStorage.setItem(KEY, JSON.stringify(data));
+      localStorage.setItem(
+        window.AtlasTeam?.active ? KEY + "-shared-draft" : KEY,
+        JSON.stringify(data),
+      );
+      window.AtlasTeam?.changed(data);
       return true;
     } catch {
       alert(
@@ -402,7 +423,9 @@
             .filter(
               (it) =>
                 it.status !== "Done" &&
-                (it.focus || (it.date && it.date <= today)),
+                (it.focus ||
+                  it.status === "Waiting" ||
+                  (it.date && it.date <= today)),
             )
             .map((it) => ({ w, l, it, overdue: !!it.date && it.date < today })),
         ),
@@ -510,16 +533,32 @@
       done = items.filter((it) => it.status === "Done").length,
       waiting = items.filter((it) => it.status === "Waiting").length;
     shell(`<div class="command-home">${window.AtlasSphereView({ workstreams: data.workstreams.length, registrations: data.command.metrics.find((m) => m.id === "registrations")?.target || 0, attendance: data.command.metrics.find((m) => m.id === "attendance")?.target || 0, hackers: data.command.metrics.find((m) => m.id === "hackers")?.target || 0 })}<section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">YOUR COMMAND CENTER</p><h2>Make what’s next <span>happen.</span></h2></div><p>${done} / ${items.length} planning items done <span>·</span> ${waiting} waiting</p></header>
-      <section class="metric-strip" aria-label="Event targets">${data.command.metrics
+      <nav class="review-tabs review-shortcuts" aria-label="Planning views">${[
+        ["progress", "Progress & attention"],
+        ["owners", "Ownership"],
+        ["recruitment", "Recruitment"],
+        ["dependencies", "Dependencies"],
+        ["decisions", "Decisions"],
+        ["publication", "Website readiness"],
+      ]
+        .map(
+          ([key, label]) =>
+            `<button data-action="delivery" data-mode="${key}">${label}</button>`,
+        )
+        .join("")}</nav>
+      <p class="review-note">Working plan · ${window.AtlasTeam?.active ? "shared with your team" : "saved in this browser"}. Headline measure definitions await review in Decisions. No count is inferred from the roster.</p>
+      <section class="metric-strip headline-metrics" aria-label="Current measures and planning targets">${data.command.headlines
+        .map((id) => data.command.metrics.find((m) => m.id === id))
+        .filter(Boolean)
         .map((m) => {
           const known =
               m.current !== null && m.current !== "" && m.current !== undefined,
             current = Number(m.current),
             target = Number(m.target);
-          return `<article class="metric-card"><span>${esc(m.name.replace(" confirmed", ""))}</span><div><strong>${known ? current.toLocaleString() : "—"}</strong><small>/ ${target.toLocaleString()}</small></div><footer>${known ? Math.max(0, target - current).toLocaleString() + " to target" : "Awaiting verified count"}<span class="mini-track"><i style="width:${known ? Math.min(100, (current / target) * 100) : 0}%"></i></span></footer></article>`;
+          return `<article class="metric-card"><span>${esc(m.name)}</span><div><strong>${known ? current.toLocaleString() : "—"}</strong><small>${target > 0 ? "/ " + target.toLocaleString() + " target" : "No target agreed"}</small></div><footer>${known ? (target > 0 ? Math.max(0, target - current).toLocaleString() + " to target" : "Verified count entered") : "Awaiting verified count"}<span class="mini-track"><i style="width:${known && target > 0 ? Math.min(100, (current / target) * 100) : 0}%"></i></span></footer></article>`;
         })
         .join("")}</section>
-      <div class="flight-grid"><section class="command-panel explorer-panel"><div class="panel-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h2>Everything. Within reach.</h2></div><span class="live-label">Browser-saved plan</span></div><div class="deck-tools"><label class="deck-search"><span aria-hidden="true">⌕</span><input id="deck-search" type="search" value="${esc(deck.query)}" placeholder="Search this view…" aria-label="Search planning data"></label><select id="deck-area" aria-label="Filter by main area"><option value="">All areas</option>${AREAS.map(([id, title]) => `<option value="${id}" ${deck.area === id ? "selected" : ""}>${esc(title)}</option>`).join("")}</select></div><div class="deck-tabs" role="group" aria-label="Data to explore">${[
+      <div class="flight-grid"><section class="command-panel explorer-panel"><div class="panel-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h2>Everything. Within reach.</h2></div><span class="live-label">${window.AtlasTeam?.active ? "Shared team plan" : "Browser-saved plan"}</span></div><div class="deck-tools"><label class="deck-search"><span aria-hidden="true">⌕</span><input id="deck-search" type="search" value="${esc(deck.query)}" placeholder="Search this view…" aria-label="Search planning data"></label><select id="deck-area" aria-label="Filter by main area"><option value="">All areas</option>${AREAS.map(([id, title]) => `<option value="${id}" ${deck.area === id ? "selected" : ""}>${esc(title)}</option>`).join("")}</select></div><div class="deck-tabs" role="group" aria-label="Data to explore">${[
         ["workstreams", "Workstreams"],
         ["people", "People"],
         ["work", "Tasks"],
@@ -531,7 +570,7 @@
             `<button data-action="deck-mode" data-mode="${key}" aria-pressed="${deck.mode === key}">${label}</button>`,
         )
         .join("")}</div><div id="deck-content">${deckContent()}</div></section>
-      <aside class="signal-stack"><section class="command-panel"><div class="panel-heading"><h2><span class="heading-dot amber"></span>Needs attention</h2><span class="small">${attention.length ? "Top " + attention.length : ""}</span></div>${attention.length ? attention.map(({ w, l, it }) => `<button class="signal-entry" data-action="open-attention" data-ws="${esc(w.id)}" data-list="${esc(l.id)}" data-item="${esc(it.id)}"><strong>${esc(it.text)}</strong><small>${esc(w.title)} · ${esc(it.date || "Pinned")}</small></button>`).join("") : '<div class="clear-state"><span>✓</span><div><strong>No items flagged</strong><p>Due and pinned items appear here.</p></div></div>'}</section><section class="command-panel"><div class="panel-heading"><h2><span class="heading-dot"></span>Next milestones</h2></div>${
+      <aside class="signal-stack"><section class="command-panel"><div class="panel-heading"><h2><span class="heading-dot amber"></span>Needs attention</h2><span class="small">${attention.length ? "Top " + attention.length : ""}</span></div>${attention.length ? attention.map(({ w, l, it }) => `<button class="signal-entry" data-action="open-attention" data-ws="${esc(w.id)}" data-list="${esc(l.id)}" data-item="${esc(it.id)}"><strong>${esc(it.text)}</strong><small>${esc(w.title)} · ${esc(it.date || "Pinned")}</small></button>`).join("") : '<div class="clear-state"><span>✓</span><div><strong>No items flagged</strong><p>Waiting, due and pinned items appear here.</p></div></div>'}</section><section class="command-panel"><div class="panel-heading"><h2><span class="heading-dot"></span>Next milestones</h2></div>${
         milestones.length
           ? milestones
               .map(({ w, l, it }) => {
@@ -541,8 +580,8 @@
               .join("")
           : '<p class="small">Add a date to a milestone to see it here.</p>'
       }</section><a class="reference-shortcut" href="atlas-reference.html#people"><span>PEOPLE · PHOTOS · TRANSPORT<strong>Explore people & operations</strong></span><b>↗</b></a></aside></div><div class="workspace-utilities">
-      <details class="brief numbers-panel" data-persist="numbers"><summary>Update target & current numbers</summary><div class="command-settings"><p>Enter verified counts. A dash means no current figure has been entered.</p><div class="metric-edit-grid">${data.command.metrics.map((m) => `<div class="metric-edit"><strong>${esc(m.name)}</strong><small>${esc(m.source)}</small><label class="field">Target<input type="number" min="1" step="1" data-metric-target="${esc(m.id)}" value="${esc(m.target)}"></label><label class="field">Current<input type="number" min="0" step="1" data-metric-current="${esc(m.id)}" value="${m.current == null ? "" : esc(m.current)}" placeholder="Not entered"></label></div>`).join("")}</div></div></details>
-      <details class="brief command-goal"><summary>Overall event goal</summary><p>Deliver the Atlas Agentic AI Hackathon with 3,000 total attendees, 2,200 physical hackers and 500+ solutions or experiences. Validate the Guinness attempt against its official rules.</p></details>
+      <details class="brief numbers-panel" data-persist="numbers"><summary>Update target & current numbers</summary><div class="command-settings"><p>All planning targets are editable assumptions. Current values must be verified; blank means unknown. Roster prospects are not confirmations. Other workstream targets stay here to keep the headline view focused.</p><div class="fields">${data.command.headlines.map((id, i) => `<label class="field">Headline measure ${i + 1}<select data-headline="${i}">${data.command.metrics.map((m) => `<option value="${esc(m.id)}" ${m.id === id ? "selected" : ""}>${esc(m.name)}</option>`).join("")}</select></label>`).join("")}</div><div class="metric-edit-grid">${data.command.metrics.map((m) => `<div class="metric-edit"><strong>${esc(m.name)}</strong><small>${esc(m.source)}</small><label class="field">Target<input type="number" min="1" step="1" data-metric-target="${esc(m.id)}" value="${esc(m.target)}"></label><label class="field">Current<input type="number" min="0" step="1" data-metric-current="${esc(m.id)}" value="${m.current == null ? "" : esc(m.current)}" placeholder="Not entered"></label></div>`).join("")}</div></div></details>
+      <details class="brief command-goal"><summary>Event outcomes & planning assumptions</summary><p>Connect talent, coaches and real business problems through the Atlas Agentic AI Hackathon 2027. Attendance and hacker figures remain planning targets. Confirm the participation buffer, trade-fair scope and Guinness requirements in Decisions before publishing commitments. The wider jobs ambition is not an event-day employment guarantee.</p></details>
       <details class="brief all-workstreams" data-persist="all-workstreams" ${ui.search || ui.tag ? "open" : ""}><summary>All workstreams · ${data.workstreams.length}</summary><div class="all-workstream-tools"><button class="btn" type="button" data-action="show-home-filter">${ui.search || ui.tag ? "Filter · on" : "Filter"}</button><button class="btn" type="button" data-action="show-add-workstream">+ Add workstream</button></div>
       ${ui.addWorkstreamOpen ? `<form class="form-row add-first" id="addWorkstreamForm"><input name="title" required maxlength="100" placeholder="New workstream" aria-label="New workstream"><select name="area" aria-label="Area">${AREAS.map(([id, title]) => `<option value="${id}">${esc(title)}</option>`).join("")}</select><button class="btn primary">Add</button></form>` : ""}
       ${ui.homeFiltersOpen ? `<section class="filter-panel"><label class="field">Find a workstream<input id="search" type="search" placeholder="Search workstreams" value="${esc(ui.search)}"></label><label class="field">See tasks by tag<select id="globalTag">${tagOptions(tags, ui.tag)}</select></label></section>` : ""}
@@ -561,7 +600,7 @@
   function modeBar() {
     return `<nav class="steps" aria-label="LOVE planning steps">${[
       ["list", "List"],
-      ["organize", "Organize"],
+      ["organize", "Order"],
       ["validate", "Validate"],
       ["execute", "Execute"],
     ]
@@ -577,7 +616,7 @@
     const total = allItems(w).length,
       done = allItems(w).filter((x) => x.status === "Done").length;
     const head = `<div class="crumb"><button type="button" data-action="home">Command view</button><span>›</span><button type="button" data-action="open-area" data-id="${esc(w.area)}">${esc(areaName(w.area))}</button><span>›</span><span>${esc(w.title)}</span></div><header class="compact-heading"><div><p class="eyebrow">Workstream</p><h1>${esc(w.title)}</h1><div class="workstream-progress">${readinessDots(w)}</div></div></header>${modeBar()}`;
-    const after = `${readinessPanel(w)}<details class="brief"><summary>Edit this workstream</summary><div class="fields"><label class="field wide">Name<input data-ws-title="${esc(w.id)}" value="${esc(w.title)}" maxlength="100"></label></div></details>`;
+    const after = `${readinessPanel(w)}<details class="brief"><summary>Edit this workstream</summary><div class="fields"><label class="field wide">Objective<textarea data-ws-brief="${esc(w.id)}">${esc(w.brief || "")}</textarea></label><label class="field wide">Measures of success<textarea data-ws-success="${esc(w.id)}">${esc(w.success || "")}</textarea></label><label class="field wide">Name<input data-ws-title="${esc(w.id)}" value="${esc(w.title)}" maxlength="100"></label></div></details>`;
     let body = "";
     if (
       ui.mode === "list" ||
@@ -598,7 +637,12 @@
       body = `<div class="bar"><div><h2>Work to finish</h2><p>Give each item a person and a date. Mark it done when the work is complete.</p></div></div><div class="notice">SPEED means keeping the schedule, arriving on time, protecting energy, using useful tools, and reviewing the plan consistently.</div><section class="sheet section">${open.length ? open.map((x) => `<div class="check-row"><div><h3>${esc(x.text)}</h3><p>${x.owner ? `For ${esc(x.owner)}` : "Needs a person"} · ${x.date ? esc(x.date) : "Needs a date"}</p></div><button class="btn" type="button" data-action="mark-done" data-id="${esc(x.id)}">Mark done</button></div>`).join("") : '<p class="empty">No open items. Add more to any list if something is missing.</p>'}</section>
       <details class="brief"><summary>How will we work at SPEED?</summary><div class="speed-grid">${SPEED.map(([key, label, prompt]) => `<label class="field">${label}<span class="small">${prompt}</span><textarea data-speed="${key}" placeholder="Add a short note">${esc(w.speed?.[key] || "")}</textarea></label>`).join("")}</div></details>`;
     }
-    shell(head + body + after);
+    shell(
+      head +
+        `<section class="workstream-purpose"><p><strong>Objective</strong> · ${esc(w.brief || "Objective needs review")}</p><p><strong>Accountable owner</strong> · ${esc(w.accountableOwner || "Not verified")}</p><p><strong>Success measures</strong> · ${esc(w.success || "Not yet defined")}</p><p class="small">Source planning content · review before approval</p></section>` +
+        body +
+        after,
+    );
   }
   function listView() {
     const w = wsById(ui.wsId),
@@ -606,7 +650,9 @@
     if (!found) return nav("workstream", ui.wsId);
     const { list, parents } = found,
       children = list.children || [],
-      items = list.items || [],
+      items = [...(list.items || [])].sort(
+        (a, b) => Number(a.status === "Done") - Number(b.status === "Done"),
+      ),
       tags = tagsOf(items),
       visible = ui.listTag
         ? items.filter((it) => (it.tags || []).includes(ui.listTag))
@@ -614,7 +660,18 @@
     const crumbs = `<div class="crumb"><button type="button" data-action="home">Command view</button><span>›</span><button type="button" data-action="open-area" data-id="${esc(w.area)}">${esc(areaName(w.area))}</button><span>›</span><button type="button" data-action="open-workstream" data-id="${esc(w.id)}">${esc(w.title)}</button>${parents.map((p) => `<span>›</span><button type="button" data-action="open-list" data-id="${esc(p.id)}">${esc(p.title)}</button>`).join("")}<span>›</span><span>${esc(list.title)}</span></div>`;
     shell(`${crumbs}<header class="compact-heading"><div><p class="eyebrow workstream-context">${esc(w.title)}</p><h1>${esc(list.title)}</h1></div><button class="btn primary" type="button" data-action="show-add-item">+ Add</button></header>
       <div id="addItemMount"></div>
-      <section class="sheet" id="itemRows">${visible.length ? visible.map((it, i) => itemRow(it, i, visible.length)).join("") : `<p class="empty">${items.length ? "No items have this tag." : "Nothing here yet. Add the first item above."}</p>`}</section>
+      <section class="sheet" id="itemRows">${
+        visible.filter((it) => it.status !== "Done").length
+          ? visible
+              .filter((it) => it.status !== "Done")
+              .map((it, i, arr) => itemRow(it, i, arr.length))
+              .join("")
+          : `<p class="empty">${items.length ? "No items have this tag." : "Nothing here yet. Add the first item above."}</p>`
+      }</section>
+      <details class="brief completed-items" data-persist="completed"><summary>Completed · ${visible.filter((it) => it.status === "Done").length}</summary>${visible
+        .filter((it) => it.status === "Done")
+        .map((it, i, arr) => itemRow(it, i, arr.length))
+        .join("")}</details>
       ${tags.length ? `<details class="brief" data-persist="list-filter"><summary>Filter this list${ui.listTag ? ` · ${esc(ui.listTag)}` : ""}</summary><label class="field tag-filter">Show items by tag<select id="listTag">${tagOptions(tags, ui.listTag)}</select></label></details>` : ""}
       <details class="brief list-options" data-persist="list-options"><summary>Smaller lists and list settings ${children.length ? `· ${children.length} smaller list${children.length === 1 ? "" : "s"}` : ""}</summary>
         <div class="bar"><div><h2>Smaller lists</h2><p>Make a smaller list when a topic needs its own detail.</p></div></div><section class="sheet" id="subRows">${children.length ? children.map((l, i) => plainRow(l.id, l.title, `${itemCount(l)} items`, i, children.length, "sublist", "open-list")).join("") : '<p class="empty">No smaller lists yet.</p>'}</section>
@@ -625,7 +682,7 @@
   }
   function itemRow(it, i, total) {
     const updates = it.updates || [];
-    return `<article class="item-row" draggable="true" data-drag-kind="item" data-id="${esc(it.id)}"><button class="drag-grip" type="button" data-action="toggle-move" aria-label="Show move controls for ${esc(it.text)}" aria-expanded="false">⠿</button><span class="row-index item-index"><span class="item-number">${number(i + 1)}</span><span class="reorder-controls"><button class="arrow" type="button" data-action="move-item" data-id="${esc(it.id)}" data-by="-1" aria-label="Move item up" ${i === 0 ? "disabled" : ""}>↑</button><button class="arrow" type="button" data-action="move-item" data-id="${esc(it.id)}" data-by="1" aria-label="Move item down" ${i === total - 1 ? "disabled" : ""}>↓</button></span></span><div><div class="item-title">${esc(it.text)}</div><div class="item-meta">${dueChip(it)}<span class="item-tags">${tagPills(it)}</span></div>${it.owner ? `<div class="item-note">${esc(it.owner)}</div>` : ""}</div><div class="item-controls"><select data-item-status="${esc(it.id)}" aria-label="Status for ${esc(it.text)}">${["To do", "Doing", "Waiting", "Done"].map((v) => `<option value="${v}" ${it.status === v ? "selected" : ""}>${v === "To do" ? "To Do" : v}</option>`).join("")}</select></div><details class="item-more"><summary>Details${updates.length ? ` · ${updates.length} update${updates.length === 1 ? "" : "s"}` : ""}</summary><div class="fields"><label class="field wide">Item<input data-item-text="${esc(it.id)}" value="${esc(it.text)}"></label><label class="field wide">Tags<input data-item-tags="${esc(it.id)}" value="${esc((it.tags || []).join(", "))}" placeholder="Add tags separated by commas"></label><label class="field">Person responsible<input data-item-owner="${esc(it.id)}" value="${esc(it.owner)}" placeholder="Name a person"></label><label class="field">Due date<input data-item-date="${esc(it.id)}" type="date" value="${esc(it.date)}"></label><label class="field wide focus-field"><input type="checkbox" data-item-focus="${esc(it.id)}" ${it.focus ? "checked" : ""}> Pin this item to Needs attention</label><label class="field wide">Working notes<textarea data-item-notes="${esc(it.id)}" placeholder="Add useful detail">${esc(it.notes)}</textarea></label></div><h4 class="updates-title">Notes and decisions</h4><ol class="updates">${updates.length ? updates.map((u) => `<li><b>${esc(u.kind)}</b> · <time>${esc(new Date(u.at).toLocaleString())}</time><p>${esc(u.text)}</p></li>`).join("") : '<li class="empty-update">No updates yet.</li>'}</ol><form class="form-row update-form" id="addUpdate" data-item-id="${esc(it.id)}"><select name="kind" aria-label="Update type"><option>Note</option><option>Decision</option></select><input name="text" required maxlength="1000" placeholder="What changed or was decided?" aria-label="New note or decision"><button class="btn" type="submit">Add update</button></form>${it.source ? `<div class="source">From ${esc(it.source)}</div>` : ""}<button class="btn quiet" type="button" data-action="promote-item" data-id="${esc(it.id)}">Make this a smaller list</button></details></article>`;
+    return `<article class="item-row" draggable="true" data-drag-kind="item" data-id="${esc(it.id)}"><button class="drag-grip" type="button" data-action="toggle-move" aria-label="Show move controls for ${esc(it.text)}" aria-expanded="false">⠿</button><span class="row-index item-index"><span class="item-number">${number(i + 1)}</span><span class="reorder-controls"><button class="arrow" type="button" data-action="move-item" data-id="${esc(it.id)}" data-by="-1" aria-label="Move item up" ${i === 0 ? "disabled" : ""}>↑</button><button class="arrow" type="button" data-action="move-item" data-id="${esc(it.id)}" data-by="1" aria-label="Move item down" ${i === total - 1 ? "disabled" : ""}>↓</button></span></span><div><div class="item-title">${esc(it.text)}</div><div class="item-meta">${dueChip(it)}<span class="item-tags">${tagPills(it)}</span></div>${it.owner ? `<div class="item-note">${esc(it.owner)}</div>` : ""}</div><div class="item-controls"><label class="task-complete"><input type="checkbox" data-item-complete="${esc(it.id)}" ${it.status === "Done" ? "checked" : ""} aria-label="Complete ${esc(it.text)}"> Done</label><select data-item-status="${esc(it.id)}" aria-label="Status for ${esc(it.text)}">${["To do", "Doing", "Waiting", "Done"].map((v) => `<option value="${v}" ${it.status === v ? "selected" : ""}>${v === "To do" ? "To Do" : v}</option>`).join("")}</select></div><details class="item-more"><summary>Details${updates.length ? ` · ${updates.length} update${updates.length === 1 ? "" : "s"}` : ""}</summary><div class="fields"><label class="field wide">Item<input data-item-text="${esc(it.id)}" value="${esc(it.text)}"></label><label class="field wide">Tags<input data-item-tags="${esc(it.id)}" value="${esc((it.tags || []).join(", "))}" placeholder="Add tags separated by commas"></label><label class="field">Person responsible<input data-item-owner="${esc(it.id)}" value="${esc(it.owner)}" placeholder="Name a person"></label><label class="field">Due date<input data-item-date="${esc(it.id)}" type="date" value="${esc(it.date)}"></label><label class="field wide focus-field"><input type="checkbox" data-item-focus="${esc(it.id)}" ${it.focus ? "checked" : ""}> Pin this item to Needs attention</label><label class="field wide">Working notes<textarea data-item-notes="${esc(it.id)}" placeholder="Add useful detail">${esc(it.notes)}</textarea></label></div><h4 class="updates-title">Notes and decisions</h4><ol class="updates">${updates.length ? updates.map((u) => `<li><b>${esc(u.kind)}</b> · <time>${esc(new Date(u.at).toLocaleString())}</time><p>${esc(u.text)}</p></li>`).join("") : '<li class="empty-update">No updates yet.</li>'}</ol><form class="form-row update-form" id="addUpdate" data-item-id="${esc(it.id)}"><select name="kind" aria-label="Update type"><option>Note</option><option>Decision</option></select><input name="text" required maxlength="1000" placeholder="What changed or was decided?" aria-label="New note or decision"><button class="btn" type="submit">Add update</button></form>${it.source ? `<div class="source">From ${esc(it.source)}</div>` : ""}<button class="btn quiet" type="button" data-action="promote-item" data-id="${esc(it.id)}">Make this a smaller list</button></details></article>`;
   }
   // Refresh the selected screen while retaining expanded panels and edit context.
   function render(keepScroll = false) {
@@ -641,6 +698,7 @@
           .map((x) => x.dataset.persist)
       : [];
     if (ui.screen === "home") home();
+    else if (ui.screen === "delivery") shell(window.AtlasReview.render());
     else if (ui.screen === "area") areaView();
     else if (ui.screen === "workstream") workstream();
     else listView();
@@ -650,6 +708,8 @@
       );
       if (row) {
         row.querySelector("details.item-more").open = true;
+        if (row.closest(".completed-items"))
+          row.closest(".completed-items").open = true;
         row.scrollIntoView?.({ block: "center" });
       }
       ui.openItemId = null;
@@ -744,6 +804,7 @@
       document.getElementById("deck-search")?.focus({ preventScroll: true });
       return;
     }
+    if (action === "delivery") return window.AtlasReview.open(mode);
     if (action === "home") return nav("home");
     if (action === "open-area") return nav("area", null, null, id);
     if (action === "open-attention") {
@@ -808,17 +869,52 @@
       document.querySelector("#addList input").focus();
       return;
     }
+    if (
+      action.startsWith("move-") &&
+      window.AtlasTeam?.active &&
+      (action === "move-workstream"
+        ? !window.AtlasTeam.canManage()
+        : !window.AtlasTeam.canOwn(w))
+    ) {
+      alert(
+        "Only the assigned owner or a manager can reorder this shared workstream.",
+      );
+      return;
+    }
     if (action === "move-workstream")
       return move(data.workstreams, id, Number(by));
     if (action === "move-list" || action === "move-five")
       return move(w.lists, id, Number(by));
     if (action === "move-sublist")
       return move(currentList().children, id, Number(by));
-    if (action === "move-item")
-      return move(currentList().items, id, Number(by));
+    if (action === "move-item") {
+      // Move only within the visible completion group; hidden completed records never absorb a move.
+      const arr = currentList().items,
+        it = arr.find((x) => x.id === id);
+      const group = arr.filter(
+        (x) =>
+          (x.status === "Done") === (it.status === "Done") &&
+          (!ui.listTag || (x.tags || []).includes(ui.listTag)),
+      );
+      const i = group.findIndex((x) => x.id === id),
+        j = i + Number(by);
+      if (j >= 0 && j < group.length) {
+        const a = arr.indexOf(group[i]),
+          b = arr.indexOf(group[j]);
+        [arr[a], arr[b]] = [arr[b], arr[a]];
+        save();
+        render(true);
+      }
+      return;
+    }
     if (action === "mark-done") {
       const it = itemById(id);
       if (it) {
+        (it.updates ||= []).push({
+          kind: "Status",
+          text: `${it.status} → Done`,
+          at: new Date().toISOString(),
+        });
         it.status = "Done";
         save();
         render(true);
@@ -928,6 +1024,28 @@
   });
   app.addEventListener("change", (e) => {
     const t = e.target;
+    if (t.dataset.wsBrief || t.dataset.wsSuccess) {
+      const w = wsById(t.dataset.wsBrief || t.dataset.wsSuccess);
+      if (w) {
+        w[t.dataset.wsBrief ? "brief" : "success"] = t.value;
+        save();
+      }
+      return;
+    }
+    if (t.dataset.itemComplete) {
+      const it = itemById(t.dataset.itemComplete);
+      if (it) {
+        it.status = t.checked ? "Done" : "To do";
+        (it.updates ||= []).push({
+          kind: "Status",
+          text: it.status,
+          at: new Date().toISOString(),
+        });
+        save();
+        render(true);
+      }
+      return;
+    }
     if (t.id === "deck-area") {
       deck.area = t.value;
       deck.page = 0;
@@ -974,10 +1092,23 @@
           )
             return;
           data = ensureCommandAreas(ensureMilestones(incoming));
+          ensureLiveMeasures();
           save();
           nav("home");
         })
         .catch(() => alert("The plan file could not be read."));
+      return;
+    }
+    if (t.dataset.headline !== undefined) {
+      const i = Number(t.dataset.headline);
+      if (data.command.headlines[1 - i] === t.value) {
+        alert("Choose two different measures.");
+        render(true);
+        return;
+      }
+      data.command.headlines[i] = t.value;
+      save();
+      render(true);
       return;
     }
     if (t.dataset.metricCurrent) {
@@ -1009,6 +1140,15 @@
         save();
         render(true);
       }
+      return;
+    }
+    if (
+      t.dataset.review &&
+      window.AtlasTeam?.active &&
+      !window.AtlasTeam.canOwn(wsById(ui.wsId))
+    ) {
+      alert("Only the assigned owner or a manager can sign off this list.");
+      render(true);
       return;
     }
     if (t.dataset.review) {
@@ -1108,6 +1248,12 @@
       if (t.dataset[attr]) {
         const it = itemById(t.dataset[attr]);
         if (it) {
+          if (field === "status" && it.status !== t.value)
+            (it.updates ||= []).push({
+              kind: "Status",
+              text: `${it.status} → ${t.value}`,
+              at: new Date().toISOString(),
+            });
           it[field] = t.value;
           if (
             field === "text" &&
@@ -1139,6 +1285,15 @@
   app.addEventListener("dragstart", (e) => {
     const row = e.target.closest("[data-drag-kind][data-id]");
     if (!row) return;
+    if (
+      window.AtlasTeam?.active &&
+      (row.dataset.dragKind === "workstream"
+        ? !window.AtlasTeam.canManage()
+        : !window.AtlasTeam.canOwn(wsById(ui.wsId)))
+    ) {
+      e.preventDefault();
+      return;
+    }
     drag = { kind: row.dataset.dragKind, id: row.dataset.id };
     row.classList.add("dragging");
     e.dataTransfer.effectAllowed = "move";
@@ -1167,6 +1322,14 @@
           : kind === "sublist"
             ? currentList().children
             : w.lists;
+    if (
+      kind === "item" &&
+      (arr.find((x) => x.id === drag.id)?.status === "Done") !==
+        (arr.find((x) => x.id === row.dataset.id)?.status === "Done")
+    ) {
+      drag = null;
+      return;
+    }
     reorder(arr, drag.id, row.dataset.id);
     drag = null;
   });
@@ -1175,6 +1338,22 @@
     app
       .querySelectorAll(".dragging,.drop-target")
       .forEach((x) => x.classList.remove("dragging", "drop-target"));
+  });
+  // Reuse the same state, export and save flow for the delivery workspace.
+  window.AtlasReview.init({
+    data: () => data,
+    lists: allLists,
+    today: todayKey,
+    save,
+    refresh: () => render(true),
+    open: () => nav("delivery"),
+  });
+  window.AtlasTeam.init({
+    replace(plan) {
+      data = ensureCommandAreas(ensureMilestones(plan));
+      ensureLiveMeasures();
+      render(true);
+    },
   });
   render();
 })();
