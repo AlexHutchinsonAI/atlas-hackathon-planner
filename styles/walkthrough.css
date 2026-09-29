@@ -288,3 +288,7 @@
 .review-shortcuts {
   margin-block: 10px 14px;
 }
+
+#team-bar[hidden] {
+  display: none;
+}

@@ -51,7 +51,9 @@
       )
       .forEach((panel) => {
         panel.classList.add("reveal-ready");
-        revealObserver.observe(panel);
+        // Working data is immediately readable; decorative 3D surfaces still animate.
+        if (panel.matches(".command-panel")) panel.classList.add("is-revealed");
+        else revealObserver.observe(panel);
       });
   }
   const mutations = new MutationObserver((records) => {

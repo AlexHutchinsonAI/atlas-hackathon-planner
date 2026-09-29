@@ -56,8 +56,8 @@ const SEED = [
   [
     "Judges & Judging",
     "Andre Boothe / Shevanese / Dennis",
-    "60-person judging function is ready: 30 Official Judges plus a 30-person Senior Technical Review Panel, with technical review, official judging, finals, scoring, conflicts and results certification fully defined.",
-    "Confirm the 30 Official Judge roster, 30-person Senior Technical Review Panel, technical-review and official-judging rubrics, shortlist mechanics, digital scoring, conflicts, finals and certification workflow.",
+    "Plan for 30 official judges and a separate senior technical review panel. Confirm panel size, roles, judging rules, conflicts and results certification.",
+    "Confirm the 30-official-judge target, reviewer-panel size, rubrics, shortlist mechanics, digital scoring, conflicts, finals and certification workflow.",
     0,
   ],
   [
@@ -3482,7 +3482,7 @@ function renderStory() {
       <div class="num"><b>~550</b><span>teams building</span></div>
       <div class="num"><b>500+</b><span>solutions, each with an Atlas Experience</span></div>
       <div class="num"><b>100</b><span>merchants bringing real problems</span></div>
-      <div class="num"><b>${judgeTarget}</b><span>judges</span></div>
+      <div class="num"><b>${judgeTarget}</b><span>official judge target</span></div>
       <div class="num"><b>100</b><span>recommended / TBC coach roster; peak active ~60, overnight active ~40</span></div>
     </div>
   </section>
@@ -3739,7 +3739,7 @@ function sortedCoachRoster() {
 }
 
 let goalState = {},
-  judgeTarget = 60;
+  judgeTarget = 30;
 const cap1 = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 function judgeCap() {
   return [
@@ -4108,7 +4108,7 @@ function areaBlock(a) {
       <div class="jt"><label>Locked judging function</label>
         <span><b>60 total — 30 Official Judges + 30 Senior Technical Reviewers.</b> Senior Technical Reviewers are part of Judging from Day 1 and are not counted as coaches.</span></div>
       <div class="statline"><span><b>30</b> Official Judges target</span><span><b>30</b> Senior Technical Reviewers target</span><span><b>${PRELIM_EVALUATOR_CANDIDATES.length}</b> currently identified Senior Technical Reviewer candidates in the January source list</span></div>
-      <p class="hint" style="margin-left:0">The current candidate list is an input to the 30-person Senior Technical Reviewer roster, not the completed roster. Remaining positions must be deliberately recruited and confirmed.</p>
+      <p class="hint" style="margin-left:0">The current candidate list supports a separate Senior Technical Reviewer panel. Its final size and appointments need confirmation; candidates are not a completed roster.</p>
       <h4 class="sub4">Judging Capacity Model</h4>${tbl(["Item", "Working Planning Position", "Basis"], judgeCap())}
       
       <h4 class="sub4">Working Operating Model</h4>${tbl(
@@ -4485,7 +4485,7 @@ qState = restore("qbank");
 reviewState = { ...TEAM_REVIEW_MERGE, ...restore("review") };
 persist("review", reviewState);
 goalState = restore("goals");
-judgeTarget = 60;
+judgeTarget = 30;
 renderClocks();
 renderAll();
 setStatus("Kept on this device");
@@ -4589,7 +4589,7 @@ if (window.claude && typeof window.claude.use === "function") {
           [
             "jt",
             (v) => {
-              judgeTarget = 60;
+              judgeTarget = 30;
             },
           ],
           ["web", (v) => (webState = v)],

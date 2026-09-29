@@ -125,6 +125,23 @@
     bridge = api;
     document.body.append(bar);
     draw();
+    // Keep account controls off the cinematic sphere and visible in the working views.
+    const placeBar = () => {
+      const workspace = document.getElementById("workspace");
+      bar.hidden = Boolean(
+        document.body.classList.contains("sphere-dashboard") &&
+          workspace &&
+          workspace.getBoundingClientRect().top > innerHeight / 2,
+      );
+    };
+    addEventListener("scroll", placeBar, { passive: true });
+    new MutationObserver(placeBar).observe(
+      document.getElementById("app") ||
+        document.querySelector(".wrap") ||
+        document.body,
+      { childList: true },
+    );
+    requestAnimationFrame(placeBar);
     bar.addEventListener("click", async (e) => {
       if (e.target.matches("[data-team-connect]")) connect();
       if (
