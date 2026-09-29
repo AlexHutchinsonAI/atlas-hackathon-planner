@@ -1152,3 +1152,6 @@ body.sphere-dashboard .command-home {
 .sphere-journey:not(.sphere-enhanced) .sphere-progress {
   display: none;
 }
+
+/* Four destinations remain balanced beside Progress on desktop and compact on phones. */
+.neural-portals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:1120px;width:92vw;gap:14px}.neural-portals>a,.neural-portals>button{min-width:0;padding:18px;gap:12px}.neural-portals span{font-size:16px}@media(max-width:850px){.neural-portals{grid-template-columns:repeat(2,minmax(0,1fr));width:min(90vw,580px);margin:22px 0}.neural-portals>a,.neural-portals>button{padding:12px;min-height:70px}.neural-portals span{font-size:14px}.neural-portals svg{width:22px;flex-shrink:0}}
