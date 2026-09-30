@@ -512,6 +512,15 @@
         : '<p class="empty">No matches. Try a different search or area.</p>'
     }</div><div class="deck-pagination"><span>${entries.length ? deck.page * size + 1 : 0}–${Math.min((deck.page + 1) * size, entries.length)} of ${entries.length} ${isStreams ? "workstreams" : "items"}</span><div><button data-action="deck-page" data-by="-1" ${deck.page === 0 ? "disabled" : ""} aria-label="Previous results">←</button><span>${deck.page + 1} / ${pages}</span><button data-action="deck-page" data-by="1" ${deck.page === pages - 1 ? "disabled" : ""} aria-label="Next results">→</button></div></div>`;
   }
+  // Gauges always pair a visual range with a text value; missing data is never treated as zero.
+  function statusGauge({ title, value, total, detail, action, mode, tone = "blue" }) {
+    const known = value !== null && value !== "" && value !== undefined && Number.isFinite(Number(value));
+    const ranged = known && Number(total) > 0;
+    const percent = ranged ? Math.max(0, Math.min(100, Number(value) / Number(total) * 100)) : 0;
+    const display = known ? Number(value).toLocaleString() : "Not reported";
+    return `<article class="status-gauge ${tone} ${known ? "" : "unreported"}"><header><span>${esc(title)}</span><span class="gauge-tag">${known ? "Recorded" : "Awaiting data"}</span></header><div class="gauge-visual"><svg viewBox="0 0 160 94" aria-hidden="true"><path class="gauge-track" d="M16 80 A64 64 0 0 1 144 80" pathLength="100"/><path class="gauge-fill" d="M16 80 A64 64 0 0 1 144 80" pathLength="100" stroke-dasharray="${percent} 100"/></svg><strong class="${known ? "" : "gauge-unknown"}">${display}</strong></div><p class="gauge-range">${ranged ? `${Math.round(percent)}% · of ${Number(total).toLocaleString()} ${title === "Items completed" || title === "Items waiting" ? "items" : "target"}` : Number(total) > 0 ? `Target: ${Number(total).toLocaleString()}` : "Target not set"}</p><p class="gauge-detail">${esc(detail)}</p><button data-action="${action}" ${mode ? `data-mode="${mode}"` : ""}>${action === "edit-numbers" ? "Update count" : "View details"} <span aria-hidden="true">↗</span></button></article>`;
+  }
+
   // Compose verified targets, direct workstream shortcuts, attention items and milestones.
   function home() {
     // The landing page is a short destination menu; planning has its own URL.
@@ -537,7 +546,7 @@
     const items = data.workstreams.flatMap(allItems),
       done = items.filter((it) => it.status === "Done").length,
       waiting = items.filter((it) => it.status === "Waiting").length;
-    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">YOUR COMMAND CENTER</p><h2>Planning workspace</h2></div><p>${done} / ${items.length} planning items done <span>·</span> ${waiting} waiting</p></header>
+    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">ATLAS / EVENT OPERATIONS</p><h2>Event dashboard</h2></div><p class="dashboard-state">${window.AtlasTeam?.active ? "Shared team plan" : "Personal browser draft"}<br><span>23–24 Jan 2027 · Montego Bay</span></p></header>
       <nav class="review-tabs review-shortcuts" aria-label="Planning views">${[
         ["progress", "Progress & attention"],
         ["owners", "Ownership"],
@@ -551,18 +560,8 @@
             `<button data-action="delivery" data-mode="${key}">${label}</button>`,
         )
         .join("")}</nav>
-      <p class="review-note">Working plan · ${window.AtlasTeam?.active ? "shared with your team" : "saved in this browser"}. Headline measure definitions await review in Decisions. No count is inferred from the roster.</p>
-      <section class="metric-strip headline-metrics" aria-label="Current measures and planning targets">${data.command.headlines
-        .map((id) => data.command.metrics.find((m) => m.id === id))
-        .filter(Boolean)
-        .map((m) => {
-          const known =
-              m.current !== null && m.current !== "" && m.current !== undefined,
-            current = Number(m.current),
-            target = Number(m.target);
-          return `<article class="metric-card"><span>${esc(m.name)}</span><div><strong>${known ? current.toLocaleString() : "—"}</strong><small>${target > 0 ? "/ " + target.toLocaleString() + " target" : "No target agreed"}</small></div><footer>${known ? (target > 0 ? Math.max(0, target - current).toLocaleString() + " to target" : "Verified count entered") : "Awaiting verified count"}<span class="mini-track"><i style="width:${known && target > 0 ? Math.min(100, (current / target) * 100) : 0}%"></i></span></footer></article>`;
-        })
-        .join("")}</section>
+      <section class="dashboard-gauges" aria-label="Event status at a glance">${statusGauge({title:"Items completed",value:done,total:items.length,detail:"Unweighted planning checklist",action:"delivery",mode:"progress"})}${statusGauge({title:"Items waiting",value:waiting,total:items.length,detail:"Waiting items need follow-up",action:"delivery",mode:"progress",tone:"amber"})}${data.command.headlines.map(id => data.command.metrics.find(m => m.id === id)).filter(Boolean).map(m => statusGauge({title:m.name,value:m.current,total:m.target,detail:m.current == null || m.current === "" ? "No verified count entered yet" : "Recorded count against planning target",action:"edit-numbers"})).join("")}</section>
+      <p class="dashboard-caption">Counts reflect this plan. Targets are planning assumptions; missing counts are not zero.</p>
       <div class="flight-grid"><section class="command-panel explorer-panel"><div class="panel-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h2>Workstream register</h2></div><span class="live-label">${window.AtlasTeam?.active ? "Shared team plan" : "Browser-saved plan"}</span></div><div class="deck-tools"><label class="deck-search"><span aria-hidden="true">⌕</span><input id="deck-search" type="search" value="${esc(deck.query)}" placeholder="Search this view…" aria-label="Search planning data"></label><select id="deck-area" aria-label="Filter by main area"><option value="">All areas</option>${AREAS.map(([id, title]) => `<option value="${id}" ${deck.area === id ? "selected" : ""}>${esc(title)}</option>`).join("")}</select></div><div class="deck-tabs" role="group" aria-label="Data to explore">${[
         ["workstreams", "Workstreams"],
         ["people", "People"],
@@ -818,6 +817,11 @@
     // The workspace shortcut bypasses the cinematic scroll without changing any data.
     if (action === "workspace") {
       location.href = 'workspace.html';
+      return;
+    }
+    if (action === "edit-numbers") {
+      const panel = document.querySelector('.numbers-panel');
+      if (panel) { panel.open = true; panel.scrollIntoView({block:'start',behavior:'instant'}); panel.querySelector('input')?.focus({preventScroll:true}); }
       return;
     }
     if (action === "delivery") return window.AtlasReview.open(mode);
