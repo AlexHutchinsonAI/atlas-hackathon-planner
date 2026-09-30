@@ -144,12 +144,12 @@ function mount() {
 
   // A reflective transparent shell keeps the neural filaments visible; front faces disappear naturally inside.
   const glass = new THREE.MeshPhysicalMaterial({
-    color: "#b4dcff",
+    color: "#6f9fea",
     metalness: 0.18,
     roughness: 0.055,
     transmission: 0,
     transparent: true,
-    opacity: 0.18,
+    opacity: 0.12,
     depthWrite: false,
     thickness: 0.18,
     ior: 1.16,
@@ -623,9 +623,9 @@ function mount() {
     ribbons.rotation.y = isStatic ? 0 : Math.sin(time * 0.13) * 0.045;
     coreHalo.material.opacity =
       0.7 + (isStatic ? 0 : Math.sin(time * 1.1) * 0.13);
-    city.visible = intro < 0.6;
-    platform.visible = intro < 0.7;
-    floor.visible = intro < 0.75;
+    city.visible = false; // An open orbital space replaces the architectural backdrop.
+    platform.visible = false;
+    floor.visible = false;
     deepMaterial.opacity = 0.07 + smooth(0.4, 0.8, progress) * 0.25;
     scene.fog.density = 0.023 + progress * 0.007;
     renderer.render(scene, camera);

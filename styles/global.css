@@ -97,3 +97,22 @@
   dialog a { font-size: 16px !important; line-height: 1.6 !important; }
   :is(.atlas-surface,.depth-flow) button[aria-current="page"] { background: var(--brand-blue) !important; color: #fff !important; border-color: var(--brand-blue) !important; }
 }
+/* The same quiet motion language connects the landing page and working sections. */
+@layer atlas-brand {
+  body .river-motion.river-motion {
+    transform: var(--river-transform,none) !important;
+    opacity: var(--river-opacity,1) !important;
+    transform-origin: center center !important;
+    transition: transform 180ms ease-out,opacity 180ms ease-out !important;
+    backface-visibility: hidden;
+  }
+  body .river-motion.river-motion:focus-within { transform: none !important; opacity: 1 !important; }
+  .academy-intro { padding-top: 26px !important; padding-bottom: 90px !important; }
+  .academy-path-grid { gap: 28px !important; }
+  .academy-path-art { background: linear-gradient(135deg,#edf3ff,#e2eaff) !important; }
+  .depth-heading { padding-block: 28px !important; }
+  @media(prefers-reduced-motion:reduce) {
+    body .river-motion.river-motion { transform: none !important; opacity: 1 !important; transition: none !important; }
+  }
+  body.motion-paused .river-motion.river-motion { transform: none !important; opacity: 1 !important; transition: none !important; }
+}
