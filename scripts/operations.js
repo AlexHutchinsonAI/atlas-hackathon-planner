@@ -2825,7 +2825,7 @@ function renderPeople() {
       P.filter((p) => p.roles.includes("Internal Owner")).length,
     ],
   ];
-  const hero = `<div class="directory-heading"><div><p class="people-kicker">THE ATLAS COLLECTIVE</p><h2>Extraordinary people.<br><span>One shared ambition.</span></h2></div><p>Find the person. See the details.<br>Keep the whole team within reach.</p></div><div class="people-metrics">${groups.map(([role, label, count]) => `<button class="people-metric ${peopleRole === role ? "on" : ""}" data-prole="${role}" aria-pressed="${peopleRole === role}"><b>${count}</b><span>${label}</span></button>`).join("")}</div>`;
+  const hero = `<div class="directory-heading"><div><p class="people-kicker">THE ATLAS COLLECTIVE</p><h2>People directory</h2></div><p>Names, roles and contact details in one place.</p></div><div class="people-metrics">${groups.map(([role, label, count]) => `<button class="people-metric ${peopleRole === role ? "on" : ""}" data-prole="${role}" aria-pressed="${peopleRole === role}"><b>${count}</b><span>${label}</span></button>`).join("")}</div>`;
   const tabs = `<nav class="people-tabs" aria-label="People views">${[
     ["directory", "Directory"],
     ["stakeholders", "Stakeholders"],
@@ -2850,7 +2850,7 @@ function renderPeople() {
   }
   el("peopleView").innerHTML =
     hero +
-    `<div class="directory-tools">${tabs}<label class="people-search-wrap"><span aria-hidden="true">⌕</span><input id="peopleSearch" type="search" aria-label="Search people" placeholder="Search everyone: name, role, company or contact…" value="${esc(peopleQuery)}"></label></div><div class="directory-caption"><span id="peopleResultCount" role="status"></span><span>Prospects and source records · roster counts are not confirmed attendance</span></div><div class="people-grid" id="peopleGrid"></div><div id="peoplePagination" class="people-pagination"></div><dialog id="personDialog" aria-labelledby="profileTitle"></dialog>`;
+    `<div class="directory-tools">${tabs}<label class="people-search-wrap"><span aria-hidden="true">⌕</span><input id="peopleSearch" type="search" aria-label="Search people" placeholder="Search everyone: name, role, company or contact…" value="${esc(peopleQuery)}"></label></div><div class="directory-caption"><span id="peopleResultCount" role="status"></span><span>Prospects and source records · roster counts are not confirmed attendance</span></div><div class="directory-columns" aria-hidden="true"><span>Name &amp; organization</span><span>Role &amp; status</span><span>Contact details</span><span>Profile</span></div><div class="people-grid" id="peopleGrid"></div><div id="peoplePagination" class="people-pagination"></div><dialog id="personDialog" aria-labelledby="profileTitle"></dialog>`;
   bindPeople();
   applyPeopleFilter();
 }

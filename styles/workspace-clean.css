@@ -1,0 +1,105 @@
+/* Compact working views. No selector here targets the sphere or its navigation. */
+.atlas-surface.atlas-surface.atlas-surface,
+.workspace-shell.atlas-surface.atlas-surface.atlas-surface,
+.depth-flow {
+  background: #f8fafc !important;
+  --line: #dce3eb;
+  --rule: #dce3eb;
+  --rule-soft: #edf0f4;
+}
+.atlas-surface.atlas-surface.atlas-surface .surface-orbit { display: none !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.surface-heading,.workspace-heading,.directory-heading,.people-hero,.outcome-hero,.compact-heading) {
+  min-height: 0 !important;
+  padding: 16px 0 !important;
+  margin: 0 0 16px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.atlas-surface.atlas-surface.atlas-surface :is(.people-hero,.outcome-hero)::before,
+.atlas-surface.atlas-surface.atlas-surface :is(.people-hero,.outcome-hero)::after { display: none !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(h1,h2), .depth-heading h2 {
+  font-size: 26px !important;
+  line-height: 1.25 !important;
+  letter-spacing: -.5px !important;
+  max-width: none !important;
+}
+.atlas-surface.atlas-surface.atlas-surface h3 { font-size: 18px !important; line-height: 1.4 !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.directory-heading,.workspace-heading) { display: flex !important; align-items: center; justify-content: space-between; gap: 20px; }
+.atlas-surface.atlas-surface.atlas-surface .directory-heading br { display: none; }
+.atlas-surface.atlas-surface.atlas-surface :is(.directory-heading,.workspace-heading) p { margin: 4px 0 !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.command-panel,.metric-card,.people-metric,.brief,.sheet,.panel,.register,.dash-card,.dash-section,.outcome-card,.chain-card,.transport-card,.goal-box,.oi-grp,.action-group,.operating-status,.outcome-sec,.source-card,.st-sec,.ex-sec,.bl,.transport-below),
+.depth-flow .glass-scroll {
+  background: #fff !important;
+  border: 1px solid #dce3eb !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 5px #18345004 !important;
+  backdrop-filter: none !important;
+  transform: none !important;
+}
+.atlas-surface.atlas-surface.atlas-surface :is(.command-panel,.transport-card,.dash-card,.dash-section) { padding: 18px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.metric-strip,.people-metrics) { gap: 8px !important; margin: 12px 0 20px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.metric-card,.people-metric) { padding: 12px 14px !important; min-height: 0 !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.metric-card strong,.people-metric b) { font-size: 26px !important; line-height: 1.2 !important; }
+.atlas-surface.atlas-surface.atlas-surface .people-metric.on { background: #edf6ff !important; border-color: #347ab7 !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.panel-heading,.deck-tools,.directory-tools) { margin-bottom: 12px !important; }
+.atlas-surface.atlas-surface.atlas-surface .panel-heading h2 { font-size: 18px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.deck-row,.signal-entry,.timeline-entry) { padding: 10px 4px !important; border-bottom: 1px solid #e4e9ef !important; border-radius: 0 !important; transform: none !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.deck-row,.signal-entry,.timeline-entry):hover { background: #f2f8ff !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(button,input,select,summary,.btn) { border-radius: 6px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.role-chip,.badge,.tag,.status-pill) { border-radius: 5px !important; padding: 3px 7px !important; font-size: 14px !important; box-shadow: none !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(th,td) { padding: 10px 12px !important; border-color: #e3e8ee !important; }
+.atlas-surface.atlas-surface.atlas-surface th { background: #f4f7fa !important; }
+.atlas-surface.atlas-surface.atlas-surface .reference-shortcut { border-radius: 8px !important; padding: 16px !important; }
+.depth-chapter { padding-top: 36px !important; padding-bottom: 24px !important; }
+.depth-heading { margin-bottom: 18px !important; text-align: left !important; }
+.depth-heading p { margin: 8px 0 !important; }
+/* Directory columns retain every contact and the existing keyboard-accessible profile dialog. */
+.atlas-surface.atlas-surface.atlas-surface .directory-columns,
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid > [data-person-card] {
+  display: grid !important;
+  grid-template-columns: minmax(220px,1.2fr) minmax(170px,.85fr) minmax(240px,1.2fr) 130px;
+  gap: 16px !important;
+  align-items: center !important;
+}
+.atlas-surface.atlas-surface.atlas-surface .directory-columns { padding: 12px 16px; background: #f1f5f9; border: 1px solid #dce3eb; border-radius: 8px 8px 0 0; font-size: 14px; font-weight: 600; color: #40566c; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid { display: block !important; gap: 0 !important; border: 1px solid #dce3eb; border-top: 0; border-radius: 0 0 8px 8px; overflow: hidden; background: #fff; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid > [data-person-card] { min-height: 100px; margin: 0 !important; padding: 12px 16px !important; border: 0 !important; border-bottom: 1px solid #e3e8ee !important; border-radius: 0 !important; box-shadow: none !important; background: #fff !important; transform: none !important; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid > [data-person-card]:last-child { border-bottom: 0 !important; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid > [data-person-card]:hover { background: #f6faff !important; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid .person-top { gap: 10px; margin: 0; align-items: center; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid :is(.person-photo,.person-avatar) { width: 38px !important; height: 38px !important; min-width: 38px; border-radius: 50% !important; font-size: 14px !important; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid .person-name { font-size: 16px !important; margin: 0 0 3px !important; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid .person-title { font-size: 14px !important; line-height: 1.4 !important; margin: 0 !important; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid :is(.role-chips,.person-contacts,.person-bottom) { margin: 0 !important; padding: 0 !important; border: 0 !important; min-width: 0; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid .person-contacts { display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid .person-contacts > * { font-size: 14px !important; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid .person-bottom { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.atlas-surface.atlas-surface.atlas-surface #peopleGrid .person-bottom > span { font-size: 13px !important; }
+/* Stack rows on small screens instead of clipping contact information. */
+@media (max-width: 1000px) {
+  .atlas-surface.atlas-surface.atlas-surface .directory-columns { display: none !important; }
+  .atlas-surface.atlas-surface.atlas-surface #peopleGrid { border-top: 1px solid #dce3eb; border-radius: 8px; }
+  .atlas-surface.atlas-surface.atlas-surface #peopleGrid > [data-person-card] { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .atlas-surface.atlas-surface.atlas-surface :is(.directory-heading,.workspace-heading) { display: block !important; }
+  .atlas-surface.atlas-surface.atlas-surface #peopleGrid > [data-person-card] { grid-template-columns: 1fr; gap: 10px !important; }
+  .atlas-surface.atlas-surface.atlas-surface #peopleGrid .person-bottom { flex-direction: row; justify-content: space-between; align-items: center; }
+  .atlas-surface.atlas-surface.atlas-surface :is(h1,h2), .depth-heading h2 { font-size: 24px !important; }
+}
+
+/* Remove raised decorative furniture from data controls, while preserving focus outlines. */
+.atlas-surface.atlas-surface.atlas-surface .depth-mark { display: none !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(button,.deck-row,.person-avatar,.person-photo,.people-tabs,.deck-tabs,#views,.directory-tools,.deck-search,.people-search-wrap) {
+  box-shadow: none !important;
+  background-image: none !important;
+  transform: none !important;
+}
+.atlas-surface.atlas-surface.atlas-surface .deck-row { background: #fff !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.deck-tabs,.people-tabs,#views) { background: #fff !important; border: 0 !important; border-bottom: 1px solid #dce3eb !important; border-radius: 0 !important; padding: 4px 0 !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.deck-tabs,.people-tabs,#views) button { background: transparent !important; border-color: transparent !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.deck-tabs,.people-tabs,#views) button:is(.on,[aria-pressed="true"]) { background: #eaf4ff !important; color: #145b95 !important; }
+/* Join workstream entries into a register rather than separate cards. */
+.atlas-surface.atlas-surface.atlas-surface .deck-row { margin: 0 !important; border: 0 !important; border-bottom: 1px solid #dce3eb !important; }
+.atlas-surface.atlas-surface.atlas-surface .deck-row > :first-child > button { border-color: transparent !important; background: transparent !important; }
