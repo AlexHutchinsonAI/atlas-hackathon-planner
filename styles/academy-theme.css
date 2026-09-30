@@ -1,0 +1,51 @@
+/* Academy typography and spacing, adapted for Atlas's working data and scroll journey. */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap');
+:root { --academy-ink: #1f2a44; --academy-blue: #316bfa; --academy-paper: #f7f9ff; }
+body, button, input, select, textarea { font-family: 'IBM Plex Sans', 'Avenir Next', sans-serif !important; }
+body, body.atlas-operations, body.sphere-dashboard { background: var(--academy-paper) !important; color: var(--academy-ink); }
+/* Spacious editorial headings sit above practical, readable registers. */
+.atlas-surface.atlas-surface.atlas-surface :is(h1,h2), .depth-heading h2, .venue-heading h2 {
+  font-family: 'IBM Plex Serif', Georgia, serif !important;
+  font-weight: 600 !important;
+  font-size: clamp(28px,3vw,40px) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.8px !important;
+  color: var(--academy-ink) !important;
+}
+.atlas-surface.atlas-surface.atlas-surface .panel-heading h2 { font-size: 23px !important; }
+.atlas-surface.atlas-surface.atlas-surface,
+.workspace-shell.atlas-surface.atlas-surface.atlas-surface,
+.depth-flow { background: var(--academy-paper) !important; }
+.workspace-shell.atlas-surface.atlas-surface.atlas-surface { width: min(1180px,90%); margin: 0 auto; padding: 72px 0 !important; }
+body.atlas-operations .wrap.atlas-surface { max-width: 1240px !important; padding: 32px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.workspace-heading,.directory-heading,.people-hero,.compact-heading) { padding: 24px 0 !important; margin-bottom: 28px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.command-panel,.transport-card,.dash-card,.dash-section) { padding: 26px !important; border-radius: 16px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.metric-strip,.people-metrics) { gap: 14px !important; margin: 20px 0 32px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.metric-card,.people-metric) { padding: 18px !important; border-radius: 12px !important; }
+.atlas-surface.atlas-surface.atlas-surface .flight-grid { gap: 24px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.directory-tools,.deck-tools) { gap: 16px !important; margin-bottom: 20px !important; }
+.atlas-surface.atlas-surface.atlas-surface :is(.eyebrow,.people-kicker) { color: #536583 !important; font-size: 12px !important; letter-spacing: 2.5px !important; }
+.atlas-surface.atlas-surface.atlas-surface .workspace-utilities { margin-top: 28px; }
+.depth-chapter { max-width: 1180px !important; margin-inline: auto !important; padding: 64px 0 32px !important; }
+.depth-heading { margin-bottom: 28px !important; }
+/* Preserve all sphere phases and camera travel; only its editorial styling changes. */
+.sphere-journey .sphere-layer h1,
+.sphere-journey .sphere-layer h2 {
+  font-family: 'IBM Plex Serif', Georgia, serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -1.5px !important;
+  font-size: clamp(36px,5.5vw,76px) !important;
+  line-height: 1.12 !important;
+}
+.sphere-journey .sphere-stage { background: radial-gradient(ellipse at 78% 42%,#dfeaff 0%,#f1f5ff 50%,#f7f9ff 85%) !important; }
+.sphere-journey .sphere-layer p { font-family: 'IBM Plex Sans', sans-serif !important; }
+.sphere-journey .neural-portals a { border-radius: 16px !important; }
+.mission-nav { font-family: 'IBM Plex Sans', sans-serif !important; }
+/* Keep the immersive tour viewport and scrolling calculations intact. */
+.venue-heading h2 { font-size: clamp(26px,3vw,38px) !important; }
+@media(max-width:700px) {
+  .workspace-shell.atlas-surface.atlas-surface.atlas-surface { width: 92%; padding: 36px 0 !important; }
+  body.atlas-operations .wrap.atlas-surface { padding: 16px !important; }
+  .atlas-surface.atlas-surface.atlas-surface :is(.command-panel,.transport-card,.dash-card,.dash-section) { padding: 16px !important; }
+  .depth-chapter { padding: 36px 16px 20px !important; }
+}

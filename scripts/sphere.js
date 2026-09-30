@@ -109,6 +109,39 @@ function mount() {
   edgeLight.position.set(5, 0, 3);
   scene.add(edgeLight);
 
+  // Small orbiting worlds extend the existing sphere into a solar-system composition.
+  // They share the scene lifecycle and respect the same pause/reduced-motion clock.
+  const worlds = new THREE.Group();
+  worlds.position.copy(center);
+  scene.add(worlds);
+  const satellites = [];
+  [
+    [4.2, 0.28, "#397bd6", 0.4],
+    [5.4, 0.43, "#a5bce5", 2.8],
+    [6.6, 0.22, "#d3b998", 4.6],
+  ].forEach(([radius, size, color, phase], index) => {
+    const planet = new THREE.Mesh(
+      new THREE.SphereGeometry(size, 28, 20),
+      new THREE.MeshStandardMaterial({color, metalness: 0.18, roughness: 0.4}),
+    );
+    worlds.add(planet);
+    const orbit = new THREE.Mesh(
+      new THREE.TorusGeometry(radius, 0.008, 5, 128),
+      new THREE.MeshBasicMaterial({color: "#6e91c5", transparent: true, opacity: 0.32}),
+    );
+    orbit.rotation.x = Math.PI / 2.5;
+    worlds.add(orbit);
+    if (index === 1) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(size * 1.65, 0.045, 6, 64),
+        new THREE.MeshStandardMaterial({color: "#99afd2", roughness: 0.45}),
+      );
+      ring.rotation.x = 1.1;
+      planet.add(ring);
+    }
+    satellites.push({planet, radius, phase, index});
+  });
+
   // A reflective transparent shell keeps the neural filaments visible; front faces disappear naturally inside.
   const glass = new THREE.MeshPhysicalMaterial({
     color: "#b4dcff",
@@ -562,6 +595,10 @@ function mount() {
     const delta = Math.min(0.05, (now - lastDraw) / 1000 || 0);
     lastDraw = now;
     if (!isStatic) time += delta;
+    satellites.forEach(({planet, radius, phase, index}) => {
+      const angle = phase + time * (0.045 - index * 0.009);
+      planet.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius * 0.31, Math.sin(angle) * radius * 0.95);
+    });
     const narrow = stage.clientWidth < 700;
     startPosition.set(narrow ? 1.5 : 0, narrow ? 2.8 : 1.8, narrow ? 15 : 12.8);
     startLook.set(narrow ? 2.8 : 0, narrow ? 1.5 : 1.15, 0);
