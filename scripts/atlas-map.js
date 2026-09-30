@@ -54,6 +54,7 @@
       map.on('load',()=>{mapFailed=false;refresh();fit();});
       new mapboxgl.Marker({color:'#172c4d'}).setLngLat([venue.lng,venue.lat]).addTo(map).getElement().addEventListener('click',()=>locate({...venue,label:venue.name}));
     }catch(e){mapFailed=true;}
+    if(requestGeneration!==generation || !document.getElementById('map-category'))return;
     document.getElementById('map-category').onchange=()=>{refresh();fit();};
     document.getElementById('map-search').oninput=refresh;
     document.getElementById('map-fit').onclick=fit;
