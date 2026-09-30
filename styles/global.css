@@ -1,0 +1,99 @@
+/* Single brand entry point for every Atlas page, including the embedded venue viewer. */
+@import url('./workspace-clean.css');
+@import url('./academy-theme.css');
+
+/* Important declarations in this named layer take precedence over legacy page themes.
+   Layout and interaction rules remain in their page files; brand rules live here. */
+@layer atlas-brand {
+  :root {
+    --brand-paper: #f7f9ff;
+    --brand-panel: #fff;
+    --brand-ink: #1f2a44;
+    --brand-muted: #526482;
+    --brand-blue: #2459d6;
+    --brand-line: #dce3ef;
+    --brand-radius: 16px;
+  }
+  html, body { background-color: var(--brand-paper) !important; color: var(--brand-ink) !important; }
+  body, button, input, select, textarea { font-family: 'IBM Plex Sans','Avenir Next',sans-serif !important; }
+  /* A shared content width aligns overview, drill-down views and operations pages. */
+  .planning-surface, body.atlas-operations .wrap, .workspace-shell {
+    width: min(1180px,calc(100% - 48px)) !important;
+    max-width: 1180px !important;
+    margin-inline: auto !important;
+    padding: 40px 0 !important;
+  }
+  body.atlas-operations .wrap { padding-top: 0 !important; }
+  .atlas-surface, .depth-flow { background: var(--brand-paper) !important; }
+  .mission-nav { background: #f7f9fff5 !important; box-shadow: none !important; border-bottom: 1px solid var(--brand-line) !important; }
+  .mission-nav :is(a,button) { font-size: 15px !important; }
+  /* Heading hierarchy is identical on every data page, without resizing the sphere. */
+  :is(.atlas-surface,.depth-flow) :is(h1,h2), dialog h2, .venue-heading h2, .venue-explorer h2 {
+    font-family: 'IBM Plex Serif',Georgia,serif !important;
+    font-weight: 600 !important;
+    color: var(--brand-ink) !important;
+    letter-spacing: -.6px !important;
+    line-height: 1.25 !important;
+    font-size: clamp(28px,3vw,38px) !important;
+  }
+  :is(.atlas-surface,.depth-flow) :is(.panel-heading h2,.dash-card h2,.transport-card h2,.review-record h2) { font-size: 23px !important; }
+  :is(.atlas-surface,.depth-flow) h3 { color: var(--brand-ink) !important; font-size: 19px !important; line-height: 1.4 !important; }
+  :is(.atlas-surface,.depth-flow) :is(p,td,th,label,summary), dialog, .venue-explorer { color: var(--brand-ink) !important; font-size: 16px !important; line-height: 1.6 !important; }
+  :is(.atlas-surface,.depth-flow) :is(.small,small,.review-note,.source-note,.person-title,.directory-caption,.people-kicker,.eyebrow) { color: var(--brand-muted) !important; font-size: 14px !important; }
+  :is(.atlas-surface,.depth-flow) :is(.surface-heading,.compact-heading,.directory-heading,.workspace-heading,.people-hero,.outcome-hero) { margin: 0 0 28px !important; padding: 28px 0 !important; min-height: 0 !important; }
+  /* All page-specific cards and forms use the same panel treatment. */
+  :is(.atlas-surface,.depth-flow) :is(.command-panel,.sheet,.panel,.register,.brief,.dash-card,.dash-section,.outcome-card,.chain-card,.transport-card,.goal-box,.oi-grp,.action-group,.operating-status,.outcome-sec,.source-card,.st-sec,.ex-sec,.bl,.transport-below,.review-record,.review-summary article,.review-table-wrap,.glass-scroll,.metric-edit,.item,.list-card,.comm-stage-card,.tf-step,.judge-profile-card) {
+    background: var(--brand-panel) !important;
+    border: 1px solid var(--brand-line) !important;
+    border-radius: var(--brand-radius) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    transform: none !important;
+  }
+  :is(.atlas-surface,.depth-flow) :is(.command-panel,.dash-card,.dash-section,.transport-card,.outcome-card,.review-record,.judge-profile-card) { padding: 24px !important; }
+  :is(.atlas-surface,.depth-flow) :is(.surface-orbit,.depth-mark) { display: none !important; }
+  /* Buttons share one hierarchy: neutral controls, blue primary actions, selected tabs. */
+  :is(.atlas-surface,.depth-flow,dialog,.venue-explorer,.venue-hint,#team-bar) :is(button,.btn), .tour-end a {
+    font-family: 'IBM Plex Sans',sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1.4 !important;
+    min-height: 44px !important;
+    padding: 10px 14px !important;
+    background: #fff !important;
+    color: var(--brand-ink) !important;
+    border: 1px solid #9eacc3 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  :is(.atlas-surface,.depth-flow,dialog,.venue-explorer) :is(button.primary,.btn.primary,button[aria-pressed="true"],button.is-on,button.on), .venue-explorer #next {
+    color: #fff !important; background: var(--brand-blue) !important; border-color: var(--brand-blue) !important;
+  }
+  :is(.atlas-surface,.depth-flow) :is(.deck-row,.library-task,.signal-entry,.timeline-entry) { background: #fff !important; border-radius: 0 !important; border: 0 !important; border-bottom: 1px solid var(--brand-line) !important; padding: 14px 8px !important; }
+  :is(.atlas-surface,.depth-flow,dialog,.venue-explorer) :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea) {
+    font-size: 16px !important; color: var(--brand-ink) !important; background: #fff !important; border: 1px solid #9eacc3 !important; border-radius: 8px !important; padding: 10px 12px !important; min-height: 44px !important; box-shadow: none !important;
+  }
+  :is(.atlas-surface,.depth-flow) :is(.views,.review-tabs,.steps,.people-tabs,.deck-tabs) { padding: 10px 0 !important; gap: 8px !important; background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--brand-line) !important; box-shadow: none !important; border-radius: 0 !important; }
+  :is(.atlas-surface,.depth-flow) th { background: #f0f4fb !important; color: var(--brand-ink) !important; }
+  :is(.atlas-surface,.depth-flow) :is(td,th) { padding: 14px !important; border-color: var(--brand-line) !important; }
+  :is(.atlas-surface,.depth-flow) a, dialog a, .venue-explorer a { color: var(--brand-blue) !important; }
+  :is(.atlas-surface,.depth-flow) .people-metric.on :is(b,span) { color: #fff !important; }
+  /* Dialogs and tour controls are part of the same system, not separate themes. */
+  dialog { background: #fff !important; border: 1px solid var(--brand-line) !important; border-radius: 18px !important; box-shadow: 0 24px 80px #1f2a4426 !important; padding: 28px !important; }
+  .venue-explorer aside, .venue-explorer header, .venue-hint { background: #fff !important; color: var(--brand-ink) !important; border: 1px solid var(--brand-line) !important; border-radius: 16px !important; box-shadow: 0 8px 28px #1f2a4412 !important; }
+  .venue-explorer :is(#status,.eyebrow,aside p,aside label,aside summary) { color: var(--brand-muted) !important; font-size: 14px !important; }
+  .venue-heading { color: var(--brand-ink) !important; }
+  :is(button,a,input,select,textarea,summary):focus-visible { outline: 3px solid #2459d6 !important; outline-offset: 3px !important; }
+  @media(max-width:700px) {
+    .planning-surface, body.atlas-operations .wrap, .workspace-shell { width: calc(100% - 28px) !important; padding: 24px 0 !important; }
+    :is(.atlas-surface,.depth-flow) :is(.command-panel,.dash-card,.dash-section,.transport-card,.outcome-card,.review-record) { padding: 16px !important; }
+    dialog { padding: 20px !important; }
+  }
+}
+/* Finish shared surfaces that older page files painted with decorative gradients. */
+@layer atlas-brand {
+  body { background-image: none !important; }
+  :is(.atlas-surface,.depth-flow) td { background: #fff !important; }
+  dialog a { font-size: 16px !important; line-height: 1.6 !important; }
+  :is(.atlas-surface,.depth-flow) button[aria-current="page"] { background: var(--brand-blue) !important; color: #fff !important; border-color: var(--brand-blue) !important; }
+}
