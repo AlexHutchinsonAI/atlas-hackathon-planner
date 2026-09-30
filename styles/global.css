@@ -1,4 +1,5 @@
 /* Single brand entry point for every Atlas page, including the embedded venue viewer. */
+@import url('./compact.css');
 @import url('./workspace-clean.css');
 @import url('./academy-theme.css');
 

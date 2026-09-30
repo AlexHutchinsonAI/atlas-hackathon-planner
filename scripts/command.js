@@ -212,7 +212,7 @@
   // Persist edits under the original browser storage key so upgrades retain user work.
   function save() {
     try {
-      localStorage.setItem(
+      window.AtlasSave.write(
         window.AtlasTeam?.active ? KEY + "-shared-draft" : KEY,
         JSON.stringify(data),
       );
@@ -225,6 +225,8 @@
       return false;
     }
   }
+  document.addEventListener('atlas-save-now',save);
+  window.AtlasSave.snapshot = () => ({type:'command',data});
   function wsById(id) {
     return data.workstreams.find((w) => w.id === id);
   }
@@ -796,7 +798,7 @@
     }
     if (action === "toggle-motion") {
       motionPaused = !motionPaused;
-      localStorage.setItem("atlas-motion-paused", String(motionPaused));
+      window.AtlasSave.write("atlas-motion-paused", String(motionPaused));
       document.body.classList.toggle("motion-paused", motionPaused);
       button.textContent = motionPaused ? "Play motion" : "Pause motion";
       button.setAttribute("aria-pressed", String(motionPaused));

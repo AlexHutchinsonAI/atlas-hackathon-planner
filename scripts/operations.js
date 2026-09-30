@@ -389,7 +389,7 @@ let saveTimer = null,
 function save(id) {
   planOf(id).updatedAt = new Date().toISOString();
   try {
-    localStorage.setItem(operationsStorageKey(), JSON.stringify(plans));
+    window.AtlasSave.write(operationsStorageKey(), JSON.stringify(plans));
     if (window.AtlasTeam?.active)
       window.AtlasTeam.changed(operationsSnapshot());
   } catch (e) {}
@@ -448,7 +448,7 @@ function rebuildWS() {
 }
 function saveCustom() {
   try {
-    localStorage.setItem(
+    window.AtlasSave.write(
       operationsStorageKey() + "-ws",
       JSON.stringify(custom),
     );
@@ -2213,7 +2213,7 @@ function renderDirection() {
   </button>`;
   };
   el("directionView").innerHTML =
-    `<div class="dash-head"><div><p class="st-date">Operating dashboard · Intellibus Atlas Agentic AI Hackathon 2027</p><h2>Where the project is now.</h2><p>One operating view of readiness, workstream health, ownership and immediate attention. Detailed execution stays inside Workstreams; this screen only surfaces what leadership needs to see and act on.</p></div><div class="dash-utils"><button type="button" data-dash-util="baseline">Planning baseline</button><button type="button" data-dash-util="refs">Source files</button></div></div>
+    `<div class="dash-head"><div><p class="st-date">Operating dashboard · Intellibus Atlas Agentic AI Hackathon 2027</p><h2>Operations overview</h2><p>Readiness, ownership and the next actions—all in one view.</p></div><div class="dash-utils"><button type="button" data-dash-util="baseline">Planning baseline</button><button type="button" data-dash-util="refs">Source files</button></div></div>
   <div class="dash-metrics">
     <div class="dash-metric"><b>${de > 0 ? de : "—"}</b><span>days to event</span></div>
     <div class="dash-metric ${readiness >= 75 ? "good" : readiness < 40 ? "alert" : "warn"}"><b>${readiness}%</b><span>planning + mobilization readiness</span></div>
@@ -2361,6 +2361,7 @@ function renderTransportCategoryButtons() {
     .join("")}</div>`;
 }
 function renderTransportMapLayout() {
+  if (window.AtlasMap) return window.AtlasMap.layout();
   const rows = transportRowsForCategory();
   const opts = rows
     .map(
@@ -2432,7 +2433,7 @@ function transportGeoCacheRead() {
 }
 function transportGeoCacheWrite(c) {
   try {
-    localStorage.setItem("atlas-transport-geocode-v1", JSON.stringify(c));
+    window.AtlasSave.write("atlas-transport-geocode-v1", JSON.stringify(c));
   } catch (e) {}
 }
 
@@ -2617,6 +2618,10 @@ function bindTransportControls() {
     };
 }
 function initTransportMap() {
+  if (window.AtlasMap) {
+    window.AtlasMap.mount(transportNetworkPoints().map(p => p.lat != null ? p : {...p,...(INSTITUTION_COORDINATES[p.label] || {})}), TRANSPORT_VENUE, `<details><summary>General public travel estimates</summary>${transportPublicTable(publicPickupRows())}</details><details><summary>School & university schedule</summary>${transportSchoolScheduleTable()}</details>${transportView()}`);
+    return;
+  }
   const mapEl = document.getElementById("transportLeafletMap");
   if (!mapEl) return;
   const fallback = document.getElementById("transportMapFallback");
@@ -3086,6 +3091,8 @@ function renderOutcomes() {
 
 // Switch operational sections while preserving their existing local storage models.
 function showView(v) {
+  document.body.classList.toggle('transport-fullscreen',v === 'transport');
+  if (v !== 'transport') window.AtlasMap?.dispose();
   // The continuous view uses real sections and native nested scrolling; existing tabs remain available elsewhere.
   if (continuousOperations) {
     if (!document.body.classList.contains("operations-continuous")) {
@@ -3168,7 +3175,7 @@ function showView(v) {
   if (v === "refs") renderRefs();
   if (v === "people") renderPeople();
   try {
-    localStorage.setItem(LS + "-view", v);
+    window.AtlasSave.write(LS + "-view", v);
   } catch (e) {}
   if (v === "direction" && directionScrollY > 0)
     setTimeout(() => window.scrollTo({ top: directionScrollY }), 0);
@@ -3374,7 +3381,7 @@ function renderRefs() {
 
 function saveExec() {
   try {
-    localStorage.setItem(
+    window.AtlasSave.write(
       operationsStorageKey() + "-exec",
       JSON.stringify(execState),
     );
@@ -3635,7 +3642,7 @@ let webState = {},
 
 function persist(key, obj) {
   try {
-    localStorage.setItem(
+    window.AtlasSave.write(
       operationsStorageKey() + "-" + key,
       JSON.stringify(obj),
     );
@@ -4588,7 +4595,7 @@ el("teachBtn").textContent = teach
 el("teachBtn").onclick = () => {
   teach = !teach;
   try {
-    localStorage.setItem(LS + "-teach", teach ? "1" : "0");
+    window.AtlasSave.write(LS + "-teach", teach ? "1" : "0");
   } catch (e) {}
   el("teachBtn").textContent = teach
     ? "PMP guide: available"
@@ -4733,3 +4740,17 @@ window.AtlasTeam.init({
     setStatus("Shared operations · managers approve changes");
   },
 });
+
+// Persist the complete operations state when explicitly saving, using the same keys as autosave.
+document.addEventListener('atlas-save-now', () => {
+  try {
+    window.AtlasSave.write(operationsStorageKey(),JSON.stringify(plans));
+    saveCustom(); saveExec();
+    const records={web:webState,judges:judgeState,actions:actState,qbank:qState,review:reviewState,ambassadors:ambassadorState,goals:goalState};
+    Object.entries(records).forEach(([key,value]) => window.AtlasSave.write(operationsStorageKey()+"-"+key,JSON.stringify(value)));
+    // Existing persist calls define the canonical keys; the full snapshot is also kept for backup.
+    window.AtlasSave.write(operationsStorageKey()+'-snapshot',JSON.stringify(operationsSnapshot()));
+    if(window.AtlasTeam?.active)window.AtlasTeam.changed(operationsSnapshot());
+  } catch(e) { /* AtlasSave already shows a persistent error instead of false success. */ }
+});
+window.AtlasSave.snapshot = () => ({type:'operations',data:operationsSnapshot()});

@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+/* First cascade layer: compact brand values win consistently over older per-page themes. */
+@layer compact {
+ body,button,input,select,textarea { font-family:'DM Sans',sans-serif !important; }
+ :is(.atlas-surface,.depth-flow) :is(h1,h2,h3),dialog h2 { font-family:'DM Sans',sans-serif !important; letter-spacing:-.5px !important; }
+ :is(.atlas-surface,.depth-flow) :is(h1,h2) { font-size:26px !important; }
+ :is(.atlas-surface,.depth-flow) h3,.panel-heading h2 { font-size:18px !important; }
+ :is(.atlas-surface,.depth-flow) :is(p,td,th,label,summary) { font-size:14px !important; line-height:1.5 !important; }
+ :is(.atlas-surface,.depth-flow) :is(button,.btn,input,select,textarea) { font-size:14px !important; min-height:38px !important; padding:8px 11px !important; }
+ :is(.atlas-surface,.depth-flow) :is(.surface-heading,.compact-heading,.directory-heading,.workspace-heading,.people-hero,.outcome-hero) { padding:14px 0 !important; margin-bottom:16px !important; }
+ :is(.atlas-surface,.depth-flow) :is(.command-panel,.dash-card,.dash-section,.transport-card,.outcome-card,.review-record,.judge-profile-card) { padding:16px !important; border-radius:10px !important; }
+ :is(.atlas-surface,.depth-flow) :is(td,th) { padding:9px 11px !important; }
+ .workspace-shell,.planning-surface,body.atlas-operations .wrap { padding-block:16px !important; }
+ .workspace-page .status-gauge { padding:14px; }
+ .workspace-page .gauge-visual { height:88px; margin-top:6px; }
+ .workspace-page .gauge-visual strong { font-size:28px; }
+ .workspace-page .gauge-visual .gauge-unknown { font-size:16px; }
+ .workspace-page .dashboard-gauges { gap:12px; }
+ .atlas-surface #peopleGrid > [data-person-card] { min-height:86px !important; padding:10px 14px !important; }
+ .atlas-surface .directory-columns { font-size:12px !important; }
+ .atlas-surface .people-metric { padding:12px !important; }
+ .atlas-surface .people-metric b { font-size:24px !important; }
+ body:has(.compact-home) .save-dock { display:none !important; }
+ .save-dock { display:flex; gap:8px; align-items:center; justify-content:flex-end; padding:10px 18px; border-top:1px solid #dce3ef; background:#fff; font-size:12px; color:#445570; }
+ .save-dock button { min-height:36px; background:#fff; border:1px solid #adb9ce; border-radius:7px; padding:7px 12px; font-size:13px; color:#243652; cursor:pointer; }
+ .save-dock #save-now { background:#2459d6; color:white; border-color:#2459d6; }
+ .save-failed { color:#a12626; }
+ body.atlas-operations #team-bar { position:static !important; transform:none !important; margin:12px auto; width:fit-content; }
+ .transport-fullscreen .wrap.atlas-surface { width:100% !important; max-width:none !important; padding:0 !important; }
+ .transport-fullscreen .mission-nav { padding-inline:20px !important; }
+ .transport-fullscreen #views { padding:4px 16px !important; margin:0 !important; }
+ .transport-fullscreen :is(.atlas-page-intro,.bar,.ref-legacy,.save-dock,#team-bar) { display:none !important; }
+ .transport-fullscreen #transportPageView { padding:0 !important; margin:0 !important; }
+ .transport-fullscreen .map-controls :is(h2,h3) { font-size:17px !important; }
+ .transport-fullscreen .map-controls summary { font-size:14px !important; }
+ .transport-fullscreen .map-controls :is(button,input,select) { min-height:38px !important; }
+ .transport-fullscreen .mapboxgl-ctrl button { min-height:29px !important; padding:0 !important; }
+ @media(max-width:600px){.save-dock{flex-wrap:wrap;justify-content:center;}.save-dock>span{width:100%;text-align:center;}}
+}
+.atlas-map-screen { position:relative; height:calc(100svh - 128px); min-height:480px; overflow:hidden; }
+#atlasMap { position:absolute; inset:0; background:#e5edf5; }
+.map-controls { position:absolute; top:16px; right:16px; width:330px; max-width:calc(100% - 80px); background:white; border:1px solid #dce3ef; border-radius:12px; box-shadow:0 12px 32px #1c36531f; z-index:3; }
+.map-controls > summary { padding:14px 16px; cursor:pointer; font-weight:600; }
+.map-controls > summary span { display:block; font-size:11px; color:#64748b; font-weight:400; margin-top:3px; }
+.map-control-content { max-height:calc(100svh - 230px); overflow:auto; padding:0 16px 16px; }
+.map-control-content label { display:grid; gap:5px; margin-bottom:12px; font-size:12px; }
+.map-control-content :is(input,select) { width:100%; }
+.map-buttons { display:flex; gap:8px; }
+#map-feedback,.map-disclaimer { font-size:12px; color:#566780; }
+#map-pickups { max-height:270px; overflow:auto; margin-bottom:14px; }
+.map-pickup { display:flex; flex-direction:column; gap:4px; width:100%; text-align:left; margin-bottom:5px; }
+.map-pickup span { font-size:11px; font-weight:400; color:#5a6c87; }
+.map-pickup:disabled { opacity:.65; }
+#map-planning { overflow:auto; }
+.mapboxgl-popup-content { font:14px/1.5 'DM Sans',sans-serif; color:#233550; }
+.mapboxgl-canvas { outline:none; }
+@media(max-width:600px){.map-controls{top:10px;right:10px;width:280px;}.atlas-map-screen{height:calc(100svh - 140px);}.map-control-content{max-height:52svh;}}
+@layer compact {
+ .map-controls,.map-controls * { box-sizing:border-box !important; }
+ .map-controls :is(select,input,button) { min-width:0 !important; max-width:100% !important; }
+ .map-controls :is(select,input) { height:38px !important; padding:7px 10px !important; }
+ #directionView:not([hidden]) { display:grid !important; grid-template-columns:1fr 1fr; gap:16px; }
+ #directionView > :is(.dash-head,.dash-metrics,.dash-rule),#directionView > .dash-section:last-child { grid-column:1/-1; }
+ #directionView .dash-head { margin:0 !important; padding:12px 0 !important; min-height:0 !important; }
+ #directionView .dash-head p { margin:5px 0 !important; }
+ #directionView .dash-head h2 { margin:8px 0 !important; }
+ #directionView .dash-metrics { display:grid !important; grid-template-columns:repeat(6,1fr) !important; gap:10px !important; margin:0 !important; }
+ #directionView .dash-metric { padding:14px !important; border-radius:9px !important; min-height:90px !important; }
+ #directionView .dash-metric b { font-size:27px !important; }
+ #directionView .dash-metric span { font-size:12px !important; line-height:1.4 !important; }
+ #directionView .dash-rule { font-size:12px !important; margin:0 !important; }
+ #directionView .dash-section { margin:0 !important; min-width:0; }
+ #directionView .population-table :is(td,th) { padding:7px !important; font-size:12px !important; }
+ #directionView .attention-row { padding:12px 0 !important; }
+ @media(max-width:900px){#directionView .dash-metrics{grid-template-columns:repeat(3,1fr) !important;}#directionView:not([hidden]){grid-template-columns:1fr !important;}#directionView > *{grid-column:1 !important;}}
+}
+@layer compact {
+ #directionView .dash-metric { background:#fff !important; box-shadow:none !important; transform:none !important; border:1px solid #dce3ef !important; }
+ #directionView .dash-metric b { color:#203652 !important; }
+ #directionView .dash-metric.alert { border-top:3px solid #b95555 !important; }
+ #directionView .dash-metric.warn { border-top:3px solid #b77917 !important; }
+ #directionView .dash-metric.good { border-top:3px solid #2c8474 !important; }
+ #directionView .population-table { min-width:0 !important; width:100% !important; table-layout:fixed; }
+ #directionView .population-table th:first-child { width:40%; }
+ #directionView .population-table .num,#directionView .population-table .gap-num { font-size:16px !important; }
+ #directionView .attention-row { display:grid !important; grid-template-columns:1fr auto !important; gap:8px !important; }
+ #directionView .attention-row > span { grid-column:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+ #directionView .attention-row > button { grid-column:2;grid-row:1/3; }
+ .transport-fullscreen .mapboxgl-ctrl-attrib-button { background-color:#fff !important; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ctext x='8' y='15' font-size='16'%3Ei%3C/text%3E%3C/svg%3E") !important; }
+}
