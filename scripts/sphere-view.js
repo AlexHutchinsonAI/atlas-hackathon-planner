@@ -16,7 +16,25 @@
   // All numbers come from the command plan; target labels prevent them from implying confirmed attendance.
   window.AtlasSphereView = (
     stats,
-  ) => `<section class="sphere-journey" aria-label="Inside Atlas interactive introduction" data-phase="overview">
+  ) => `<section class="academy-welcome" aria-labelledby="academy-title">
+    <div class="academy-intro">
+      <p class="academy-label">INTELLIBUS · MONTEGO BAY · 23–24 JANUARY</p>
+      <h1 id="academy-title">Atlas Agentic AI<br>Hackathon 2027.</h1>
+      <p class="academy-description">Bring people, ideas and real-world challenges together. One shared space to plan the event, connect the team and turn ambition into action.</p>
+      <div class="academy-actions"><button class="academy-primary" data-action="workspace">Open your workspace</button><a href="#atlas-universe">Explore Atlas <span aria-hidden="true">→</span></a></div>
+    </div>
+    <section class="academy-paths" aria-labelledby="academy-paths-title">
+      <p class="academy-label">YOUR EVENT, CONNECTED</p>
+      <h2 id="academy-paths-title">The people. The plan. The place.</h2>
+      <p>Everything you need to bring the hackathon together, with a clear path to every detail.</p>
+      <div class="academy-path-grid">
+        <a href="atlas-reference.html#people"><div class="academy-path-art people-art">${icon("people")}<span>01 / PEOPLE</span></div><h3>Meet the collective.</h3><p>Judges, coaches, speakers and the people making it happen.</p><span class="academy-path-link">Explore people →</span></a>
+        <a href="#workspace"><div class="academy-path-art plan-art">${icon("plans")}<span>02 / PLANNING</span></div><h3>Build the plan.</h3><p>Workstreams, responsibilities and milestones in one workspace.</p><span class="academy-path-link">Open the plan →</span></a>
+        <a href="virtual-walkthrough.html"><div class="academy-path-art venue-art">${icon("route")}<span>03 / VENUE</span></div><h3>Step into the venue.</h3><p>Explore Montego Bay Convention Centre before the event.</p><span class="academy-path-link">Take the walkthrough →</span></a>
+      </div>
+    </section>
+  </section>
+  <section id="atlas-universe" class="sphere-journey" aria-label="Inside Atlas interactive introduction" data-phase="overview">
     <div class="sphere-stage">
       <div class="sphere-canvas" aria-hidden="true"></div>
       <div class="sphere-fallback" aria-hidden="true"><div class="fallback-orb"><i></i><i></i><i></i><b></b></div></div>

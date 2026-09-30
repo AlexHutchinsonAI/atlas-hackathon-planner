@@ -49,3 +49,36 @@ body.atlas-operations .wrap.atlas-surface { max-width: 1240px !important; paddin
   .atlas-surface.atlas-surface.atlas-surface :is(.command-panel,.transport-card,.dash-card,.dash-section) { padding: 16px !important; }
   .depth-chapter { padding: 36px 16px 20px !important; }
 }
+/* A dedicated Academy-style landing page precedes the preserved interactive sphere. */
+.academy-welcome { width: min(1120px,calc(100% - 64px)); margin: auto; padding: 74px 0 80px; color: #1f2a44; }
+.academy-intro { max-width: 710px; padding-bottom: 62px; }
+.academy-label { font-size: 12px; font-weight: 600; letter-spacing: 3px; color: #536583; margin: 0 0 18px; }
+.academy-welcome h1 { font-family: 'IBM Plex Serif',Georgia,serif; font-size: clamp(40px,5.2vw,64px); line-height: 1.1; letter-spacing: -1.5px; font-weight: 600; margin: 0 0 28px; color: #1f2a44; }
+.academy-description { font-size: 20px; line-height: 1.6; color: #526482; max-width: 650px; margin: 0 0 30px; }
+.academy-actions { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+.academy-actions .academy-primary { background: #316bfa; color: #fff; border: 0; border-radius: 18px; padding: 15px 24px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 3px 6px #316bfa25; }
+.academy-actions a { color: #2459d6; font-size: 16px; font-weight: 600; text-decoration: none; padding: 12px 0; }
+.academy-actions a span { margin-left: 10px; }
+.academy-paths h2 { font-family: 'IBM Plex Serif',Georgia,serif; font-size: clamp(28px,3.4vw,38px); font-weight: 600; line-height: 1.2; margin: 0 0 12px; letter-spacing: -.6px; }
+.academy-paths > p:not(.academy-label) { font-size: 17px; line-height: 1.6; color: #526482; margin: 0 0 26px; }
+.academy-path-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+.academy-path-grid > a { display: block; color: #1f2a44; text-decoration: none; background: #ffffffc9; padding: 20px; border: 1px solid #d9dfeb; border-radius: 18px; transition: border-color .2s,box-shadow .2s; }
+.academy-path-grid > a:hover { border-color: #316bfa; box-shadow: 0 8px 24px #2347800c; }
+.academy-path-art { height: 136px; padding: 22px; display: flex; align-items: center; justify-content: space-between; background: #e7eeff; border-radius: 12px; color: #2459ad; }
+.academy-path-art svg { width: 54px; height: 54px; }
+.academy-path-art span { font-size: 11px; letter-spacing: 2px; }
+.plan-art { background: #e9edf6; }
+.venue-art { background: #e6f3f5; }
+.academy-path-grid h3 { font-family: 'IBM Plex Serif',Georgia,serif; font-size: 24px; font-weight: 600; margin: 24px 0 10px; }
+.academy-path-grid p { font-size: 16px; line-height: 1.6; color: #526482; margin-bottom: 24px; }
+.academy-path-link { color: #2459d6; font-weight: 600; font-size: 15px; }
+#atlas-universe { scroll-margin-top: 80px; }
+body.sphere-dashboard .mission-nav { padding-inline: max(32px,calc((100% - 1120px)/2)) !important; background: #f7f9fff5 !important; border-bottom: 0 !important; }
+@media(max-width:700px) {
+  .academy-welcome { width: calc(100% - 36px); padding: 40px 0; }
+  .academy-intro { padding-bottom: 44px; }
+  .academy-description { font-size: 18px; }
+  .academy-path-grid { grid-template-columns: 1fr; }
+  .academy-path-art { height: 100px; }
+  body.sphere-dashboard .mission-nav { padding-inline: 18px !important; }
+}
