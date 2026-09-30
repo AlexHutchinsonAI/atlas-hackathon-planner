@@ -16,51 +16,21 @@
   // All numbers come from the command plan; target labels prevent them from implying confirmed attendance.
   window.AtlasSphereView = (
     stats,
-  ) => `<section class="academy-welcome" aria-labelledby="academy-title">
-    <div class="academy-intro">
-      <p class="academy-label">INTELLIBUS · MONTEGO BAY · 23–24 JANUARY</p>
-      <h1 id="academy-title">Atlas Agentic AI<br>Hackathon 2027.</h1>
-      <p class="academy-description">Bring people, ideas and real-world challenges together. One shared space to plan the event, connect the team and turn ambition into action.</p>
-      <div class="academy-actions"><button class="academy-primary" data-action="workspace">Open your workspace</button><a href="#atlas-universe">Explore Atlas <span aria-hidden="true">→</span></a></div>
-    </div>
-    <section class="academy-paths" aria-labelledby="academy-paths-title">
-      <p class="academy-label">YOUR EVENT, CONNECTED</p>
-      <h2 id="academy-paths-title">The people. The plan. The place.</h2>
-      <p>Everything you need to bring the hackathon together, with a clear path to every detail.</p>
-      <div class="academy-path-grid">
-        <a href="atlas-reference.html#people"><div class="academy-path-art people-art">${icon("people")}<span>01 / PEOPLE</span></div><h3>Meet the collective.</h3><p>Judges, coaches, speakers and the people making it happen.</p><span class="academy-path-link">Explore people →</span></a>
-        <a href="#workspace"><div class="academy-path-art plan-art">${icon("plans")}<span>02 / PLANNING</span></div><h3>Build the plan.</h3><p>Workstreams, responsibilities and milestones in one workspace.</p><span class="academy-path-link">Open the plan →</span></a>
-        <a href="virtual-walkthrough.html"><div class="academy-path-art venue-art">${icon("route")}<span>03 / VENUE</span></div><h3>Step into the venue.</h3><p>Explore Montego Bay Convention Centre before the event.</p><span class="academy-path-link">Take the walkthrough →</span></a>
-      </div>
-    </section>
-  </section>
-  <section id="atlas-universe" class="sphere-journey" aria-label="Inside Atlas interactive introduction" data-phase="overview">
+  ) => `<section id="atlas-universe" class="sphere-journey" aria-label="Inside Atlas interactive introduction" data-phase="overview">
     <div class="sphere-stage">
       <div class="sphere-canvas" aria-hidden="true"></div>
       <div class="sphere-fallback" aria-hidden="true"><div class="fallback-orb"><i></i><i></i><i></i><b></b></div></div>
       <div class="sphere-vignette" aria-hidden="true"></div>
       <div class="sphere-overview sphere-layer">
-        <div class="sphere-intro"><p class="sphere-eyebrow">INTELLIBUS · AGENTIC AI HACKATHON</p><h1>Inside <span>Atlas.</span></h1><p class="sphere-subtitle">Your people. Your plans. Connected.</p>
-          <div class="sphere-actions">
-            <a href="atlas-reference.html#people"><span class="sphere-action-icon">${icon("people")}</span><span><strong>People & workforce</strong><small>Profiles, roles and your entire team</small></span><span class="sphere-open">Open ${icon("arrow")}</span></a>
-            <button data-action="open-area" data-id="event"><span class="sphere-action-icon">${icon("plans")}</span><span><strong>Competition & judging</strong><small>Rules, reviewers and recognition</small></span><span class="sphere-open">Open ${icon("arrow")}</span></button>
-            <a href="atlas-reference.html#transport"><span class="sphere-action-icon">${icon("route")}</span><span><strong>Venue & transport</strong><small>Pickup points, routes and arrival plans</small></span><span class="sphere-open">Open ${icon("arrow")}</span></a>
-          </div>
-          <div class="sphere-event">23–24 JAN 2027 <span>MONTEGO BAY, JAMAICA</span></div>
+        <div class="front-intro">
+          <p class="front-eyebrow">INTELLIBUS PRESENTS / JAMAICA 2027</p>
+          <h1>Big ideas.<br><em>Real-world</em><br>possibilities.</h1>
+          <p class="front-event-name">Atlas Agentic AI Hackathon 2027</p>
+          <p class="front-description">A meeting of minds. A place to build.<br>Bring the next generation of ideas to life.</p>
+          <div class="front-actions"><button data-action="workspace">Open workspace <span>↗</span></button><a href="atlas-reference.html#people">Meet the people →</a></div>
         </div>
-        <div class="sphere-side-note"><span>A brighter,<br>more connected<br>tomorrow.</span><i></i></div>
-        <div class="sphere-stats">${[
-          [stats.registrations, "Registration target", "people"],
-          [stats.attendance, "Attendance target", "people"],
-          [stats.hackers, "Hacker target", "plans"],
-          [stats.workstreams, "Workstreams", "route"],
-        ]
-          .map(
-            ([value, label, type]) =>
-              `<button data-action="workspace" class="sphere-stat">${icon(type)}<span><b>${Number(value).toLocaleString()}</b><small>${label}</small></span>${icon("arrow")}</button>`,
-          )
-          .join("")}</div>
-        <button class="sphere-scroll-cue" data-sphere-enter><span>Scroll to enter the sphere</span><span aria-hidden="true">↓</span></button>
+        <div class="front-orbit-label" aria-hidden="true"><span>ATLAS / 01</span><b>A world of connections.</b></div>
+        <div class="front-bottom"><p><b>23–24 January 2027</b><span>Montego Bay, Jamaica</span></p><button data-sphere-enter>Scroll to explore <span>↓</span></button></div>
       </div>
       <div class="sphere-enter sphere-layer" aria-hidden="true" inert><p class="sphere-eyebrow">A DIFFERENT PERSPECTIVE</p><h2>Atlas Agentic AI Hackathon 2027</h2><p>Where individual ideas become connected possibilities.</p></div>
       <div class="sphere-inside sphere-layer" aria-hidden="true" inert><p class="sphere-eyebrow">WELCOME INSIDE</p><h2>Everything is<br><span>connected.</span></h2><p>Follow a connection. Bring your plan to life.</p><div class="neural-portals"><a href="atlas-reference.html#people">${icon("people")}<span>People<small>Meet the collective</small></span>↗</a><button data-action="workspace">${icon("plans")}<span>Plans<small>Explore your workstreams</small></span>↗</button><button data-action="delivery" data-mode="progress">${icon("route")}<span>Progress<small>See what comes next</small></span>↗</button><a href="virtual-walkthrough.html">${icon("route")}<span>Virtual walkthrough<small>Step inside the venue</small></span>↗</a></div><button class="sphere-workspace-button" data-action="workspace">Open your workspace <span>↓</span></button></div>
@@ -69,5 +39,14 @@
       <div class="sphere-progress" aria-label="Journey stages"><button data-sphere-step="0" aria-label="Show sphere overview" aria-current="step">01 <span>Overview</span></button><i></i><button data-sphere-step="0.28" aria-label="Enter the sphere">02 <span>Enter</span></button><i></i><button data-sphere-step="0.52" aria-label="Explore inside the sphere">03 <span>Connect</span></button><i></i><button data-sphere-step="0.73" aria-label="Explore the atomic layer">04 <span>Atoms</span></button><i></i><button data-sphere-step="0.96" aria-label="Explore the light field">05 <span>Discover</span></button></div>
       <p class="sphere-fallback-note" hidden>The scene is still. Your workspace is ready below.</p>
     </div>
+  </section>
+  <section class="front-discover" aria-labelledby="front-discover-title">
+    <header><p class="front-eyebrow">FROM POSSIBILITY TO A PLAN</p><h2 id="front-discover-title">One event.<br><em>Everything connected.</em></h2><p>Find your people. Shape the programme. Explore the place where it all comes together.</p></header>
+    <div class="front-destinations">
+      <a href="atlas-reference.html#people"><span class="front-index">01 / THE COLLECTIVE</span><h3>People make<br>the difference.</h3><p>Meet the judges, coaches, speakers and team behind Atlas.</p><span class="front-destination-link">Explore the directory <b>↗</b></span></a>
+      <a href="#workspace"><span class="front-index">02 / THE WORKSPACE</span><h3>A clear view.<br>A shared plan.</h3><p>Follow every workstream, decision and milestone in one place.</p><span class="front-destination-link">Start planning <b>↗</b></span></a>
+      <a href="virtual-walkthrough.html"><span class="front-index">03 / THE EXPERIENCE</span><h3>Be there.<br>Before you arrive.</h3><p>Take a 360° journey through Montego Bay Convention Centre.</p><span class="front-destination-link">Enter the venue <b>↗</b></span></a>
+    </div>
+    <div class="front-numbers" aria-label="Planning targets"><p>THE AMBITION<span>Planning targets, not confirmed attendance</span></p><div><b>${Number(stats.registrations).toLocaleString()}</b><span>Registrations</span></div><div><b>${Number(stats.attendance).toLocaleString()}</b><span>Attendees</span></div><div><b>${Number(stats.hackers).toLocaleString()}</b><span>Hackers</span></div></div>
   </section>`;
 })();

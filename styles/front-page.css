@@ -1,0 +1,69 @@
+/* A single cinematic opening replaces the previous stacked introductions. */
+body.sphere-dashboard { background: #f6f8fc !important; }
+.front-intro { position: absolute; top: 10%; left: max(6%,calc((100% - 1200px)/2)); width: 46%; max-width: 600px; z-index: 2; }
+.front-eyebrow { font: 600 11px/1.5 'IBM Plex Sans',sans-serif; letter-spacing: 2.5px; color: #506485; margin: 0 0 26px; }
+.sphere-journey .front-intro h1 { font-family: 'IBM Plex Serif',Georgia,serif !important; font-size: clamp(44px,5.5vw,80px) !important; line-height: 1.04 !important; font-weight: 500 !important; letter-spacing: -3px !important; color: #162642 !important; margin: 0 0 26px !important; padding: 0 !important; background: transparent !important; border: 0 !important; box-shadow: none !important; }
+.front-intro em,.front-discover em { font-weight: 400; color: #3165b1; }
+.sphere-journey .front-intro p { background: transparent !important; box-shadow: none !important; padding: 0 !important; }
+.front-event-name { font-size: 17px; font-weight: 600; color: #243c61; margin: 0 0 12px; }
+.front-description { font-size: 18px; line-height: 1.6; color: #4c617f; margin: 0 0 26px; }
+.front-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.front-actions button { background: #2459d6; border: 1px solid #2459d6; color: #fff; padding: 15px 22px; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.front-actions button span { margin-left: 20px; }
+.front-actions a { font-size: 15px; color: #2459a2; text-decoration: none; font-weight: 500; }
+.front-orbit-label { position: absolute; top: 15%; right: 7%; display: grid; gap: 7px; color: #344f78; }
+.front-orbit-label span { font-size: 10px; letter-spacing: 3px; }
+.front-orbit-label b { font-size: 14px; font-weight: 400; }
+.front-bottom { position: absolute; bottom: 90px; left: 6%; right: 6%; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #45699025; padding-top: 18px; }
+.front-bottom p { display: grid; gap: 5px; margin: 0; font-size: 13px; color: #465c7a; }
+.front-bottom b { font-weight: 500; color: #203656; }
+.front-bottom button { border: 0; border-radius: 0; background: transparent; color: #243c61; padding: 14px; cursor: pointer; font-size: 14px; }
+.front-bottom button span { margin-left: 30px; }
+.front-discover { max-width: 1200px; margin: auto; padding: 100px 32px 70px; color: #162642; }
+.front-discover header { max-width: 720px; margin-bottom: 60px; }
+.front-discover h2 { font-family: 'IBM Plex Serif',Georgia,serif; font-size: clamp(32px,4vw,52px); font-weight: 500; letter-spacing: -1.5px; line-height: 1.15; margin: 0 0 24px; }
+.front-discover header > p:last-child { color: #50617b; font-size: 18px; line-height: 1.7; max-width: 540px; }
+.front-destinations { display: grid; grid-template-columns: repeat(3,1fr); gap: 40px; }
+.front-destinations > a { text-decoration: none; color: inherit; padding: 24px 0; border-top: 1px solid #b6c5d9; }
+.front-index { font-size: 10px; letter-spacing: 2px; color: #526985; }
+.front-destinations h3 { font-family: 'IBM Plex Serif',Georgia,serif; font-weight: 500; font-size: 30px; line-height: 1.2; letter-spacing: -.6px; margin: 28px 0 16px; }
+.front-destinations p { color: #50617b; font-size: 16px; line-height: 1.7; min-height: 80px; }
+.front-destination-link { display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: #2459a2; }
+.front-destination-link b { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #b6c5d9; border-radius: 50%; font-size: 20px; font-weight: 400; transition: background .2s; }
+.front-destinations a:hover b { background: #e4edff; }
+.front-numbers { border-top: 1px solid #b6c5d9; margin-top: 64px; padding-top: 35px; display: grid; grid-template-columns: 1.4fr repeat(3,1fr); gap: 30px; align-items: center; }
+.front-numbers p { font-size: 11px; letter-spacing: 1px; color: #526985; }
+.front-numbers span { display: block; font-size: 13px; letter-spacing: 0; color: #50617b; margin-top: 8px; }
+.front-numbers b { font-size: 38px; font-weight: 500; }
+@media(max-width:700px) {
+ .front-intro { left: 7%; top: 5%; width: 86%; }
+ .sphere-journey .front-intro h1 { font-size: clamp(40px,10vw,58px) !important; letter-spacing: -1.5px !important; margin-bottom: 18px !important; }
+ .front-description { font-size: 16px; }
+ .front-event-name { font-size: 15px; }
+ .front-orbit-label { display: none; }
+ .front-bottom { bottom: 70px; }
+ .front-bottom p { font-size: 11px; }
+ .front-discover { padding: 60px 24px; }
+ .front-destinations { grid-template-columns: 1fr; gap: 20px; }
+ .front-destinations p { min-height: 0; }
+ .front-numbers { grid-template-columns: repeat(3,1fr); gap: 16px; }
+ .front-numbers > p { grid-column: 1/-1; }
+ .front-numbers b { font-size: 28px; }
+}
+@media(max-height:700px) and (min-width:701px) {
+ .front-intro { top: 5%; }
+ .sphere-journey .front-intro h1 { font-size: 48px !important; margin-bottom: 14px !important; }
+ .front-eyebrow { margin-bottom: 16px; }
+ .front-description { font-size: 16px; margin-bottom: 18px; }
+}
+/* Maintain readable action contrast against the pale 3D scene. */
+@layer atlas-brand {
+ .front-actions button,.front-actions button span { color: #fff !important; }
+}
+@media(max-width:700px) {
+ .front-bottom { bottom: 100px; }
+ .front-bottom button { padding: 8px; font-size: 12px; }
+ .front-bottom button span { margin-left: 10px; }
+ .front-actions { gap: 16px; }
+ .front-intro { pointer-events: auto; }
+}

@@ -7,7 +7,7 @@
   const embedded = new URLSearchParams(location.search).has('embedded');
   // The parent scrolls embedded operations; its own viewport is not the user's viewport.
   if (embedded) return;
-  const selector = '.academy-intro,.academy-paths > h2,.academy-path-grid > a,.workspace-heading,.depth-heading,.planning-surface > header,.directory-heading,.people-hero,.command-panel,.review-summary,.review-table-wrap,.directory-tools,#peopleGrid,.transport-hero,.outcome-hero,.dash-section';
+  const selector = '.front-discover > header,.front-destinations > a,.front-numbers,.academy-intro,.academy-paths > h2,.academy-path-grid > a,.workspace-heading,.depth-heading,.planning-surface > header,.directory-heading,.people-hero,.command-panel,.review-summary,.review-table-wrap,.directory-tools,#peopleGrid,.transport-hero,.outcome-hero,.dash-section';
   const observer = new IntersectionObserver(entries => {
     entries.forEach(({target,isIntersecting}) => isIntersecting ? visible.add(target) : visible.delete(target));
     schedule();
