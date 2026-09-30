@@ -336,7 +336,7 @@
   // Render the shared Intellibus navigation around the current planning view.
   function shell(inner) {
     document.body.classList.toggle("motion-paused", motionPaused);
-    document.body.classList.toggle("sphere-dashboard", ui.screen === "home");
+    document.body.classList.toggle("sphere-dashboard", ui.screen === "home" && !location.pathname.endsWith("/workspace.html"));
     if (ui.screen !== "home")
       inner = `<section class="atlas-surface planning-surface">${inner}</section>`;
     app.innerHTML = `<nav class="mission-nav" aria-label="Main navigation"><button class="logo-home" data-action="home" aria-label="Intellibus Atlas dashboard"><img src="assets/intellibus-logo.svg" alt="Intellibus" width="166" height="31"></button><span class="nav-divider"></span><span class="product-name">ATLAS <small>2027</small></span><div class="nav-tools"><button class="nav-link" data-action="home">Overview</button><button class="nav-link workspace-nav" data-action="workspace">Workspace</button><a class="nav-link" href="atlas-reference.html#people">People</a><a class="nav-link" href="atlas-reference.html#transport">Transport</a><a class="nav-link" href="atlas-reference.html#direction">Operations</a><button class="motion-toggle" data-action="toggle-motion" aria-pressed="${motionPaused}" aria-label="${motionPaused ? "Play decorative motion" : "Pause decorative motion"}" title="Pause or resume decorative animation">${motionPaused ? "Play motion" : "Pause motion"}</button></div></nav>${inner}`;
@@ -514,6 +514,11 @@
   }
   // Compose verified targets, direct workstream shortcuts, attention items and milestones.
   function home() {
+    // The landing page is a short destination menu; planning has its own URL.
+    if (!location.pathname.endsWith('/workspace.html')) {
+      shell(`<div class="command-home compact-home">${window.AtlasSphereView({})}</div>`);
+      return;
+    }
     const list = data.workstreams.filter((w) =>
       (w.title + " " + w.originalTitle)
         .toLowerCase()
@@ -532,7 +537,7 @@
     const items = data.workstreams.flatMap(allItems),
       done = items.filter((it) => it.status === "Done").length,
       waiting = items.filter((it) => it.status === "Waiting").length;
-    shell(`<div class="command-home">${window.AtlasSphereView({ workstreams: data.workstreams.length, registrations: data.command.metrics.find((m) => m.id === "registrations")?.target || 0, attendance: data.command.metrics.find((m) => m.id === "attendance")?.target || 0, hackers: data.command.metrics.find((m) => m.id === "hackers")?.target || 0 })}<section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">YOUR COMMAND CENTER</p><h2>Planning workspace</h2></div><p>${done} / ${items.length} planning items done <span>·</span> ${waiting} waiting</p></header>
+    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">YOUR COMMAND CENTER</p><h2>Planning workspace</h2></div><p>${done} / ${items.length} planning items done <span>·</span> ${waiting} waiting</p></header>
       <nav class="review-tabs review-shortcuts" aria-label="Planning views">${[
         ["progress", "Progress & attention"],
         ["owners", "Ownership"],
@@ -587,19 +592,7 @@
       ${ui.homeFiltersOpen ? `<section class="filter-panel"><label class="field">Find a workstream<input id="search" type="search" placeholder="Search workstreams" value="${esc(ui.search)}"></label><label class="field">See tasks by tag<select id="globalTag">${tagOptions(tags, ui.tag)}</select></label></section>` : ""}
       ${ui.tag ? `<section class="sheet tag-results">${tagged.length ? tagged.map(({ w, l, it }) => `<button class="tag-result" type="button" data-action="open-tag-item" data-ws="${esc(w.id)}" data-list="${esc(l.id)}"><span>${esc(it.text)}</span><small>${esc(w.title)} · ${esc(l.title)}</small></button>`).join("") : '<p class="empty">No tasks have this tag yet.</p>'}</section>` : ""}
       <section class="sheet" id="homeRows">${list.length ? list.map((w, i) => plainRow(w.id, w.title, "", i, list.length, "workstream", "open-workstream", readinessDots(w))).join("") : '<p class="empty">No matching workstream. Try another word.</p>'}</section></details>
-      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></div></section><div class="depth-flow"><section class="depth-chapter" id="journey-tasks"><header class="depth-heading"><span>01 / EVERY DETAIL</span><h2>Task library</h2><p>All workstreams and tasks, in one scrollable library. Select a task to edit it.</p></header><div class="glass-scroll task-library" tabindex="0" role="region" aria-label="Complete task library">${data.workstreams
-        .map(
-          (w) =>
-            `<section><h3>${esc(w.title)}</h3>${allLists(w)
-              .map(
-                (l) =>
-                  `<h4>${esc(l.title)}</h4>${(l.items || []).map((it) => `<button class="library-task" data-action="open-attention" data-ws="${esc(w.id)}" data-list="${esc(l.id)}" data-item="${esc(it.id)}"><span>${esc(it.text)}</span><small>${esc(it.status || "Not started")}${it.date ? " · " + esc(it.date) : ""}</small></button>`).join("")}`,
-              )
-              .join("")}</section>`,
-        )
-        .join(
-          "",
-        )}</div></section>${window.AtlasReview.flow()}<section class="depth-chapter" id="journey-operations"><header class="depth-heading"><span>08 / THE COLLECTIVE</span><h2>People & operations</h2><p>Explore the people, transport and operations below.</p><a href="atlas-reference.html?flow=1">Open the full operations journey ↗</a></header><iframe class="operations-flow" title="Atlas people and operations, continuous scroll" src="atlas-reference.html?flow=1&embedded=1" loading="lazy"></iframe></section><section id="journey-venue" class="venue-journey"><div class="venue-sticky"><header class="venue-heading"><span>09 / EXPLORE THE VENUE</span><h2>Step inside Montego Bay.</h2><p>Scroll to explore the venue · Drag to look around · <a href="#venue-end">Skip walkthrough ↓</a></p></header><div class="venue-window"><iframe title="Montego Bay Convention Centre 360 degree walkthrough" src="venue/index.html?embedded=1" loading="lazy"></iframe><div class="venue-hint" role="status">↔ Drag to look around. Scroll to visit the next space.<button type="button" aria-label="Dismiss drag hint">Got it</button></div></div><p class="venue-progress">Historic venue photography · <a href="https://virtualtour.mbconventioncentre.com/" target="_blank" rel="noopener">Original tour ↗</a> · <span>1 / 25</span></p></div></section><div id="venue-end"></div><footer class="journey-footer"><p>Atlas Agentic AI Hackathon 2027</p><a href="#workspace">Back to your workspace ↑</a></footer></div></div>`);
+      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></div></section></div>`);
   }
   function areaView() {
     const id = ui.areaId,
@@ -824,15 +817,11 @@
       return nav("list", button.dataset.ws, button.dataset.list);
     // The workspace shortcut bypasses the cinematic scroll without changing any data.
     if (action === "workspace") {
-      if (ui.screen !== "home") nav("home");
-      document
-        .getElementById("workspace")
-        ?.scrollIntoView({ block: "start", behavior: "instant" });
-      document.getElementById("deck-search")?.focus({ preventScroll: true });
+      location.href = 'workspace.html';
       return;
     }
     if (action === "delivery") return window.AtlasReview.open(mode);
-    if (action === "home") return nav("home");
+    if (action === "home") { location.href = "index.html"; return; }
     if (action === "open-area") return nav("area", null, null, id);
     if (action === "open-attention") {
       ui.openItemId = button.dataset.item;

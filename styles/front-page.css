@@ -67,3 +67,27 @@ body.sphere-dashboard { background: #f6f8fc !important; }
  .front-actions { gap: 16px; }
  .front-intro { pointer-events: auto; }
 }
+/* Short landing page: the sphere is decorative, not a multi-screen scroll gate. */
+.compact-home .sphere-journey.sphere-journey { height: calc(100svh - 66px) !important; min-height: 580px; }
+.compact-home .sphere-stage.sphere-stage { position: relative; top: 0; height: 100% !important; min-height: 580px; }
+.compact-home .front-intro { top: 15%; }
+.compact-home .front-bottom { bottom: 35px; }
+.compact-home .front-bottom a { color: #2459a2; font-size: 15px; text-decoration: none; }
+.compact-home .front-primary { display: inline-flex; gap: 22px; background: #2459d6; padding: 15px 22px; border-radius: 30px; }
+@layer atlas-brand { .compact-home .front-primary,.compact-home .front-primary span { color: #fff !important; } }
+@media(max-width:700px) {
+ .compact-home .sphere-journey.sphere-journey { height: calc(100svh - 62px) !important; min-height: 640px; }
+ .compact-home .front-intro { top: 8%; }
+ .compact-home .front-bottom { bottom: 24px; align-items: flex-end; }
+ .compact-home .front-bottom a { font-size: 13px; }
+ .compact-home .front-orbit-label { display: none; }
+}
+/* Connection controls belong to the workspace, leaving landing navigation unobstructed. */
+body:has(.compact-home) #team-bar { display: none !important; }
+@media(max-width:700px) {
+ body:has(.compact-home) .mission-nav { height: auto !important; min-height: 110px; display: flex !important; flex-wrap: wrap !important; gap: 8px !important; padding: 10px 18px !important; }
+ body:has(.compact-home) .mission-nav .nav-tools { width: 100%; display: flex !important; overflow-x: auto; justify-content: flex-start; gap: 14px; }
+ body:has(.compact-home) .mission-nav .nav-link { display: inline-block !important; white-space: nowrap; font-size: 13px !important; }
+ body:has(.compact-home) .mission-nav .motion-toggle { padding: 5px 8px; font-size: 12px !important; white-space: nowrap; }
+ .compact-home .sphere-journey.sphere-journey { height: calc(100svh - 110px) !important; min-height: 620px; }
+}

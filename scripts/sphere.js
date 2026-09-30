@@ -569,7 +569,7 @@ function mount() {
   function updateProgress() {
     const rect = root.getBoundingClientRect(),
       travel = root.offsetHeight - stage.offsetHeight;
-    progress = isStatic
+    progress = (isStatic || root.dataset.compact === "true")
       ? 0
       : clamp(
           (parseFloat(getComputedStyle(stage).top) - rect.top) /
