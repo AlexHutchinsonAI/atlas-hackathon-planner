@@ -15,7 +15,7 @@
   function discover() {
     for (const node of targets) if (!node.isConnected) { observer.unobserve(node); targets.delete(node); visible.delete(node); }
     document.querySelectorAll(selector).forEach(node => {
-      if (targets.has(node) || node.closest('.sphere-journey')) return;
+      if (targets.has(node) || node.closest('.sphere-journey,dialog')) return;
       // Avoid multiplying transforms when a panel contains another animated section.
       if (node.parentElement.closest(selector)) return;
       targets.add(node); node.classList.add('river-motion'); observer.observe(node);

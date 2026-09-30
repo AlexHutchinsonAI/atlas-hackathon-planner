@@ -5,11 +5,13 @@
   const styles = {streets:'mapbox://styles/mapbox/streets-v12',satellite:'mapbox://styles/mapbox/satellite-streets-v12',dark:'mapbox://styles/mapbox/dark-v11'};
   const safe = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function dispose(){ generation++; markers.forEach(m=>m.remove());markers=[];map?.remove();map=null; }
-  function layout(){return `<section class="atlas-map-screen"><div id="atlasMap" aria-label="Interactive Jamaica transport map"></div><details class="map-controls" open><summary>Transport explorer <span>Filters & details</span></summary><div class="map-control-content"><label>Map style<select id="map-style"><option value="streets">Street map</option><option value="satellite">Satellite</option><option value="dark">Dark</option></select></label><label>Transport network<select id="map-category"><option value="all">All transport</option><option value="town">General public</option><option value="highschool">High schools</option><option value="college">Colleges</option><option value="university">Universities</option></select></label><label>Find a pickup<input id="map-search" type="search" placeholder="Search location or parish"></label><div class="map-buttons"><button id="map-fit">Show network</button><button id="map-venue">Venue</button></div><p id="map-feedback" role="status">Loading map…</p><div id="map-pickups"></div><details><summary>Transport & school planning</summary><div id="map-planning"></div></details><p class="map-disclaimer">Planning locations and travel estimates only. Pickup times and operators are not confirmed.</p></div></details></section>`;}
+  function layout(){return `<section class="atlas-map-screen"><div id="atlasMap" aria-label="Interactive Jamaica transport map"></div><details class="map-controls" open><summary>Transport explorer <span>Filters & details</span></summary><div class="map-control-content"><label>Map style<select id="map-style"><option value="streets">Street map</option><option value="satellite">Satellite</option><option value="dark">Dark</option></select></label><label>Transport network<select id="map-category"><option value="all">All transport</option><option value="town">General public</option><option value="highschool">High schools</option><option value="college">Colleges</option><option value="university">Universities</option></select></label><label>Find a pickup<input id="map-search" type="search" placeholder="Search location or parish"></label><div class="map-buttons"><button id="map-fit">Show network</button><button id="map-venue">Venue</button></div><p id="map-feedback" role="status">Loading map…</p><div id="map-pickups"></div><button type="button" id="map-open-planning">Transport & school planning ↗</button><p class="map-disclaimer">Planning locations and travel estimates only. Pickup times and operators are not confirmed.</p></div></details><dialog id="map-planning-dialog" aria-labelledby="map-planning-title"><header class="map-dialog-head"><h2 id="map-planning-title">Transport & school planning</h2><form method="dialog"><button aria-label="Close transport planning">Close ×</button></form></header><div id="map-planning"></div></dialog></section>`;}
   async function mount(points,venue,planning){
     dispose();
     const requestGeneration = generation;
     document.getElementById('map-planning').innerHTML=planning;
+    // Full planning layouts get a properly sized top-layer dialog, never a narrow sidebar.
+    document.getElementById('map-open-planning').onclick=()=>document.getElementById('map-planning-dialog').showModal();
     let rows=points;
     const feedback=document.getElementById('map-feedback');
     const list=document.getElementById('map-pickups');
@@ -17,7 +19,8 @@
     let mapFailed=false;
     function locate(point){
       if(!map || point.lat==null || point.lng==null)return;
-      map.flyTo({center:[point.lng,point.lat],zoom:12,essential:false});
+      if(innerWidth < 700) document.querySelector('.map-controls').open=false;
+      map.flyTo({center:[point.lng,point.lat],zoom:12,padding:0,offset:innerWidth>800?[-160,60]:[0,70],essential:false});
       activePopup?.remove();
       const el=document.createElement('div');
       el.innerHTML=`<strong>${safe(point.label)}</strong><p>${safe(point.parish||venue.detail)}</p><p>${safe(point.planning||'Event venue')}</p><small>Planning location · verify before dispatch</small>`;
@@ -50,8 +53,11 @@
       map=new mapboxgl.Map({container:'atlasMap',style:styles.streets,center:[-77.3,18.15],zoom:7.3,attributionControl:false});
       map.addControl(new mapboxgl.NavigationControl(),'top-left');
       map.addControl(new mapboxgl.AttributionControl({compact:true}),'bottom-left');
-      map.on('error',()=>{mapFailed=true;feedback.textContent='Map could not load. Check connection or Mapbox URL permissions. Pickup records remain available.';});
-      map.on('load',()=>{mapFailed=false;refresh();fit();});
+      map.on('error',()=>{if(requestGeneration!==generation)return;document.getElementById('map-style').disabled=false;mapFailed=true;feedback.textContent='Map could not load. Check connection or Mapbox URL permissions. Pickup records remain available.';});
+      map.on('style.load',()=>{
+        if(requestGeneration===generation)document.getElementById('map-style').disabled=false;
+      });
+      map.on('load',()=>{if(requestGeneration!==generation)return;mapFailed=false;refresh();fit();});
       new mapboxgl.Marker({color:'#172c4d'}).setLngLat([venue.lng,venue.lat]).addTo(map).getElement().addEventListener('click',()=>locate({...venue,label:venue.name}));
     }catch(e){mapFailed=true;}
     if(requestGeneration!==generation || !document.getElementById('map-category'))return;
@@ -59,7 +65,12 @@
     document.getElementById('map-search').oninput=refresh;
     document.getElementById('map-fit').onclick=fit;
     document.getElementById('map-venue').onclick=()=>locate({...venue,label:venue.name});
-    document.getElementById('map-style').onchange=e=>map?.setStyle(styles[e.target.value]);
+    document.getElementById('map-style').onchange=e=>{
+      if(!map)return;
+      // Serialize style changes so asynchronous sprite loads cannot cross into a replacement style.
+      e.target.disabled=true;
+      map.setStyle(styles[e.target.value],{diff:false});
+    };
     refresh();
   }
   window.AtlasMap={layout,mount,dispose};
