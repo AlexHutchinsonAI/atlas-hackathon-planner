@@ -27,7 +27,8 @@
           <h1>Atlas.<br><em>Let’s build.</em></h1>
           <p class="front-event-name">Atlas Agentic AI Hackathon 2027</p>
           <p class="front-description">Your people, plans and venue.<br>Choose where you want to go.</p>
-          <div class="front-actions"><a class="front-primary" href="workspace.html">Open workspace <span>↗</span></a><a href="atlas-reference.html#people">Meet the people →</a></div>
+          <!-- Direct shortcut to the five-step progress register shown in the original planner. -->
+          <div class="front-actions"><a class="front-primary" href="workspace.html">Open workspace <span>↗</span></a><a href="atlas-reference.html#people">Meet the people →</a><a href="atlas-reference.html#notebook">Workstream progress <span aria-hidden="true">● ● ● ● ● →</span></a></div>
         </div>
         <div class="front-orbit-label" aria-hidden="true"><span>ATLAS / 01</span><b>A world of connections.</b></div>
         <div class="front-bottom"><p><b>23–24 January 2027</b><span>Montego Bay, Jamaica</span></p><a href="virtual-walkthrough.html">Virtual walkthrough ↗</a></div>
