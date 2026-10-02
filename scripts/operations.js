@@ -3639,6 +3639,8 @@ let webState = {},
   reviewState = {},
   ambassadorState = {},
   curArea = null;
+// Resolve the shared prize review link once; later sidebar navigation remains unchanged.
+let requestedPrizeSection = new URLSearchParams(location.search).get("section") === "prizes";
 
 function persist(key, obj) {
   try {
@@ -3900,6 +3902,10 @@ function itemStatus(it) {
 }
 function renderWeb() {
   const W = webItems();
+  if (requestedPrizeSection) {
+    curArea = W.all.find(item => item.areas.some(area => area.name === "Prizes"))?.key || curArea;
+    requestedPrizeSection = false;
+  }
   if (!curArea || !W.all.find((x) => x.key === curArea))
     curArea = W.goal[0].key;
   const q = AREAS.filter((a) => areaStatus(a) === "Ready to Publish").length;
@@ -3921,7 +3927,7 @@ function renderWeb() {
               : "Not Reviewed";
     return `<button class="ws" data-wkey="${it.key}" aria-current="${it.key === curArea}">
       <span class="n"></span>
-      <span class="nm">${it.areas.some((a) => /to assign/i.test(a.lead)) ? '<span class="gapdot"></span>' : ""}${esc(it.label)}<small>${esc(lead)} · Review: ${esc(rev)}</small></span>
+      <span class="nm">${it.areas.some((a) => /to assign/i.test(a.lead)) ? '<span class="gapdot"></span>' : ""}${esc(it.label)}<small>${esc(lead)} · Review: ${esc(rev)}</small>${it.areas.some(a => a.name === "Prizes") ? `<small class="prize-review-summary">Detailed reviews: ${Object.keys(window.ATLAS_KANDIA_REVIEW.current).filter(k => reviewStatus(k) === "Approved").length} approved · ${Object.keys(window.ATLAS_KANDIA_REVIEW.current).filter(k => reviewStatus(k) === "Reviewed — Changes Required").length} changes required</small>` : ""}</span>
       <span class="chip c${PUB.indexOf(st)}">${esc(st)}</span></button>`;
   };
   el("webView").innerHTML = `
