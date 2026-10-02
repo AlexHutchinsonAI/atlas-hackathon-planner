@@ -56,6 +56,8 @@
   const uid = () =>
     Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 9);
   let data = load();
+  // Import saved entries once per workstream without replacing the current plan or later edits.
+  window.AtlasSavedPlan.merge(data);
   // Add unknown live measures without changing existing targets or saved counts.
   function ensureLiveMeasures() {
     for (const [id, name] of [
@@ -548,7 +550,7 @@
     const items = data.workstreams.flatMap(allItems),
       done = items.filter((it) => it.status === "Done").length,
       waiting = items.filter((it) => it.status === "Waiting").length;
-    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">ATLAS / EVENT OPERATIONS</p><h2>Event dashboard</h2></div><p class="dashboard-state">${window.AtlasTeam?.active ? "Shared team plan" : "Personal browser draft"}<br><span>23–24 Jan 2027 · Montego Bay</span></p></header>
+    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">ATLAS / EVENT OPERATIONS</p><h2>Event dashboard</h2><p class="small">Destini’s saved plan is available inside 16 workstreams · 138 tasks · 50 deadlines.</p></div><p class="dashboard-state">${window.AtlasTeam?.active ? "Shared team plan" : "Personal browser draft"}<br><span>23–24 Jan 2027 · Montego Bay</span></p></header>
       <nav class="review-tabs review-shortcuts" aria-label="Planning views">${[
         ["progress", "Progress & attention"],
         ["owners", "Ownership"],
@@ -646,7 +648,7 @@
     shell(
       head +
         `<section class="workstream-purpose"><p><strong>Objective</strong> · ${esc(w.brief || "Objective needs review")}</p><p><strong>Accountable owner</strong> · ${esc(w.accountableOwner || "Not verified")}</p><p><strong>Success measures</strong> · ${esc(w.success || "Not yet defined")}</p><p class="small">Source planning content · review before approval</p></section>` +
-        body +
+        window.AtlasSavedPlan.render(w) + body +
         after,
     );
   }
@@ -1372,7 +1374,7 @@
   });
   window.AtlasTeam.init({
     replace(plan) {
-      data = ensureCommandAreas(ensureMilestones(plan));
+      data = window.AtlasSavedPlan.merge(ensureCommandAreas(ensureMilestones(plan)));
       ensureLiveMeasures();
       render(true);
     },
