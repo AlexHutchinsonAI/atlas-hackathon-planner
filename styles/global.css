@@ -117,3 +117,7 @@
   }
   body.motion-paused .river-motion.river-motion { transform: none !important; opacity: 1 !important; transition: none !important; }
 }
+
+/* Blue filled dots make recorded planning progress visible on the light register. */
+.atlas-operations .pips i { width: 8px; height: 8px; background: #cbd5e1; }
+.atlas-operations .pips i.on { background: #2563eb; }

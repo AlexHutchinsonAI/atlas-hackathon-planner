@@ -4538,6 +4538,30 @@ async function doExport() {
 
 /* ---------- boot ---------- */
 loadLocal();
+// Seed the original progress register from the exported plan without replacing browser edits.
+let importedDestini = false;
+for (const source of window.ATLAS_DESTINI_PLAN || []) {
+  const id = "ws" + String(source.n).padStart(2, "0");
+  const existing = plans[id];
+  if (existing && (existing.destiniImported || existing.updatedAt || existing.outcome?.trim() || existing.tasks?.length || existing.krs?.length || existing.handled?.length || existing.khandled?.length || Object.values(existing.mobilize || {}).some(Boolean))) continue;
+  const taskIds = source.tasks.map((_, i) => `destini-${id}-t${i}`);
+  const clean = value => value === "—" ? "" : (value || "");
+  const p = blank();
+  p.outcome = source.outcome === "(not written)" ? "" : source.outcome;
+  p.tasks = source.tasks.map((t, i) => ({
+    id: taskIds[i], title: t.title, owner: clean(t.owner), due: clean(t.date),
+    // Only a uniquely named predecessor is recoverable; an export dash remains unset.
+    dep: source.tasks.filter(x => x.title === t.after).length === 1 ? taskIds[source.tasks.findIndex(x => x.title === t.after)] : "",
+    done: t.done === "yes"
+  }));
+  p.krs = source.results.map((k, i) => ({...k, id: `destini-${id}-k${i}`}));
+  p.handled = p.tasks.map(t => t.title);
+  p.khandled = p.krs.map(k => k.title);
+  p.destiniImported = "2026-10-02";
+  plans[id] = p;
+  importedDestini = true;
+}
+if (importedDestini) window.AtlasSave.write(operationsStorageKey(), JSON.stringify(plans));
 try {
   const c = localStorage.getItem(LS + "-ws");
   if (c) custom = JSON.parse(c) || [];
