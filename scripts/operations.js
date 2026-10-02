@@ -3954,7 +3954,7 @@ function detailTable(head, rows, cls = "") {
   return `<div class="table-scroll"><table class="${cls}"><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${esc(String(c))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
 function reviewableTable(head, rows, prefix, cls = "") {
-  const keys = rows.map((_, i) => prefix + ":" + i);
+  const keys = rows.map((row, i) => prefix + ":" + (prefix === "prize" ? Number(row[0]) - 1 : i));
   return (
     reviewSummary(keys) +
     `<div class="table-scroll"><table class="${cls}"><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join("")}<th>Review Status</th><th>Review Comment / Blocker</th></tr></thead><tbody>${rows
@@ -4128,7 +4128,7 @@ function areaBlock(a) {
         "Locked Prize & Recognition Framework",
         `<div class="review-lock"><b>FOR REVIEW — ARCHITECTURE LOCKED.</b> Owner: Candia. Changes from this point should only follow a judge-operability issue, Competition Rules conflict, measurement limitation, sponsor term or deliberate leadership decision.</div>
       <div class="source-note"><b>Team review merged.</b> The attached prize-workbook snapshot contains 18 Approved rows, 31 Reviewed — Changes Required rows and 2 Not Reviewed rows across the prize framework, mechanics, tracks, judge build-out and area review gate. Comments were preserved verbatim. The review was completed on the earlier workbook, so judge-build rows remain flagged for re-check against the now-locked 30 Official Judges + 30 Senior Technical Reviewers model.</div>
-      ${reviewableTable(["#", "Prize / Recognition", "What It Means", "Prize / Recognition", "Measurement / Success Criteria", "Mechanics — How the Winner Is Determined"], PRIZE_FRAMEWORK, "prize", "prize-table")}`,
+      ${reviewableTable(["#", "Prize / Recognition", "What It Means", "Prize / Recognition", "Measurement / Success Criteria", "Mechanics — How the Winner Is Determined"], PRIZE_DISPLAY, "prize", "prize-table")}`,
       ) +
       sec(
         "Competition Prize Mechanics",
@@ -4144,7 +4144,7 @@ function areaBlock(a) {
       ) +
       sec(
         "Mapped to Judge Build-Out",
-        `<p class="hint" style="margin-left:0">Prize architecture remains locked for review. These are the judging dependencies that must be closed before the engine is execution-ready.</p>${reviewableTable(["Judge Build-Out Item", "Prize Framework Already Defines", "Still to Build / Confirm", "Owner", "Status"], PRIZE_JUDGE_MAP, "judge-build")}`,
+        `<p class="hint" style="margin-left:0">Kandia’s 2 October source refers to an older 85-judge target and specialist awards now removed. Reconcile these references before approval; the current 30 Official Judges + 30 Senior Technical Reviewers model is retained. These are the judging dependencies that must be closed before the engine is execution-ready.</p>${reviewableTable(["Judge Build-Out Item", "Prize Framework Already Defines", "Still to Build / Confirm", "Owner", "Status"], PRIZE_JUDGE_MAP, "judge-build")}`,
       );
   }
   if (isS) {
@@ -4585,6 +4585,14 @@ persist("judges", judgeState);
 actState = restore("actions");
 qState = restore("qbank");
 reviewState = { ...TEAM_REVIEW_MERGE, ...restore("review") };
+// Merge the source's explicit review edits without resetting coach reviews or newer local decisions.
+if (!localStorage.getItem(LS + '-kandia-20261002')) {
+  for (const [key, value] of Object.entries(window.ATLAS_KANDIA_REVIEW.current)) {
+    reviewState[key] = window.AtlasBackupUpdate.merge(reviewState[key], window.ATLAS_KANDIA_REVIEW.previous[key], value);
+  }
+  persist("review", reviewState);
+  localStorage.setItem(LS + '-kandia-20261002', '1');
+}
 persist("review", reviewState);
 goalState = restore("goals");
 judgeTarget = 30;

@@ -1740,7 +1740,7 @@ const AREAS = [
     lead: "Candia",
     sup: "Camile / Dennis / Judging Lead",
     status: "For Review — Architecture Locked",
-    pos: "Prize & Recognition architecture is locked for review: 19 awards/recognitions, one competition prize per team, minimum qualifying thresholds, award sequence, tie-breaking, evidence requirements, merchant/community recognition and a five-track working assumption.",
+    pos: "Prize & Recognition architecture is locked for review: 14 active awards/recognitions, one competition prize per team, minimum qualifying thresholds, award sequence, tie-breaking, evidence requirements, merchant/community recognition and a five-track working assumption.",
     ready:
       "Ready for publication only after the Judge Build-Out validates scoring operations, the Competition Rules are cross-checked with Dennis, final tracks are approved and sponsor-funded terms are confirmed.",
     notes:
@@ -2920,7 +2920,7 @@ const PRIZE_FRAMEWORK = [
     "The strongest complete solution across the entire hackathon. It solves a meaningful problem, works end-to-end, demonstrates strong technical and Agentic AI execution, creates clear value and can be convincingly demonstrated.",
     "$5,000",
     "Minimum 90/100. Technical execution 25; Agentic AI architecture 20; problem relevance 15; usability 15; impact 15; demo/presentation 10.",
-    "All eligible teams receive a final competition score. Highest score at or above 90 wins. Once awarded, the team is removed from consideration for all other cash competition prizes.",
+    "All eligible teams receive a final competition score. Highest score at or above 90 wins. Once awarded, the team is removed from consideration for all other cash competition prizes."
   ],
   [
     2,
@@ -2928,7 +2928,7 @@ const PRIZE_FRAMEWORK = [
     "The next strongest overall solution after the Champion, meeting the same competition standards.",
     "$3,000",
     "Minimum 85/100. Same 100-point Overall Competition rubric.",
-    "Awarded to the highest-scoring remaining eligible team after Champion is removed. Team must score at least 85. Winner becomes ineligible for subsequent cash prizes.",
+    "Awarded to the highest-scoring remaining eligible team after Champion is removed. Team must score at least 85. Winner becomes ineligible for subsequent cash prizes."
   ],
   [
     3,
@@ -2936,7 +2936,7 @@ const PRIZE_FRAMEWORK = [
     "The next strongest overall solution after Champion and Second Place.",
     "$2,000",
     "Minimum 80/100. Same 100-point Overall Competition rubric.",
-    "Awarded to the highest-scoring remaining eligible team after Champion and Second Place are removed. Minimum 80 required.",
+    "Awarded to the highest-scoring remaining eligible team after Champion and Second Place are removed. Minimum 80 required."
   ],
   [
     4,
@@ -2944,15 +2944,15 @@ const PRIZE_FRAMEWORK = [
     "The strongest remaining solution within a specific challenge track. It must directly solve the defined track problem—not simply loosely relate to the theme.",
     "$1,000 per track",
     "Minimum 90/100. Challenge fit 25; technical execution 25; solution effectiveness 20; innovation 15; measurable impact 15.",
-    "Teams are ranked within their assigned track. Top-3 overall winners are removed first. Highest remaining qualifying Track score wins. If that team has already won another cash prize, move to the next qualifying team. If nobody reaches 90, the award may be withheld.",
+    "Teams are ranked within their assigned track. Top-3 overall winners are removed first. Highest remaining qualifying Track score wins. If that team has already won another cash prize, move to the next qualifying team. If nobody reaches 90, the award may be withheld."
   ],
   [
     5,
     "Best Agentic AI Architecture",
-    "The strongest genuine use of Agentic AI. Agents should perform meaningful work, use tools/data, coordinate tasks, execute workflows and demonstrate sensible human oversight.",
-    "$500",
-    "Minimum 85/100. Agent/tool orchestration 30; architecture quality 25; task completion/reliability 20; human oversight/safeguards 15; observability/explainability 10.",
-    "Judges score eligible solutions against this specialist rubric. Highest-scoring team that has not already won a cash prize receives the award. Minimum score still applies.",
+    "A fully functional agentic AI solution that can set a goal, plan, act, check its result and repeat. Judges also assess meaningful tool use, human oversight, privacy, security and reliable task completion.",
+    "$1,000 proposed — subject to budget confirmation and a working demonstration",
+    "Minimum 85/100. Agent/tool orchestration 25; architecture quality 20; task completion/reliability 20; human oversight and responsible AI safeguards 20; observability/explainability 15.",
+    "Judges score eligible solutions against this specialist rubric. Highest-scoring team that has not already won a cash prize receives the award. Minimum score still applies."
   ],
   [
     6,
@@ -2960,7 +2960,7 @@ const PRIZE_FRAMEWORK = [
     "The solution closest to being practically usable or pilot-ready now. It works end-to-end, has a functioning user journey and requires relatively limited additional work before implementation.",
     "$500",
     "Minimum 80/100. End-to-end functionality 25; reliability 20; usability 15; scalability/maintainability 15; security/data handling 15; deployment readiness 10. Working demo required.",
-    "Only teams with a working end-to-end demonstration qualify. Judges score deployment readiness. Highest eligible non-winning team above 80 receives the award.",
+    "Only teams with a working end-to-end demonstration qualify. Judges score deployment readiness. Highest eligible non-winning team above 80 receives the award."
   ],
   [
     7,
@@ -2968,7 +2968,7 @@ const PRIZE_FRAMEWORK = [
     "The solution with the clearest potential to become a viable product, service or commercial offering. It solves a problem a defined customer would realistically value or pay to solve.",
     "$500",
     "Minimum 80/100. Customer problem 20; market demand 20; business/revenue model 20; customer evidence 15; scalability 15; go-to-market approach 10.",
-    "Judges evaluate whether there is a real customer, real demand and credible business pathway. Highest remaining eligible score above 80 wins.",
+    "Judges evaluate whether there is a real customer, real demand and credible business pathway. Highest remaining eligible score above 80 wins."
   ],
   [
     8,
@@ -2976,7 +2976,7 @@ const PRIZE_FRAMEWORK = [
     "The solution with the strongest potential to create measurable economic, social or national value in Jamaica.",
     "$500",
     "Minimum 80/100. Relevance to Jamaican need 25; beneficiaries/value created 20; measurable outcomes 20; scalability 15; accessibility/inclusion 10; sustainability 10.",
-    "Judges assess both significance of the Jamaican problem and credibility of the proposed impact. Highest remaining eligible qualifying team wins.",
+    "Judges assess both significance of the Jamaican problem and credibility of the proposed impact. Highest remaining eligible qualifying team wins."
   ],
   [
     9,
@@ -2984,7 +2984,7 @@ const PRIZE_FRAMEWORK = [
     "The solution demonstrating that powerful AI can also be secure, responsible, transparent and appropriately controlled.",
     "$500",
     "Minimum 85/100. Data/privacy 20; security/safeguards 20; human oversight/control 20; transparency/explainability 15; failure/error handling 15; responsible-use design 10.",
-    "Judges score eligible solutions specifically on trust and responsible-AI design. Highest remaining qualifying team wins.",
+    "Judges score eligible solutions specifically on trust and responsible-AI design. Highest remaining qualifying team wins."
   ],
   [
     10,
@@ -2992,15 +2992,15 @@ const PRIZE_FRAMEWORK = [
     "The strongest qualifying student-led team. Students are not judged using an easier technical standard; the award recognizes exceptional emerging talent.",
     "$500",
     "Highest eligible student-team score using the core competition rubric. Minimum 80/100.",
-    "Student eligibility is verified before competition. After teams that have already won cash awards are removed, the highest remaining eligible student team scoring 80+ receives the award.",
+    "Student eligibility is verified before competition. After teams that have already won cash awards are removed, the highest remaining eligible student team scoring 80+ receives the award."
   ],
   [
     11,
     "People's Choice",
     "The solution attendees most strongly support after experiencing the competing solutions. It reflects audience preference rather than technical judging.",
-    "$250",
+    "$1,000",
     "Highest number of verified attendee votes. One vote per attendee. Duplicate/ineligible votes excluded.",
-    "Voting is tied to verified registration/Atlas identity. Once voting closes, totals are validated. If the highest-voted team has already received a cash award, the prize passes to the next-highest eligible team.",
+    "Voting is tied to verified registration/Atlas identity. Once voting closes, totals are validated. If the highest-voted team has already received a cash award, the prize passes to the next-highest eligible team."
   ],
   [
     12,
@@ -3008,7 +3008,7 @@ const PRIZE_FRAMEWORK = [
     "Rewards meaningful adoption and use of Atlas on Android—not simply downloading the app.",
     "$250",
     "Verified Android install + authentication; 100% profile completion; event activity; 3+ qualifying Atlas actions.",
-    "Atlas analytics determine qualifying users/teams. Actions are weighted by value rather than raw clicks. Exact formula remains internal. If the top qualifier has already won a cash prize, move to the next eligible qualifier.",
+    "Atlas analytics determine qualifying users/teams. Actions are weighted by value rather than raw clicks. Exact formula remains internal. If the top qualifier has already won a cash prize, move to the next eligible qualifier."
   ],
   [
     13,
@@ -3016,7 +3016,7 @@ const PRIZE_FRAMEWORK = [
     "Rewards someone who uses Atlas Chat meaningfully across different tasks rather than simply generating the highest volume of prompts.",
     "$250",
     "Minimum 10 meaningful interactions across 3+ use cases. Useful task completion 50; breadth of use 25; quality/relevance 25.",
-    "Platform data identifies qualifying activity. Artificial, repetitive or spam interactions are excluded. Highest qualifying user/team wins, subject to the no-stacking rule. Exact formula remains unpublished.",
+    "Platform data identifies qualifying activity. Artificial, repetitive or spam interactions are excluded. Highest qualifying user/team wins, subject to the no-stacking rule. Exact formula remains unpublished."
   ],
   [
     14,
@@ -3024,15 +3024,15 @@ const PRIZE_FRAMEWORK = [
     "The strongest solution to a clearly defined business or industry problem supplied by a sponsor.",
     "Sponsor-funded / TBC",
     "Recommended 100-point rubric: challenge fit 30; effectiveness 25; technical execution 20; innovation 15; presentation 10. Minimum recommended 80/100.",
-    "Sponsor challenge and scoring criteria must be approved before competition begins. Sponsor judges score submissions. Highest eligible qualifying solution wins. If cash and competitive, the no-stacking rule applies.",
+    "Sponsor challenge and scoring criteria must be approved before competition begins. Sponsor judges score submissions. Highest eligible qualifying solution wins. If cash and competitive, the no-stacking rule applies."
   ],
   [
     15,
     "Best Coach / Mentor",
     "Recognizes a coach who consistently helps teams overcome real blockers, provides useful direction and materially improves the participant experience without doing the work for the team.",
-    "$200 technology/experience gift + recognition",
+    "$2,500",
     "Scheduled check-ins completed 25; participant rating 25; responsiveness 20; documented blockers resolved 20; lead assessment 10. Eligibility: 90%+ required coverage and 4.5/5+ participant rating.",
-    "Coaching activity/check-ins are logged. Participant feedback is collected. Coaching Lead validates eligibility and scoring. Highest qualifying score wins. This sits outside the team cash-prize stacking rules.",
+    "Coaching activity/check-ins are logged. Participant feedback is collected. Coaching Lead validates eligibility and scoring. Highest qualifying score wins. This sits outside the team cash-prize stacking rules."
   ],
   [
     16,
@@ -3040,7 +3040,7 @@ const PRIZE_FRAMEWORK = [
     "Recognizes the Ambassador who makes the strongest measurable contribution to mobilization and participant engagement.",
     "$150 technology/experience gift + recognition",
     "Attributed registrations 30; registration-to-attendance conversion 25; assigned deliverables completed 20; event-day engagement 15; lead assessment 10. Minimum 90% assignment completion.",
-    "Each Ambassador requires attributable registration/referral data. Final score combines mobilization performance with delivery performance. Highest qualifying score wins.",
+    "Each Ambassador requires attributable registration/referral data. Final score combines mobilization performance with delivery performance. Highest qualifying score wins."
   ],
   [
     17,
@@ -3048,7 +3048,7 @@ const PRIZE_FRAMEWORK = [
     "Recognizes exceptional reliability, service, initiative and contribution to successful event delivery.",
     "$100 technology/experience gift + recognition",
     "Attendance/punctuality 25; assigned tasks completed 25; participant/service quality 20; initiative/problem-solving 15; supervisor assessment 15. Eligibility: 100% assigned shifts completed, excluding approved emergencies; recommended supervisor rating 4.5/5+.",
-    "Volunteer schedules and completed assignments are tracked. Supervisor submits assessment. Highest eligible total score wins.",
+    "Volunteer schedules and completed assignments are tracked. Supervisor submits assessment. Highest eligible total score wins."
   ],
   [
     18,
@@ -3056,7 +3056,7 @@ const PRIZE_FRAMEWORK = [
     "Recognizes the merchant that most successfully turns its presence into meaningful attendee engagement and measurable business value. People stop, engage and take an action rather than simply walking past the booth.",
     "Trophy + Certificate + Post-event Spotlight",
     "Verified attendee engagements 20; qualified leads/Atlas actions 25; measurable commercial outcomes 20; attendee experience rating 20; activation quality/creativity 10; full participation/compliance 5. Minimum attendee rating 4.0/5 and 90%+ required operating hours.",
-    "Merchant interactions are captured through QR scans, Atlas actions, lead capture or another verified mechanism. Event/merchant team validates results. Highest qualifying score wins.",
+    "Merchant interactions are captured through QR scans, Atlas actions, lead capture or another verified mechanism. Event/merchant team validates results. Highest qualifying score wins."
   ],
   [
     19,
@@ -3064,59 +3064,59 @@ const PRIZE_FRAMEWORK = [
     "Recognizes the merchant attendees most enjoyed, valued or connected with during the event.",
     "Trophy + Certificate + Post-event Spotlight",
     "Highest verified merchant vote count. One vote per verified attendee. Merchant must operate at least 90% of required hours and remain in good standing.",
-    "Attendees cast one verified merchant vote. Voting closes at a set time before closing ceremony. Valid votes are totaled and highest qualifying merchant wins.",
-  ],
+    "Attendees cast one verified merchant vote. Voting closes at a set time before closing ceremony. Valid votes are totaled and highest qualifying merchant wins."
+  ]
 ];
 
 const PRIZE_RULES = [
   [
     "No Prize Stacking",
-    "One competition prize per team. Once a team receives a cash competition award, it is removed from consideration for subsequent cash awards.",
+    "One competition prize per team. Once a team receives a cash competition award, it is removed from consideration for subsequent cash awards."
   ],
   [
     "Award Sequence",
-    "Overall Champion → Second Place → Third Place → Track Winners → Specialist Awards → Best Student Team → People's Choice → Surprise Awards.",
+    "Overall Champion → Second Place → Third Place → Track Winners → Agentic AI and Jamaican Impact → Best Student Team → People's Choice → Surprise Awards."
   ],
   [
     "Passing an Award",
-    "Where the highest-ranked team has already won, the award moves to the next highest-scoring eligible entrant that still meets the minimum qualifying standard.",
+    "Where the highest-ranked team has already won, the award moves to the next highest-scoring eligible entrant. A five-point exception requires documented Head Judge approval."
   ],
   [
     "Minimum Thresholds",
-    "Minimum scores are absolute. If nobody eligible reaches the minimum, the award may be withheld.",
+    "A team within five points of a category minimum may receive the award following a documented Head Judge decision; otherwise the award may be withheld."
   ],
   [
     "Overall Tie-Breaking",
-    "Technical Execution → Problem Relevance → Agentic AI Architecture → Head Judge decision.",
+    "Technical Execution → Problem Relevance → Agentic AI Architecture → Head Judge decision."
   ],
   [
     "Specialist Tie-Breaking",
-    "Use the category's highest-weight criterion first; then remaining criteria by weight; then Head Judge decision.",
+    "Use the category's highest-weight criterion first; then remaining criteria by weight; then Head Judge decision."
   ],
   [
     "Judge Scoring",
-    "Use at least 3 judges for major competition decisions unless the final capacity model approves another structure. Final score is the average of valid judge scores.",
+    "Use at least 3 judges for major competition decisions unless the final capacity model approves another structure. Final score is the average of valid judge scores."
   ],
   [
     "Evidence",
-    "Every winner requires a retained scorecard, analytics export, verified vote report, referral report, attendance/check-in record or other applicable evidence.",
+    "Every winner requires a retained scorecard, analytics export, verified vote report, referral report, attendance/check-in record or other applicable evidence."
   ],
   [
     "Community Recognition",
-    "Coach, Ambassador and Volunteer awards are individual recognition awards and do not count toward team prize stacking.",
+    "Coach, Ambassador and Volunteer awards are individual recognition awards and do not count toward team prize stacking."
   ],
   [
     "Merchant Recognition",
-    "Merchant awards are a separate recognition stream and do not affect hackathon team prizes.",
+    "Merchant awards were removed from this prize framework following review."
   ],
   [
     "Sponsor Prize",
-    "If sponsor-funded, cash and competitive, include it under the one-prize-per-team rule.",
+    "If sponsor-funded, cash and competitive, include it under the one-prize-per-team rule."
   ],
   [
     "Surprise Awards",
-    "The award may be announced, but the exact winning formula remains internal to reduce gaming.",
-  ],
+    "The award may be announced, but the exact winning formula remains internal to reduce gaming."
+  ]
 ];
 
 const PRIZE_TRACKS = [
@@ -6848,3 +6848,6 @@ Object.assign(COACH_PHOTOS, {
   "Shawn Grant": "assets/people/b80721711295dd9f.jpg",
   "Kyle Campbell": "assets/people/0e786def876d3f80.jpg",
 });
+
+// Keep original award IDs so saved reviews stay attached after removing inactive awards.
+const PRIZE_DISPLAY = PRIZE_FRAMEWORK.filter(row => ![6,7,9,18,19].includes(row[0]));
