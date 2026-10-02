@@ -478,6 +478,8 @@ function addWorkstream(name) {
   if (o) o.focus();
 }
 
+// Keep the prize review reachable in the legacy register without inventing five-step task completion.
+let prizeRegisterOpen = new URLSearchParams(location.search).get("workstream") === "prizes";
 function renderRegister() {
   const list = el("regList");
   const rows = WS.filter((w) => !gapsOnly || w.gap);
@@ -485,7 +487,7 @@ function renderRegister() {
     rows
       .map((w) => {
         const st = moveState(planOf(w.id));
-        return `<button class="ws" data-id="${w.id}" aria-current="${w.id === current}">
+        return `<button class="ws" data-id="${w.id}" aria-current="${!prizeRegisterOpen && w.id === current}">
       <span class="n">${w.n}</span>
       <span class="nm">${w.gap ? '<span class="gapdot"></span>' : ""}${esc(w.name)}
         <small>${esc(w.leads)}</small></span>
@@ -494,9 +496,12 @@ function renderRegister() {
       })
       .join("") ||
     `<p class="empty" style="padding:14px">No workstreams match.</p>`;
-  list.querySelectorAll(".ws").forEach(
+  list.insertAdjacentHTML("afterbegin", `<button type="button" class="ws" id="prizeRegisterLink" aria-current="${prizeRegisterOpen}"><span class="n">★</span><span class="nm">Prizes &amp; recognition<small>Kandia · 14 awards · pictures &amp; reviews</small></span></button>`);
+  el("prizeRegisterLink").onclick = () => { prizeRegisterOpen = true; renderAll(); };
+  list.querySelectorAll(".ws[data-id]").forEach(
     (b) =>
       (b.onclick = () => {
+        prizeRegisterOpen = false;
         current = b.dataset.id;
         renderAll();
       }),
@@ -659,6 +664,10 @@ function outcomeTagForWorkstream(w) {
 }
 
 function renderPanel() {
+  if (prizeRegisterOpen) {
+    el("panel").innerHTML = window.AtlasPrizes.render("ws35");
+    return;
+  }
   const w = WS.find((x) => x.id === current),
     p = planOf(current),
     st = moveState(p);
