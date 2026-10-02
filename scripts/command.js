@@ -648,7 +648,7 @@
     shell(
       head +
         `<section class="workstream-purpose"><p><strong>Objective</strong> · ${esc(w.brief || "Objective needs review")}</p><p><strong>Accountable owner</strong> · ${esc(w.accountableOwner || "Not verified")}</p><p><strong>Success measures</strong> · ${esc(w.success || "Not yet defined")}</p><p class="small">Source planning content · review before approval</p></section>` +
-        window.AtlasSavedPlan.render(w) + body +
+        window.AtlasSavedPlan.render(w) + window.AtlasPrizes.render(w.id) + body +
         after,
     );
   }
@@ -1379,5 +1379,8 @@
       render(true);
     },
   });
-  render();
+  // Open a shared workstream link directly without changing saved planning data.
+  const linkedWorkstream = new URLSearchParams(location.search).get("workstream");
+  if (linkedWorkstream && wsById(linkedWorkstream)) nav("workstream", linkedWorkstream);
+  else render();
 })();

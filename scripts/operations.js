@@ -3961,7 +3961,7 @@ function reviewableTable(head, rows, prefix, cls = "") {
       .map((r, i) => {
         const k = keys[i],
           rv = reviewOf(k);
-        return `<tr>${r.map((c) => `<td>${esc(String(c))}</td>`).join("")}<td class="review-cell"><select data-rkey="${esc(k)}">${REVIEW.map((x) => `<option${x === rv.status ? " selected" : ""}>${esc(x)}</option>`).join("")}</select></td><td class="review-comment"><input type="text" data-rnote="${esc(k)}" value="${esc(rv.note || "")}" placeholder="Why blocked / changes required / approval note"></td></tr>`;
+        return `<tr>${r.map((c, j) => `<td>${esc(String(c))}${prefix === "prize" && j === 1 && window.ATLAS_PRIZES?.images[r[0]] ? `<img class="prize-original-image" src="${window.ATLAS_PRIZES.images[r[0]]}" alt="${esc(r[1])} prize illustration" loading="lazy">` : ""}</td>`).join("")}<td class="review-cell"><select data-rkey="${esc(k)}">${REVIEW.map((x) => `<option${x === rv.status ? " selected" : ""}>${esc(x)}</option>`).join("")}</select></td><td class="review-comment"><input type="text" data-rnote="${esc(k)}" value="${esc(rv.note || "")}" placeholder="Why blocked / changes required / approval note"></td></tr>`;
       })
       .join("")}</tbody></table></div>`
   );
