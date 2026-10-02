@@ -1,0 +1,24 @@
+/* This first layer overrides legacy important colors without changing layout, photographs or 3D geometry. */
+@layer atlas-appearance {
+  #atlas-theme-toggle { position:fixed; bottom:18px; left:18px; z-index:9000; min-height:44px; padding:10px 16px; border-radius:24px; border:1px solid #7488a8 !important; background:#fff !important; color:#203250 !important; font:600 14px/1.5 'IBM Plex Sans',sans-serif !important; cursor:pointer; box-shadow:0 3px 16px #08172d25; }
+  #atlas-theme-toggle:focus-visible { outline:3px solid #3c82f6 !important; outline-offset:3px; }
+  html[data-theme='dark'] { color-scheme:dark; --brand-paper:#0b1423; --brand-panel:#142136; --brand-ink:#e8f0fc; --brand-muted:#b1c4dc; --brand-blue:#91bfff; --brand-line:#3c526d; }
+  html[data-theme='dark'], html[data-theme='dark'] body { background:#0b1423 !important; color:#e8f0fc !important; }
+  html[data-theme='dark'] :is(.atlas-surface,.depth-flow,.command-home,.workspace-shell,.sphere-stage,.tour-end,.venue-journey,#views) { background:#0b1423 !important; }
+  html[data-theme='dark'] :is(.save-dock,.status-gauge,.gauge-tag,.mission-nav,.command-panel,.panel,.sheet,.register,.brief,.dash-card,.dash-section,.card,.person-card,.metric-card,.people-metric,.outcome-card,.chain-card,.transport-card,.goal-box,.oi-grp,.action-group,.operating-status,.outcome-sec,.source-card,.st-sec,.ex-sec,.bl,.transport-below,.review-record,.review-summary article,.review-table-wrap,.glass-scroll,.metric-edit,.item,.list-card,.comm-stage-card,.tf-step,.judge-profile-card,.deck-row,.library-task,.signal-entry,.timeline-entry,.deck-tools,.deck-tabs,.deck-search,.date-tile,.task-library,.people-hero,.outcome-hero,.reference-shortcut,.workspace-utilities>details,.venue-hint,.venue-explorer aside,.venue-explorer header,dialog,#team-bar,.mapboxgl-popup-content) { background:#142136 !important; color:#e8f0fc !important; border-color:#3c526d !important; box-shadow:none !important; }
+  html[data-theme='dark'] :is(h1,h2,h3,h4,p,span,label,summary,td,th,strong,b,.nav-link,.product-name,.front-event-name,.front-description,.person-name,.row-title,.nm,.tag,.chip,.role-chip,.due-chip) { color:#e8f0fc !important; }
+  html[data-theme='dark'] :is(small,.small,.hint,.eyebrow,.front-eyebrow,.row-sub,.person-title,.source-note,.review-note,.item-note,.deck-pagination,.people-pagination,.venue-heading>span,.venue-heading p) { color:#b1c4dc !important; }
+  html[data-theme='dark'] :is(a,.front-intro em) { color:#91bfff !important; }
+  html[data-theme='dark'] :is(button,input,select,textarea,.btn,.tag,.chip,.role-chip,.due-chip) { background:#1b2d47 !important; color:#edf4ff !important; border-color:#617b9e !important; }
+  html[data-theme='dark'] :is(input,textarea)::placeholder { color:#b1c4dc !important; }
+  html[data-theme='dark'] :is(th,.ws[aria-current='true']) { background:#223b5b !important; }
+  html[data-theme='dark'] :is(td,th,.deck-row) { border-color:#3c526d !important; }
+  html[data-theme='dark'] :is(.front-primary,button.primary,.btn.primary,button.on,button.is-on) { background:#285bc1 !important; color:#fff !important; }
+  html[data-theme='dark'] .logo-home img { filter:brightness(0) invert(1) !important; }
+  html[data-theme='dark'] #atlas-theme-toggle { background:#1b2d47 !important; color:#edf4ff !important; }
+  html[data-theme='dark'] .gauge-track { stroke:#3c526d !important; }
+  html[data-theme='dark'] .pips i.on { background:#70aaff !important; }
+  html[data-theme='dark'] .pips i:not(.on) { background:#52647b !important; }
+  html[data-theme='dark'] :focus-visible { outline-color:#91bfff !important; }
+  @media(max-width:600px) { #atlas-theme-toggle { bottom:12px; left:12px; padding:8px 12px; } }
+}
