@@ -4,7 +4,15 @@
   function merge(plan) {
     for (const imported of window.ATLAS_DESTINI_PLAN || []) {
       const w = plan.workstreams.find(w => w.id === 'ws' + String(imported.n).padStart(2, '0'));
-      if (w && !w.destiniPlan) w.destiniPlan = JSON.parse(JSON.stringify(imported));
+      const previous = (window.ATLAS_DESTINI_PREVIOUS || []).find(p => p.n === imported.n);
+      // Refresh untouched exports while preserving task edits already saved in this browser.
+      if (w && (!w.destiniPlan || JSON.stringify(w.destiniPlan) === JSON.stringify(previous))) w.destiniPlan = JSON.parse(JSON.stringify(imported));
+    }
+    // Remove an older untouched section only when the full backup explicitly leaves it empty.
+    for (const previous of window.ATLAS_DESTINI_PREVIOUS || []) {
+      if ((window.ATLAS_DESTINI_PLAN || []).some(p => p.n === previous.n)) continue;
+      const w = plan.workstreams.find(w => w.id === 'ws' + String(previous.n).padStart(2, '0'));
+      if (w && JSON.stringify(w.destiniPlan) === JSON.stringify(previous)) delete w.destiniPlan;
     }
     return plan;
   }
@@ -15,7 +23,7 @@
       <p>Imported 2 October 2026. These entries are separate from the revised lists below and are not double-counted in dashboard totals. Edits save on this device; they do not sync to Google Sheets.</p>
       <p><strong>Exported outcome:</strong> ${esc(p.outcome)}</p><p><strong>Leads:</strong> ${esc(p.leads)}</p>
       <div class="saved-table" role="region" aria-label="Destini’s saved tasks" tabindex="0"><table><thead><tr><th>Task</th><th>Owner</th><th>Due date</th><th>Done</th><th>Starts after / review</th></tr></thead><tbody>${p.tasks.map((t,i)=>`<tr><td>${esc(t.title || '[Blank task in export]')}</td><td><input aria-label="Owner for task ${i+1}" data-saved-ws="${esc(w.id)}" data-saved-index="${i}" data-saved-field="owner" value="${esc(t.owner==='—'?'':t.owner)}"></td><td><input aria-label="Due date for task ${i+1}" type="date" data-saved-ws="${esc(w.id)}" data-saved-index="${i}" data-saved-field="date" value="${esc(t.date==='—'?'':t.date)}"></td><td><input aria-label="Complete saved task ${i+1}" type="checkbox" data-saved-ws="${esc(w.id)}" data-saved-index="${i}" data-saved-field="done" ${t.done==='yes'?'checked':''}></td><td>${esc(t.after)}${t.issues.length?`<p class="saved-warning">At import: ${esc(t.issues.join('; ').replace('Dependency cycle: sequence cannot be followed','Dependency chain contains a cycle'))}</p>`:''}</td></tr>`).join('')}</tbody></table></div>
-      <details><summary>Key results and evidence · ${p.results.length}</summary><ul>${p.results.map(r=>`<li><strong>${esc(r.title)}</strong><p>Target: ${esc(r.target || 'Not supplied')}${r.target?' (year not stated)':''}<br>Evidence required: ${esc(r.evidence || 'Not supplied')}</p></li>`).join('')}</ul></details>
+      <details><summary>Key results and evidence · ${p.results.length}</summary><ul>${p.results.map(r=>`<li><strong>${esc(r.title)}</strong><p>Target: ${esc(r.target || 'Not supplied')}${r.target && !/\b20\d{2}\b/.test(r.target)?' (year not stated)':''}<br>Evidence required: ${esc(r.evidence || 'Not supplied')}</p></li>`).join('')}</ul></details>
       <p class="small">Evidence requirements are not proof of completion. Planning dots are not completed tasks. Dependency notes reflect the original export.</p></details>`;
   }
   // Use the existing save pipeline and backup rather than creating an unrelated storage system.

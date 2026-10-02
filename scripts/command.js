@@ -550,7 +550,7 @@
     const items = data.workstreams.flatMap(allItems),
       done = items.filter((it) => it.status === "Done").length,
       waiting = items.filter((it) => it.status === "Waiting").length;
-    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">ATLAS / EVENT OPERATIONS</p><h2>Event dashboard</h2><p class="small">Destini’s saved plan is available inside 16 workstreams · 138 tasks · 50 deadlines.</p></div><p class="dashboard-state">${window.AtlasTeam?.active ? "Shared team plan" : "Personal browser draft"}<br><span>23–24 Jan 2027 · Montego Bay</span></p></header>
+    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">ATLAS / EVENT OPERATIONS</p><h2>Event dashboard</h2><p class="small">Destini’s saved plan is available inside 17 workstreams · 153 tasks · 153 deadlines.</p></div><p class="dashboard-state">${window.AtlasTeam?.active ? "Shared team plan" : "Personal browser draft"}<br><span>23–24 Jan 2027 · Montego Bay</span></p></header>
       <nav class="review-tabs review-shortcuts" aria-label="Planning views">${[
         ["progress", "Progress & attention"],
         ["owners", "Ownership"],

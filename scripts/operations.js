@@ -4538,6 +4538,9 @@ async function doExport() {
 
 /* ---------- boot ---------- */
 loadLocal();
+// Apply the complete backup before the text-export fallback initializes missing records.
+const backupState = window.AtlasBackupUpdate.apply(plans, {...TEAM_REVIEW_MERGE, ...restore("review")}, operationsStorageKey());
+plans = backupState.plans;
 // Seed the original progress register from the exported plan without replacing browser edits.
 let importedDestini = false;
 for (const source of window.ATLAS_DESTINI_PLAN || []) {
