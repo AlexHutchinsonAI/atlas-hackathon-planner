@@ -122,8 +122,8 @@ const SEED = [
   [
     "Network & Internet",
     "Alex / Daniel",
-    "Primary high-capacity network, independent failover, spares, monitoring and critical-function backup are tested at event load.",
-    "Confirm final engineered capacity, equipment ownership and rental model, redundancy standard and venue and failover design.",
+    "Vendor-managed connectivity across agreed event areas for 23–24 January 2027, demonstrated against confirmed load and agreed acceptance criteria, with tested recovery and continuous support.",
+    "Review vendor-led proposal, 2,500 participants and 8,000–12,000 concurrent devices, unresolved bandwidth, agreed acceptance criteria, delivery, testing and support responsibilities.",
     0,
   ],
   [
@@ -4580,6 +4580,7 @@ for (const source of window.ATLAS_DESTINI_PLAN || []) {
   importedDestini = true;
 }
 if (importedDestini) window.AtlasSave.write(operationsStorageKey(), JSON.stringify(plans));
+plans = window.AtlasInternetRegisterUpdate.apply(plans, operationsStorageKey());
 try {
   const c = localStorage.getItem(LS + "-ws");
   if (c) custom = JSON.parse(c) || [];

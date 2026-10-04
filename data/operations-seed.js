@@ -286,23 +286,19 @@ const SUGGEST = {
     "Load-out - Define teardown timing, asset custody and venue handback.",
   ],
   16: [
-    "Requirements - Confirm device count, expected concurrent connections, traffic profile and critical systems.",
-    "Venue audit - Survey available circuits, ISP handoff, cabling routes, mounting and interference conditions.",
-    "Architecture - Design primary wired/wireless topology and segmentation for participants, staff and infrastructure.",
-    "Capacity - Size internet bandwidth, access points, controllers, switches and DHCP for peak load.",
-    "Security - Define authentication, isolation, firewall and rogue-device controls.",
-    "Failover - Design an independent backup path that does not share the primary single point of failure.",
-    "Critical backup - Define which functions retain connectivity if participant internet degrades.",
-    "Equipment - Decide owned versus rented network equipment and responsibility for configuration.",
-    "Spares - Hold critical AP, switch, cabling, power and controller spares onsite.",
-    "Monitoring - Build live dashboards and alert thresholds for bandwidth, packet loss, AP load and gateway health.",
-    "Support - Define NOC/onsite roles, escalation and vendor support contacts.",
-    "Load test - Simulate event-scale connections and traffic before event week.",
-    "Failover test - Force the primary path down and prove critical recovery.",
-    "Venue test - Repeat validation after final physical install.",
-    "Runbook - Publish startup, monitoring, incident and recovery procedures.",
-    "Close - Capture logs and retain evidence for post-event review.",
-  ],
+  "Kickoff - Hold the vendor kickoff on 5 October, 1–2 PM Jamaica time. Outcome: agreed assessment scope, proposal inputs, named vendor delivery lead and next dates. Source invitation: Hackathon 2027 (Kick Off Session); organiser David Hamilton / Liberty Caribbean; created by Camile Gayle. RSVP not verified.",
+  "Baseline - Use 2,500 participants and 8,000–12,000 concurrent devices; confirm floor plan and service hours. Outcome: one agreed sizing baseline. Alex confirmed 2,500 participants and 8,000–12,000 concurrent devices on 4 October 2026. Use these counts for vendor assessment and justified sizing. Confirm setup, rehearsal, overnight competition, judging and each wave’s planned 24-hour window. Starts after Step 1; final sizing depends on Intellibus confirmation.",
+  "Site assessment - Ask the vendor to assess Halls A and B, meeting rooms and grand ballroom. Outcome: documented coverage, venue Wi-Fi coordination, available circuits, handoff, cabling, mounting, interference and power constraints. Starts after Step 1; coordinates with floor-plan and venue workstreams.",
+  "Applications - Ask the vendor to support build tools, cloud AI, collaboration and judging. Outcome: Docker, npm, Python, AI model downloads, source control and judging work under agreed load. Vendor proposes secure access for participants, judges, VIPs, staff and IT administrators and protects essential traffic. Starts after Steps 2–3.",
+  "Production - Confirm seven production connections, including two cameras, before sizing. Outcome: endpoint locations, service type and upload/download requirements agreed with production. Clarify the earlier “at least 1,000” note: units, total or per connection. Bandwidth remains unresolved. Starts after Step 1; depends on production inputs.",
+  "Proposal - Request a justified complete solution and itemized quote from the vendor. Outcome: capacity assumptions, coverage/design rationale, delivery dates, support commitments, warranty, exclusions, dependencies and alternatives for unmet requirements. Vendor owns suitability and delivery of its recommendation. Starts after Steps 2–5; no AP model, SSID, VLAN or internal architecture prescribed.",
+  "Resilience - Ask the vendor to propose Internet, equipment and power resilience. Outcome: backup capacity, remaining failure risks, recovery times, manual steps and session impact documented; essential services and recovery limits agreed. Starts after Steps 2–5; feeds Step 6.",
+  "Approval - Review proposal, costs, responsibilities and acceptance criteria before deployment. Outcome: approved scope or documented changes; measurable coverage, concurrent load, application access, throughput, latency, packet loss, power runtime and recovery criteria. No bandwidth, budget or SLA numbers approved yet. Starts after Steps 6–7; requires authorised Intellibus decision.",
+  "Delivery - Ask the vendor to own installation, configuration, safe cabling and monitoring. Outcome: delivery schedule, power plan, spares, on-site coverage, escalation contacts and venue/provider responsibilities agreed. Starts after Step 8; depends on venue access, approved floor plan and power readiness.",
+  "Testing - Test installed coverage, concurrent load, application access and production together. Outcome: evidence against agreed criteria; demonstrate failure and restoration under load, including power/runtime and session impact. Starts after Step 9; testing date must leave time to resolve issues before event operations.",
+  "Handover - Resolve issues or record accepted exceptions and hand over the managed service. Outcome: test results, as-built records, secure configuration handover, monitoring and recovery runbook, named vendor lead and support roster available before opening. Starts after Step 10; Intellibus accepts readiness.",
+  "Event support - Provide continuous support through competition, overnight periods and judging. Outcome: monitored service, incident escalation and recovery throughout the agreed window; retain logs and close-out evidence. Event is 23–24 January 2027; exact setup, rehearsal and operating hours remain to confirm. Starts after Step 11."
+],
   17: [
     "Scope - List every Atlas/platform function required before, during and after the event.",
     "Identity - Confirm participant, merchant, judge, senior technical reviewer, coach and staff identity/role models.",
@@ -743,14 +739,15 @@ const REC = {
     ],
   ],
   16: [
-    "The network carries 2,200 concurrent builders with proven failover and held spares.",
-    [
-      "Engineered capacity verified by load test",
-      "Independent failover proven",
-      "Spares held for all critical components",
-      "Monitoring live before doors open",
-    ],
-  ],
+  "Vendor-managed connectivity across agreed event areas for 23–24 January 2027, demonstrated against confirmed load and agreed acceptance criteria, with tested recovery and continuous support.",
+  [
+    "Coverage and concurrent load meet agreed baseline",
+    "Build tools, cloud AI, judging and production pass combined testing",
+    "Throughput, latency and packet loss meet agreed criteria",
+    "Power runtime, failure recovery and restoration demonstrated",
+    "Monitoring, as-built records, secure handover and support coverage accepted"
+  ]
+],
   17: [
     "Atlas and core event systems run at full load with a rehearsed recovery procedure.",
     [
@@ -1036,7 +1033,7 @@ const REF = {
     "Meeting rooms specialist functions; courtyard Culinary Village and arrivals",
     "2,200 hackers plus roughly 800 others",
   ],
-  16: ["Technology, network and platform staffing about 25 to 35"],
+  16: ["Confirmed by Alex: 2,500 participants and 8,000–12,000 concurrent devices. Vendor must justify capacity and own technical delivery, testing and support; bandwidth remains unresolved."],
   17: [
     "500+ solutions target, each with an Atlas Experience",
     "Atlas carries registration, judging and core event functions",
@@ -3992,16 +3989,15 @@ const DOD = {
     ],
   },
   16: {
-    s: "By [date], the primary network, an independent failover link, spares, live monitoring and backup for critical functions pass a full-load test at [N] concurrent devices, with failover switching in under [X] minutes and no loss of critical functions.",
-    c: [
-      "The primary network sustains [X] Mbps with no drops over 60 minutes at [N] concurrent devices.",
-      "The failover link, on a separate provider, activates within [X] minutes of a forced primary outage.",
-      "Spares (routers, APs, cables, power) are on site, labelled and swap-tested.",
-      "Monitoring alerts [owner] within [X] minutes of degradation.",
-      "Critical functions (registration, judging, streaming) keep running on backup during the outage test.",
-      "Results signed off by [owner] and logged.",
-    ],
-  },
+  "s": "Vendor-managed connectivity across agreed event areas for 23–24 January 2027, demonstrated against confirmed load and agreed acceptance criteria, with tested recovery and continuous support. Confirmed baseline: 2,500 participants and 8,000–12,000 concurrent devices. Vendor owns recommendation, assessment, implementation, testing, recovery, monitoring, support and secure handover; Intellibus approves scope and acceptance criteria. Bandwidth remains unresolved.",
+  "c": [
+    "Coverage and concurrent load meet agreed baseline — criteria agreed before deployment; vendor supplies test evidence.",
+    "Build tools, cloud AI, judging and production pass combined testing — criteria agreed before deployment; vendor supplies test evidence.",
+    "Throughput, latency and packet loss meet agreed criteria — criteria agreed before deployment; vendor supplies test evidence.",
+    "Power runtime, failure recovery and restoration demonstrated — criteria agreed before deployment; vendor supplies test evidence.",
+    "Monitoring, as-built records, secure handover and support coverage accepted — criteria agreed before deployment; vendor supplies test evidence."
+  ]
+},
   17: {
     s: "By [date], Atlas and core event systems pass a capacity test at 550 concurrent teams with rehearsed recovery and live integrations.",
     c: [
