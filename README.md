@@ -76,3 +76,20 @@ Run `npm test` for authorization checks and `node tests/walkthrough-check.cjs` f
 ### Remaining decisions
 
 The two headline measures can be selected in target/current-number settings; registrations and participation confirmations are provisional defaults. Meeting proposals (wave times, targets/buffers, fair scope, contracts, confirmed speakers, medical/food/volunteer coverage) are pending records, not invented commitments. Private HR, other projects and personal transcript content were not added to the site.
+
+### Cloud autosave and activation — October 2026
+
+Both Workspace/Command and the legacy Operations register use the existing authenticated Neon documents. Every persisted edit is queued for a debounced save; **Save now** commits the current field and immediately flushes that queue. Saving, saved, offline, retry and conflict states are visible. Temporary network failures retry with bounded backoff; 400/401/403/409 require attention. Conflicts never overwrite a newer revision. Personal browser records remain separate and unchanged.
+
+Pending cloud edits use account-specific recovery keys. On sign-in, the server document is loaded first; a pending draft is only resumed explicitly with its original revision. Signing out never loads another user's draft. Pending records are excluded from general backups. Managers can explicitly import the pre-sign-in browser snapshot only while the shared document remains at revision zero. Existing cloud edits are never silently replaced by an old browser backup. Workspace and Operations have separate import actions; import both to transfer both datasets. Existing private drafts are kept locally.
+
+**Integration stays disabled until configuration is explicitly approved.** No authentication settings, database credentials, allowlists, memberships or paid services were changed by this code update. Existing Neon schema remains sufficient; no destructive migration is required.
+
+After approval, an authorised administrator must complete Clerk live custom-domain/DNS setup and enter live provider credentials privately. Do not paste credentials into chat or commit them. Configure `ATLAS_ACCESS_POLICY` to exactly one of:
+- `invited`: verified emails in `ATLAS_MEMBER_EMAILS` only.
+- `company`: verified primary @intellibus.com accounts.
+- `verified-email`: any verified primary email may view; non-managers cannot write either cloud document.
+
+`ATLAS_MANAGER_EMAILS` explicitly designates approved Intellibus managers. It defaults empty. Do not enable a wider policy until the owner confirms disclosure of internal workstreams and event/people details to that audience. Clerk's provider allowlist must match the approved policy; changing it needs separate approval. Keep `ATLAS_ALLOWED_ORIGINS` restricted to approved application domains.
+
+Provider configuration remains required before live sign-in, cross-browser persistence and email verification can be tested. Do not claim these checks passed from unit tests. Production requires `pk_live_` keys. Requests without an authenticated, currently verified and permitted identity fail closed before database access. Read-only actors are rejected server-side even if they bypass the UI.

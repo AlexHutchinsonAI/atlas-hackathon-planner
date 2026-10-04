@@ -215,7 +215,7 @@
   function save() {
     try {
       window.AtlasSave.write(
-        window.AtlasTeam?.active ? KEY + "-shared-draft" : KEY,
+        window.AtlasTeam?.active ? KEY + window.AtlasTeam.draftSuffix : KEY,
         JSON.stringify(data),
       );
       window.AtlasTeam?.changed(data);
@@ -1373,8 +1373,9 @@
     open: () => nav("delivery"),
   });
   window.AtlasTeam.init({
+    snapshot: () => data,
     replace(plan) {
-      data = window.AtlasSavedPlan.merge(ensureCommandAreas(ensureMilestones(plan)));
+      data = ensureCommandAreas(ensureMilestones(plan));
       ensureLiveMeasures();
       render(true);
     },

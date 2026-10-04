@@ -29,7 +29,7 @@
   // Use the existing save pipeline and backup rather than creating an unrelated storage system.
   document.addEventListener('change', event => {
     const input = event.target;
-    if (!input.dataset.savedField) return;
+    if (!input.dataset.savedField || window.AtlasTeam?.readOnly) return;
     const plan = window.AtlasSave?.snapshot?.()?.data;
     const task = plan?.workstreams.find(w=>w.id===input.dataset.savedWs)?.destiniPlan?.tasks[Number(input.dataset.savedIndex)];
     if (!task || !['owner','date','done'].includes(input.dataset.savedField)) return;

@@ -4757,7 +4757,7 @@ void useLocal;
 
 // Preserve the legacy record model while giving it authenticated, versioned team persistence.
 function operationsStorageKey() {
-  return LS + (window.AtlasTeam?.active ? "-shared-draft" : "");
+  return LS + (window.AtlasTeam?.active ? window.AtlasTeam.draftSuffix : "");
 }
 function operationsSnapshot() {
   return {
@@ -4775,6 +4775,7 @@ function operationsSnapshot() {
 }
 window.AtlasTeam.init({
   endpoint: "/api/team-operations",
+  snapshot: operationsSnapshot,
   replace(value) {
     plans = value.plans || {};
     custom = value.custom || [];

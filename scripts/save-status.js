@@ -17,7 +17,7 @@
     saveNow();
     const records={};
     // Export only this planner's keys, never unrelated browser storage or authentication tokens.
-    for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key.startsWith('intellibus-')||key.startsWith('atlas-'))records[key]=localStorage.getItem(key);}
+    for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if((key.startsWith('intellibus-')||key.startsWith('atlas-')) && !key.startsWith('atlas-cloud-pending-') && (!key.includes('-shared-') || (window.AtlasTeam?.active && key.includes(window.AtlasTeam.draftSuffix))))records[key]=localStorage.getItem(key);}
     const snapshot=window.AtlasSave.snapshot?.();
     const blob=new Blob([JSON.stringify({format:'atlas-backup-v1',exportedAt:new Date().toISOString(),records,current:snapshot},null,2)],{type:'application/json'});
     const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='atlas-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);

@@ -31,6 +31,7 @@ module.exports = async (req, res) => {
           error:
             "The shared plan changed. Export your draft, then reload the shared version before retrying.",
         });
+    if (actor.readOnly) return res.status(403).json({error:"Your account has view-only access."});
     const denial = authorize(current.body, body.plan, actor);
     if (denial) return res.status(403).json({ error: denial });
     const [updated] =

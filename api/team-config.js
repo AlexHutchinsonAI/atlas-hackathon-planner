@@ -9,6 +9,6 @@ module.exports = (req, res) => {
       publishableKey: configured()
         ? process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
         : null,
-      domain: "intellibus.com",
+      accessPolicy: configured() ? process.env.ATLAS_ACCESS_POLICY : null,
     });
 };
