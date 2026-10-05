@@ -4,7 +4,7 @@
   bar.innerHTML='<span role="status" id="save-feedback">Edits autosave on this device</span><button type="button" id="save-now">Save now</button><button type="button" id="save-backup">Download backup</button>';
   let activeField;
   function message(text,failed=false){bar.querySelector('[role="status"]').textContent=text;bar.classList.toggle('save-failed',failed);}
-  function write(key,value){try{localStorage.setItem(key,value);message('Saved on this device · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));return true;}catch(error){message('Save failed — download a backup before leaving',true);throw error;}}
+  function write(key,value){if(window.AtlasTeam?.readOnly){message("View only · only Alex can edit the shared planner");return false;}try{localStorage.setItem(key,value);message('Saved on this device · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));return true;}catch(error){message('Save failed — download a backup before leaving',true);throw error;}}
   function saveNow(){
     // Commit the current field through the app's existing change handler before taking a snapshot.
     if(activeField?.isConnected && activeField.matches('input,textarea,select'))activeField.dispatchEvent(new Event('change',{bubbles:true}));

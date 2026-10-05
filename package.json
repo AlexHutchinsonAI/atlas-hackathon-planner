@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node --test tests/permissions.test.cjs tests/internet-register.test.cjs tests/cloud.test.cjs"
+    "test": "node --test tests/permissions.test.cjs tests/internet-register.test.cjs tests/cloud.test.cjs tests/firebase.test.cjs"
   },
   "engines": {
     "node": "22.x"
   },
   "dependencies": {
     "@clerk/backend": "3.20.1",
-    "@neondatabase/serverless": "1.1.0"
+    "@neondatabase/serverless": "1.1.0",
+    "firebase-admin": "14.5.0"
+  },
+  "overrides": {
+    "gaxios": {
+      "uuid": "11.1.1"
+    }
   }
 }

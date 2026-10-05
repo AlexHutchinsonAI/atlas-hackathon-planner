@@ -2,13 +2,6 @@
 const { configured } = require("../lib/team.cjs");
 module.exports = (req, res) => {
   res.setHeader("Cache-Control", "no-store");
-  res
-    .status(200)
-    .json({
-      enabled: configured(),
-      publishableKey: configured()
-        ? process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-        : null,
-      accessPolicy: configured() ? process.env.ATLAS_ACCESS_POLICY : null,
-    });
+  const enabled=configured(), provider=process.env.ATLAS_AUTH_PROVIDER === 'firebase' ? 'firebase' : 'clerk';
+  res.status(200).json({enabled,provider,publishableKey:enabled && provider==='clerk' ? process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY : null,firebase:enabled && provider==='firebase' ? require('../lib/firebase.cjs').webConfig() : null,accessPolicy:enabled ? process.env.ATLAS_ACCESS_POLICY : null});
 };

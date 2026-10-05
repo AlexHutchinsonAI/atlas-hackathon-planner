@@ -6,7 +6,7 @@
     revision = null,
     active = false,
     config = null,
-    clerkReady, queue, personalSnapshot, connectedActorId = null;
+    clerkReady, queue, personalSnapshot, connectedActorId = null, connecting = false;
   const bar = document.createElement("aside");
   bar.id = "team-bar";
   bar.setAttribute("aria-label", "Team connection");
@@ -27,7 +27,7 @@
     bar.querySelector("[data-team-recover]").hidden = !(active && savedDraft());
   }
   async function request(method, body) {
-    const token = await window.Clerk.session?.getToken();
+    const token = config?.provider === "firebase" ? await window.AtlasFirebaseAuth.token() : await window.Clerk.session?.getToken();
     const r = await fetch(bridge.endpoint || "/api/team-plan", {
       method,
       headers: {
@@ -75,7 +75,13 @@
       );
       return;
     }
+    if(connecting)return;
+    connecting=true;
     try {
+      if(config.provider === 'firebase') {
+        await window.AtlasFirebaseAuth.init(config.firebase);
+        if(!await window.AtlasFirebaseAuth.ensureSignedIn())return;
+      }else{
       await loadClerk();
       if (!window.Clerk.session) {
         await window.Clerk.openSignIn({
@@ -83,6 +89,7 @@
           afterSignUpUrl: location.href,
         });
         return;
+      }
       }
       const shared = await request("GET");
       if (active && queue?.saving) return;
@@ -104,16 +111,31 @@
       queue.start(revision);
       bridge.replace(shared.body);
       draw();
+      lockView();
       setMessage(`Signed in as ${actor.email} · ${actor.readOnly ? 'view only' : 'cloud autosave enabled'}`);
     } catch (e) {
       setMessage(e.message || "Sign-in unavailable. Your draft is unchanged.");
-    }
+    } finally {connecting=false;}
   }
   function draftKey(){return 'atlas-cloud-pending-' + encodeURIComponent(actor.id) + '-' + encodeURIComponent(bridge.endpoint || '/api/team-plan');}
   function savedDraft(){try {return JSON.parse(localStorage.getItem(draftKey()) || 'null');}catch{return null;}}
   function changed(plan) {
     if (!active || actor.readOnly) return;
     queue.change(plan);
+  }
+  function lockView() {
+    if(!active || !actor?.readOnly)return;
+    const root=document.getElementById('app') || document.querySelector('.wrap') || document.body;
+    root.querySelectorAll('input,textarea,select').forEach(field=>{
+      if(field.closest('#team-bar,.mission-nav,#views,.deck-tools,.deck-tabs,.people-search-wrap') || field.type==='search' || /search|filter/i.test(field.id+' '+field.getAttribute('aria-label')+' '+field.getAttribute('placeholder')))return;
+      field.disabled=true;
+    });
+    root.querySelectorAll('button').forEach(button=>{
+      if(button.closest('#team-bar,.mission-nav,#views,#regList,.deck-tools,.deck-tabs') || button.matches('[data-nav]'))return;
+      const text=(button.textContent||'').trim();
+      if(/^(Add|Remove|Delete|Save|Import|Accept|Approve|Dismiss|Use this|Fill recommended|Create|Edit|Mark|Move|Complete|Show them again)/i.test(text))button.disabled=true;
+    });
+    const saveNow=document.getElementById('save-now');if(saveNow)saveNow.disabled=true;
   }
   function init(api) {
     bridge = api;
@@ -136,6 +158,7 @@
         document.body,
       { childList: true },
     );
+    new MutationObserver(lockView).observe(document.getElementById("app") || document.querySelector(".wrap") || document.body,{childList:true,subtree:true});
     requestAnimationFrame(placeBar);
     bar.addEventListener("click", async (e) => {
       if (e.target.matches("[data-team-connect]")) connect();
@@ -170,7 +193,7 @@
           return;
         queue?.stop();
         active = false;
-        await window.Clerk?.signOut();
+        if(config.provider === "firebase")await window.AtlasFirebaseAuth.signOut();else await window.Clerk?.signOut();
         location.reload();
       }
     });
@@ -181,6 +204,14 @@
         if (!c?.enabled) {
           bar.querySelector("[data-team-connect]").textContent =
             "Team setup pending";
+        } else if(c.provider === 'firebase') {
+          window.AtlasFirebaseAuth.init(c.firebase).then(()=>{
+            window.AtlasFirebaseAuth.listen(({id,verified})=>{
+              if(active && (!id || id !== connectedActorId)){queue?.stop();active=false;actor=null;location.reload();return;}
+              if(id && verified && !active)connect();
+            });
+          }).catch(()=>setMessage('Sign-in could not load. Personal drafts remain available.'));
+          bar.querySelector('[data-team-connect]').textContent='Sign in';
         } else {
           loadClerk()
             .then(() => {

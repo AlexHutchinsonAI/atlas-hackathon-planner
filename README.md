@@ -1,6 +1,6 @@
 # Intellibus Atlas Planner
 
-Source for [atlas-hackathon-planner.vercel.app](https://atlas-hackathon-planner.vercel.app/). The interface is static HTML/CSS/JavaScript. Optional Vercel API functions provide Clerk-verified team access and Neon-backed shared plans; no frontend build step is required.
+Source for [atlas-hackathon-planner.vercel.app](https://atlas-hackathon-planner.vercel.app/). The interface is static HTML/CSS/JavaScript. Optional Vercel API functions provide Firebase-verified team access and Neon-backed shared plans; no frontend build step is required.
 
 ## Screens and source structure
 
@@ -24,7 +24,7 @@ The white logo is the asset used by [Intellibus's official website](https://www.
 
 ## Data behavior
 
-The command plan and operations records retain their original, separate browser storage keys. Existing saved edits survive this refactor. Counts marked unknown remain unknown until someone supplies a verified value. Directory counts describe roster prospects, not confirmed attendance. GitHub changes deploy the application; browser edits do not automatically synchronize between people. Use the existing export controls to keep a copy.
+The command plan and operations records retain their original, separate browser storage keys. Existing saved edits survive this refactor. Counts marked unknown remain unknown until someone supplies a verified value. Directory counts describe roster prospects, not confirmed attendance. GitHub changes deploy the application. Signed-in shared edits synchronize through the existing Neon database; personal browser drafts remain separate. Use the export controls to keep a copy.
 
 The directory displays 8 records per page on desktop and 4 on phones. Category counters act as filters. Search matches names, roles, organizations, statuses and contact fields; profiles open in a native dialog with keyboard focus containment and Escape dismissal. Transport retains Leaflet/OpenStreetMap attribution, OSRM routes and the source pickup tables. Additional planning tables are collapsed below the main map.
 
@@ -60,14 +60,14 @@ Delivery views provide all attention items, accountable versus supporting owners
 
 ### Team connection
 
-Clerk (Hobby) and Neon (Free) were provisioned through the existing Vercel project. No paid upgrade was selected. Clerk's company-domain allowlist is configured. The server additionally requires a currently verified primary `@intellibus.com` email; test addresses cannot access shared plans.
+Firebase Authentication uses the existing production address without a custom domain. The approved project is `atlas-planner-auth` on Spark (no paid upgrade). Google and verified email/password sign-in are enabled; magic-link sign-in is disabled. Firebase-managed domains remain, and the planner production domain is authorized. The application imports no Analytics SDK and sends no Analytics events.
 
-- `scripts/team.js` connects explicitly to a shared baseline; it never automatically uploads an old personal draft. Personal and shared draft storage keys are separate.
-- `api/team-plan.js` applies server-side owner/manager permissions and optimistic revision checks. A conflict stops saves and asks the editor to export/reload; it never silently overwrites a concurrent save.
-- `api/team-operations.js` retains the separate operations model. All authorized company users may read it; managers approve shared operations/roster changes.
-- `ATLAS_MANAGER_EMAILS` must contain the explicitly approved manager emails, comma-separated. It defaults to no managers. Owners are assigned with their verified company email, not their display name.
-- Clerk production requires a custom domain/DNS and live keys. Production requests fail closed while only development keys exist. `/api/team-config` exposes no secrets and reports team access disabled until ready. Configure `ATLAS_ALLOWED_ORIGINS` for any custom domain.
-- Live email login and multi-person synchronization cannot be marked verified until the production domain and manager setup are complete. Do not use `pk_test` credentials as production auth.
+Any currently verified email may view the shared internal planner, as approved by Alex. Only the exact verified email `alex.hutchinson@intellibus.com` may edit, import or save. The server verifies token signature, project, expiry and current account state on every shared request; disabled, deleted, unverified, changed-email and revoked accounts fail closed. Read-only actors cannot write even if they bypass the UI.
+
+- `ATLAS_AUTH_PROVIDER=firebase`, `ATLAS_ACCESS_POLICY=verified-email`, and `ATLAS_FIREBASE_WEB_CONFIG` (public apiKey/authDomain/projectId/appId JSON) enable the production provider. The existing `DATABASE_URL` remains server-only.
+- Firebase uses its managed `atlas-planner-auth.firebaseapp.com` callback domain and Google popup flow. No service-account private key is generated or committed.
+- Workspace and Operations retain separate documents with optimistic revision checks. A conflict blocks saves instead of overwriting another revision.
+- Clerk remains a dormant fallback; its existing resources and credentials were not deleted. Its production path still requires live credentials and approved access configuration.
 
 Database schema (already initialized): `atlas_plans(scope text primary key, body jsonb not null, revision integer not null default 0, updated_at timestamptz not null default now(), updated_by text)`. Preview and production documents use distinct scope values.
 
@@ -83,13 +83,6 @@ Both Workspace/Command and the legacy Operations register use the existing authe
 
 Pending cloud edits use account-specific recovery keys. On sign-in, the server document is loaded first; a pending draft is only resumed explicitly with its original revision. Signing out never loads another user's draft. Pending records are excluded from general backups. Managers can explicitly import the pre-sign-in browser snapshot only while the shared document remains at revision zero. Existing cloud edits are never silently replaced by an old browser backup. Workspace and Operations have separate import actions; import both to transfer both datasets. Existing private drafts are kept locally.
 
-**Integration stays disabled until configuration is explicitly approved.** No authentication settings, database credentials, allowlists, memberships or paid services were changed by this code update. Existing Neon schema remains sufficient; no destructive migration is required.
+Firebase production activation requires the three approved environment variables above and a normal GitHub deployment. Preview remains separately scoped and unconfigured. Production rejects an authentication emulator configuration. Public web configuration excludes measurement IDs; database credentials and bearer tokens are never exposed by `/api/team-config`.
 
-After approval, an authorised administrator must complete Clerk live custom-domain/DNS setup and enter live provider credentials privately. Do not paste credentials into chat or commit them. Configure `ATLAS_ACCESS_POLICY` to exactly one of:
-- `invited`: verified emails in `ATLAS_MEMBER_EMAILS` only.
-- `company`: verified primary @intellibus.com accounts.
-- `verified-email`: any verified primary email may view; non-managers cannot write either cloud document.
-
-`ATLAS_MANAGER_EMAILS` explicitly designates approved Intellibus managers. It defaults empty. Do not enable a wider policy until the owner confirms disclosure of internal workstreams and event/people details to that audience. Clerk's provider allowlist must match the approved policy; changing it needs separate approval. Keep `ATLAS_ALLOWED_ORIGINS` restricted to approved application domains.
-
-Provider configuration remains required before live sign-in, cross-browser persistence and email verification can be tested. Do not claim these checks passed from unit tests. Production requires `pk_live_` keys. Requests without an authenticated, currently verified and permitted identity fail closed before database access. Read-only actors are rejected server-side even if they bypass the UI.
+Run `npm test` for permissions, Internet-register preservation, queue/recovery and Firebase current-account checks. Unit tests are separate from live verification of sign-in, cross-browser persistence and email verification. No production account is created through email/password testing without its owner privately entering the credential.
