@@ -17,8 +17,10 @@
    async function finish(){verification();if(auth.currentUser?.emailVerified){dialog.close();dialog.querySelector('[name=password]').value='';}else{message('Verify your email to continue.');}}
    async function run(action){
     const buttons=[...dialog.querySelectorAll('button:not([value=close])')];buttons.forEach(b=>b.disabled=true);message('Working…');
-    try{await action();}catch(e){message(e.code==='auth/popup-blocked'?'Your browser blocked the sign-in popup. Allow this planner’s popup or use email sign-in.':'Sign-in did not complete. Check your details, verify your email, or try again.');}
-    finally{buttons.forEach(b=>b.disabled=false);}
+    let timeout;
+    try{await Promise.race([action(),new Promise((_,reject)=>{timeout=setTimeout(()=>reject({code:'auth/popup-timeout'}),45000);})]);}
+    catch(e){message(['auth/popup-blocked','auth/popup-timeout'].includes(e.code)?'Sign-in did not open or finish. Check for a blocked popup, allow this planner’s popup, then retry or use email sign-in.':e.code==='auth/popup-closed-by-user'?'Sign-in was cancelled. You can try again.':'Sign-in did not complete. Check your details, verify your email, or try again.');}
+    finally{clearTimeout(timeout);buttons.forEach(b=>b.disabled=false);}
    }
    dialog.querySelector('[data-google]').onclick=()=>run(async()=>{await sdk.signInWithPopup(auth,new sdk.GoogleAuthProvider());await finish();});
    dialog.querySelector('[data-email-form]').onsubmit=e=>{e.preventDefault();run(async()=>{await sdk.signInWithEmailAndPassword(auth,email(),password());await finish();});};
