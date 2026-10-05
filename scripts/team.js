@@ -9,12 +9,18 @@
     clerkReady, queue, personalSnapshot, connectedActorId = null, connecting = false;
   const bar = document.createElement("aside");
   bar.id = "team-bar";
+  const accountButton=document.createElement('button');accountButton.id='atlas-account-control';accountButton.type='button';accountButton.textContent='Sign in';accountButton.setAttribute('aria-label','Sign in to Atlas');
+  const accountStyle=document.createElement('style');accountStyle.textContent='#atlas-account-control{position:fixed;top:12px;right:16px;z-index:100;padding:9px 15px;border:1px solid #8eb5e4;border-radius:999px;background:#153b68;color:#fff;font:600 14px system-ui;box-shadow:0 3px 12px #102d5140;cursor:pointer}@media(max-width:640px){#atlas-account-control{top:8px;right:8px;padding:8px 12px;font-size:13px}}';document.head.append(accountStyle);document.body.append(accountButton);
+  accountButton.onclick=()=>active?bar.querySelector('[data-team-leave]').click():connect();
   bar.setAttribute("aria-label", "Team connection");
   const setMessage = (text) => {
     bar.querySelector("[data-team-status]").textContent = text;
     if (active) window.AtlasSave?.message(text, /Conflict|unavailable|Offline|expired|denied/.test(text));
   };
   function draw() {
+    accountButton.textContent=active?(actor.readOnly?'View only · Sign out':'Alex · Sign out'):'Sign in';
+    accountButton.setAttribute('aria-label',active?'Sign out of Atlas':'Sign in to Atlas');
+    accountButton.title=active?actor.email:'Sign in to the shared planner';
     bar.innerHTML =
       '<span data-team-status role="status"></span><button data-team-connect>Connect team</button><button data-team-reload hidden>Reload shared plan</button><button data-team-leave hidden>Sign out</button><button data-team-import hidden>Import my browser plan once</button><button data-team-recover hidden>Resume unsaved edits</button><button data-team-import-file hidden>Import saved backup once</button><input data-team-file type="file" accept="application/json,.json" hidden>';
     setMessage(
