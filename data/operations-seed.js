@@ -1033,7 +1033,7 @@ const REF = {
     "Meeting rooms specialist functions; courtyard Culinary Village and arrivals",
     "2,200 hackers plus roughly 800 others",
   ],
-  16: ["Confirmed by Alex: 2,500 participants and 8,000–12,000 concurrent devices. Vendor must justify capacity and own technical delivery, testing and support; bandwidth remains unresolved."],
+  16: ["Attendance stated at the 5 October 2026 Flow kickoff: 3,000 attendees. Concurrent device count is unconfirmed; the earlier 8,000–12,000 assumption requires reconciliation. Vendor must justify capacity and own technical delivery, testing and support; bandwidth remains unresolved."],
   17: [
     "500+ solutions target, each with an Atlas Experience",
     "Atlas carries registration, judging and core event functions",
@@ -3989,7 +3989,7 @@ const DOD = {
     ],
   },
   16: {
-  "s": "Vendor-managed connectivity across agreed event areas for 23–24 January 2027, demonstrated against confirmed load and agreed acceptance criteria, with tested recovery and continuous support. Confirmed baseline: 2,500 participants and 8,000–12,000 concurrent devices. Vendor owns recommendation, assessment, implementation, testing, recovery, monitoring, support and secure handover; Intellibus approves scope and acceptance criteria. Bandwidth remains unresolved.",
+  "s": "Vendor-managed connectivity across agreed event areas for 23–24 January 2027, demonstrated against confirmed load and agreed acceptance criteria, with tested recovery and continuous support. Attendance stated at the 5 October 2026 Flow kickoff: 3,000 attendees. Concurrent device count is unconfirmed; the earlier 8,000–12,000 assumption requires reconciliation. Vendor owns recommendation, assessment, implementation, testing, recovery, monitoring, support and secure handover; Intellibus approves scope and acceptance criteria. Bandwidth remains unresolved.",
   "c": [
     "Coverage and concurrent load meet agreed baseline — criteria agreed before deployment; vendor supplies test evidence.",
     "Build tools, cloud AI, judging and production pass combined testing — criteria agreed before deployment; vendor supplies test evidence.",

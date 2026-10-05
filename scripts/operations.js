@@ -123,7 +123,7 @@ const SEED = [
     "Network & Internet",
     "Alex / Daniel",
     "Vendor-managed connectivity across agreed event areas for 23–24 January 2027, demonstrated against confirmed load and agreed acceptance criteria, with tested recovery and continuous support.",
-    "Review vendor-led proposal, 2,500 participants and 8,000–12,000 concurrent devices, unresolved bandwidth, agreed acceptance criteria, delivery, testing and support responsibilities.",
+    "Review vendor-led proposal for 3,000 attendees stated at the 5 October 2026 Flow kickoff; concurrent device count is unconfirmed and the earlier 8,000–12,000 assumption requires reconciliation. Bandwidth, acceptance criteria, delivery, testing and support responsibilities remain to agree.",
     0,
   ],
   [
