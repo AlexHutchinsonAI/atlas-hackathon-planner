@@ -16,7 +16,7 @@
   };
   function draw() {
     bar.innerHTML =
-      '<span data-team-status role="status"></span><button data-team-connect>Connect team</button><button data-team-reload hidden>Reload shared plan</button><button data-team-leave hidden>Sign out</button><button data-team-import hidden>Import my browser plan once</button><button data-team-recover hidden>Resume unsaved edits</button>';
+      '<span data-team-status role="status"></span><button data-team-connect>Connect team</button><button data-team-reload hidden>Reload shared plan</button><button data-team-leave hidden>Sign out</button><button data-team-import hidden>Import my browser plan once</button><button data-team-recover hidden>Resume unsaved edits</button><button data-team-import-file hidden>Import saved backup once</button><input data-team-file type="file" accept="application/json,.json" hidden>';
     setMessage(
       active ? `Shared plan · ${actor.email}` : "Personal browser draft",
     );
@@ -24,6 +24,7 @@
     bar.querySelector("[data-team-reload]").hidden = !active;
     bar.querySelector("[data-team-leave]").hidden = !active;
     bar.querySelector("[data-team-import]").hidden = !(active && actor.manager && revision === 0);
+    bar.querySelector("[data-team-import-file]").hidden = !(active && actor.manager && revision === 0);
     bar.querySelector("[data-team-recover]").hidden = !(active && savedDraft());
   }
   async function request(method, body) {
@@ -160,7 +161,20 @@
     );
     new MutationObserver(lockView).observe(document.getElementById("app") || document.querySelector(".wrap") || document.body,{childList:true,subtree:true});
     requestAnimationFrame(placeBar);
+    bar.addEventListener('change', async e => {
+      if(!e.target.matches('[data-team-file]') || !active || !actor.manager || revision!==0 || queue.saving)return;
+      try {
+        const file=e.target.files[0];if(!file || file.size>2000000)throw Error('Choose a planner JSON backup smaller than 2 MB.');
+        const value=JSON.parse(await file.text()), snapshot=value.current||value;
+        const expected=bridge.endpoint==='/api/team-operations'?'operations':'command';
+        if(snapshot.type!==expected || !snapshot.data || typeof snapshot.data!=='object')throw Error('This backup is for a different planner view.');
+        if(confirm('Import this selected saved plan into the empty shared baseline? Original browser drafts remain on this device.')) {
+          bridge.replace(snapshot.data);changed(snapshot.data);await queue.flush();draw();
+        }
+      }catch(error){setMessage(error.message||'Backup import failed. Your draft is retained.');}
+    });
     bar.addEventListener("click", async (e) => {
+      if(e.target.matches('[data-team-import-file]'))bar.querySelector('[data-team-file]').click();
       if (e.target.matches("[data-team-connect]")) connect();
       if (
         e.target.matches("[data-team-reload]") &&
