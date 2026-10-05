@@ -23,6 +23,7 @@ const baseline = () =>
           : {},
     ]),
   );
+const {saveWithActivity}=require('../lib/activity.cjs');
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   if (!["GET", "PUT"].includes(req.method)) {
@@ -57,7 +58,7 @@ module.exports = async (req, res) => {
     if ((body.operation==='import' || current.revision===0) && !actor.manager) return res.status(403).json({error:'Only the planner owner may initialize or import a shared baseline.'});
     const plan = Object.fromEntries(keys.map((k) => [k, body.plan[k]]));
     const [saved] =
-      await db`UPDATE atlas_plans SET body=${JSON.stringify(plan)},revision=revision+1,updated_at=now(),updated_by=${actor.email} WHERE scope=${scope} AND revision=${body.revision} RETURNING revision`;
+      await saveWithActivity(db,{scope,revision:body.revision,plan,actor,current:current.body,kind:"operations"});
     if (!saved)
       return res
         .status(409)

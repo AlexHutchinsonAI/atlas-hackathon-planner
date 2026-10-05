@@ -2,6 +2,7 @@
 const { identity, sql, environment } = require("../lib/team.cjs");
 const { authorize, validPlan } = require("../lib/permissions.cjs");
 const seed = require("../data/command-seed.js");
+const {saveWithActivity}=require('../lib/activity.cjs');
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   if (!["GET", "PUT"].includes(req.method)) {
@@ -36,7 +37,7 @@ module.exports = async (req, res) => {
     const denial = authorize(current.body, body.plan, actor);
     if (denial) return res.status(403).json({ error: denial });
     const [updated] =
-      await db`UPDATE atlas_plans SET body=${JSON.stringify(body.plan)},revision=revision+1,updated_at=now(),updated_by=${actor.email} WHERE scope=${scope} AND revision=${body.revision} RETURNING revision`;
+      await saveWithActivity(db,{scope,revision:body.revision,plan:body.plan,actor,current:current.body,kind:"workspace"});
     if (!updated)
       return res
         .status(409)

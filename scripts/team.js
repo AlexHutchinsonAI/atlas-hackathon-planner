@@ -33,10 +33,11 @@
     bar.querySelector("[data-team-import-file]").hidden = !(active && actor.manager && revision === 0);
     bar.querySelector("[data-team-recover]").hidden = !(active && savedDraft());
   }
-  async function request(method, body) {
+  async function request(method, body, endpoint=bridge.endpoint || "/api/team-plan") {
     const token = config?.provider === "firebase" ? await window.AtlasFirebaseAuth.token() : await window.Clerk.session?.getToken();
-    const r = await fetch(bridge.endpoint || "/api/team-plan", {
+    const r = await fetch(endpoint, {
       method,
+      ...(endpoint==="/api/team-activity" ? {signal:AbortSignal.timeout(12000)} : {}),
       headers: {
         Authorization: `Bearer ${token || ""}`,
         "Content-Type": "application/json",
@@ -107,7 +108,7 @@
       active = true;
       queue?.stop();
       queue = new window.AtlasCloudQueue({
-        request: body => request("PUT", body),
+        request: async body => {const saved=await request("PUT", body);window.AtlasActivity?.refresh();return saved;},
         persist: draft => {
           try { if (draft) localStorage.setItem(draftKey(), JSON.stringify(draft)); else localStorage.removeItem(draftKey()); }
           catch { setMessage("Device save unavailable · keep this tab open until cloud save succeeds"); }
@@ -119,6 +120,7 @@
       bridge.replace(shared.body);
       draw();
       lockView();
+      window.AtlasActivity?.connect({actor,load:()=>request("GET",null,"/api/team-activity")});
       setMessage(`Signed in as ${actor.email} · ${actor.readOnly ? 'view only' : 'cloud autosave enabled'}`);
     } catch (e) {
       setMessage(e.message || "Sign-in unavailable. Your draft is unchanged.");
@@ -215,6 +217,7 @@
           return;
         queue?.stop();
         active = false;
+        window.AtlasActivity?.disconnect();
         if(config.provider === "firebase")await window.AtlasFirebaseAuth.signOut();else await window.Clerk?.signOut();
         location.reload();
       }
@@ -229,7 +232,7 @@
         } else if(c.provider === 'firebase') {
           window.AtlasFirebaseAuth.init(c.firebase,c.verifiedEditors).then(()=>{
             window.AtlasFirebaseAuth.listen(({id,verified})=>{
-              if(active && (!id || id !== connectedActorId)){queue?.stop();active=false;actor=null;location.reload();return;}
+              if(active && (!id || id !== connectedActorId)){queue?.stop();active=false;actor=null;window.AtlasActivity?.disconnect();location.reload();return;}
               if(id && verified && !active)connect();
             });
           }).catch(()=>setMessage('Sign-in could not load. Personal drafts remain available.'));
@@ -239,7 +242,7 @@
             .then(() => {
               window.Clerk.addListener(({ session, user }) => {
                 if (session && !active) connect();
-                if (active && (!session || (user?.id && user.id !== connectedActorId))) {queue?.stop();active=false;actor=null;location.reload();}
+                if (active && (!session || (user?.id && user.id !== connectedActorId))) {queue?.stop();active=false;actor=null;window.AtlasActivity?.disconnect();location.reload();}
               });
             })
             .catch(() =>

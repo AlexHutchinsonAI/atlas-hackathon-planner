@@ -86,3 +86,11 @@ Pending cloud edits use account-specific recovery keys. On sign-in, the server d
 Firebase production activation requires the three approved environment variables above and a normal GitHub deployment. Preview remains separately scoped and unconfigured. Production rejects an authentication emulator configuration. Public web configuration excludes measurement IDs; database credentials and bearer tokens are never exposed by `/api/team-config`.
 
 Run `npm test` for permissions, Internet-register preservation, queue/recovery and Firebase current-account checks. Unit tests are separate from live verification of sign-in, cross-browser persistence and email verification. No production account is created through email/password testing without its owner privately entering the credential.
+
+### Recent changes and account attribution
+
+A responsive recent-changes bar displays the current verified account, last recorded editor, timestamps, and concise affected workstream/record summaries for Workspace and Operations. It refreshes after successful saves, every 30 seconds while the page is visible, and on demand. It records content changes, not logins or full user sessions. Unchanged Save now operations create no invented content-change entry.
+
+`atlas_activity` is an additive table initialized by the authenticated server. Entries are append-only through planner APIs and generated from the verified server actor and database timestamp. A single SQL statement atomically updates the document at the expected revision and inserts its activity entry; conflict or audit failure cannot leave a false successful event. No credentials, tokens, private note values or full duplicated documents are stored in activity. Only affected field names, record/workstream labels and action counts are recorded. Existing documents and revisions are retained. Older changes are not reconstructed; existing last-save metadata is labelled separately before history begins. Activity reads require the same current verified identity as shared planner reads.
+
+`npm test` covers attribution/spoofing, concise summaries, grouped changes, concurrent revision conflicts, failed transactions, unchanged saves and anonymous activity denial.

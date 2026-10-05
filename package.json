@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node --test tests/permissions.test.cjs tests/internet-register.test.cjs tests/cloud.test.cjs tests/firebase.test.cjs"
+    "test": "node --test tests/permissions.test.cjs tests/internet-register.test.cjs tests/cloud.test.cjs tests/firebase.test.cjs tests/activity.test.cjs"
   },
   "engines": {
     "node": "22.x"
