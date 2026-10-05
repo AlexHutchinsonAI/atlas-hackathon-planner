@@ -34,7 +34,7 @@ test('late completion after sign-out cannot update another account revision or q
  let finish;const {q,saved}=harness(()=>new Promise(r=>finish=r));q.change({a:1});const flight=q.flush();q.stop();q.start(10);finish({revision:5});await flight;assert.equal(q.revision,10);assert.equal(saved.at(-1).plan.a,1);
 });
 const vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
-function endpoint(name,actor){let queries=0;const db=(strings,...values)=>{queries++;if(strings.join('').includes('SELECT'))return Promise.resolve([{body:require('../data/command-seed.js'),revision:0}]);return Promise.resolve([]);};const mod={exports:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../api/'+name+'.js'),'utf8'),{module:mod,require:id=>id==='../lib/team.cjs'?{identity:async()=>{if(!actor)throw Object.assign(new Error('sign in'),{status:401});return actor;},sql:()=>db,environment:()=> 'test'}:require(path.join(__dirname,'../api',id))});return {handler:mod.exports,queries:()=>queries};}
+function endpoint(name,actor,revision=0){let queries=0;const db=(strings,...values)=>{queries++;if(strings.join('').includes('SELECT'))return Promise.resolve([{body:require('../data/command-seed.js'),revision}]);if(strings.join('').includes('UPDATE'))return Promise.resolve(values.at(-1)===revision?[{revision:revision+1}]:[]);return Promise.resolve([]);};const mod={exports:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../api/'+name+'.js'),'utf8'),{module:mod,require:id=>id==='../lib/team.cjs'?{identity:async()=>{if(!actor)throw Object.assign(new Error('sign in'),{status:401});return actor;},sql:()=>db,environment:()=> 'test'}:require(path.join(__dirname,'../api',id))});return {handler:mod.exports,queries:()=>queries};}
 function response(){return {code:200,setHeader(){},status(x){this.code=x;return this;},json(x){this.body=x;return this;}};}
 test('signed-out requests cannot read either cloud document or reach the database',async()=>{
  for(const name of ['team-plan','team-operations']){const e=endpoint(name,null),res=response();await e.handler({method:'GET'},res);assert.equal(res.code,401);assert.equal(e.queries(),0);}
@@ -48,4 +48,16 @@ test('production integration stays disabled without approved policy or live Cler
  const env={VERCEL_ENV:'production',CLERK_SECRET_KEY:'placeholder',NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:'pk_live_placeholder',DATABASE_URL:'placeholder'};
  assert.equal(configured(env),false);assert.equal(configured({...env,ATLAS_ACCESS_POLICY:'verified-email'}),true);
  assert.equal(configured({...env,ATLAS_ACCESS_POLICY:'verified-email',NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:'pk_test_placeholder'}),false);
+});
+
+test('verified non-owner editors save both existing documents with revision checks and cannot initialize/import',async()=>{
+ const actor={id:'firebase:outside',email:'outside@example.com',editor:true,readOnly:false,manager:false};
+ const operations={plans:{},custom:[],execState:{goals:{},decisions:{}},webState:{},judgeState:{},actState:{},qState:{},reviewState:{},ambassadorState:{},goalState:{}};
+ for(const name of ['team-plan','team-operations']) {
+  const plan=name==='team-plan'?structuredClone(require('../data/command-seed.js')):operations;
+  const e=endpoint(name,actor,7),saved=response();await e.handler({method:'PUT',body:{revision:7,plan}},saved);assert.equal(saved.code,200);assert.equal(saved.body.revision,8);
+  const imported=response();await e.handler({method:'PUT',body:{revision:7,plan,operation:'import'}},imported);assert.equal(imported.code,403);
+  const initial=endpoint(name,actor,0),denied=response();await initial.handler({method:'PUT',body:{revision:0,plan}},denied);assert.equal(denied.code,403);
+  const stale=response();await e.handler({method:'PUT',body:{revision:6,plan}},stale);assert.equal(stale.code,409);
+ }
 });

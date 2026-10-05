@@ -31,6 +31,7 @@ module.exports = async (req, res) => {
           error:
             "The shared plan changed. Export your draft, then reload the shared version before retrying.",
         });
+    if ((body.operation==='import' || current.revision===0) && !actor.manager) return res.status(403).json({error:'Only the planner owner may initialize or import a shared baseline.'});
     if (actor.readOnly) return res.status(403).json({error:"Your account has view-only access."});
     const denial = authorize(current.body, body.plan, actor);
     if (denial) return res.status(403).json({ error: denial });

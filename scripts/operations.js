@@ -4789,7 +4789,7 @@ window.AtlasTeam.init({
     goalState = value.goalState || {};
     rebuildWS();
     renderAll();
-    setStatus("Shared operations · managers approve changes");
+    setStatus("Shared operations · verified accounts can edit and save");
   },
 });
 

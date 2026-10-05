@@ -1,4 +1,4 @@
-/* Legacy operational records share a separate document; approval-bearing edits require a manager. */
+/* Legacy operational records share a separate document; verified editors may change planner content. */
 const { identity, sql, environment } = require("../lib/team.cjs");
 const keys = [
   "plans",
@@ -37,12 +37,12 @@ module.exports = async (req, res) => {
     const [current] =
       await db`SELECT body,revision FROM atlas_plans WHERE scope=${scope}`;
     if (req.method === "GET") return res.json({ ...current, actor });
-    if (!actor.manager)
+    if (actor.readOnly || (!actor.editor && !actor.manager))
       return res
         .status(403)
         .json({
           error:
-            "Shared operations approvals and roster changes require a manager. Export your local proposal for review.",
+            "Sign in with a verified email to edit shared planner content.",
         });
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     if (
@@ -54,6 +54,7 @@ module.exports = async (req, res) => {
       JSON.stringify(body.plan).length > 2000000
     )
       return res.status(400).json({ error: "Invalid operations document" });
+    if ((body.operation==='import' || current.revision===0) && !actor.manager) return res.status(403).json({error:'Only the planner owner may initialize or import a shared baseline.'});
     const plan = Object.fromEntries(keys.map((k) => [k, body.plan[k]]));
     const [saved] =
       await db`UPDATE atlas_plans SET body=${JSON.stringify(plan)},revision=revision+1,updated_at=now(),updated_by=${actor.email} WHERE scope=${scope} AND revision=${body.revision} RETURNING revision`;

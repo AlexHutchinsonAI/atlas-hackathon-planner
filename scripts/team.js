@@ -18,7 +18,7 @@
     if (active) window.AtlasSave?.message(text, /Conflict|unavailable|Offline|expired|denied/.test(text));
   };
   function draw() {
-    accountButton.textContent=active?(actor.readOnly?'View only · Sign out':'Alex · Sign out'):'Sign in';
+    accountButton.textContent=active?(actor.readOnly?'View only · Sign out':actor.manager?'Alex · Sign out':'Account · Sign out'):'Sign in';
     accountButton.setAttribute('aria-label',active?'Sign out of Atlas':'Sign in to Atlas');
     accountButton.title=active?actor.email:'Sign in to the shared planner';
     bar.innerHTML =
@@ -86,7 +86,7 @@
     connecting=true;
     try {
       if(config.provider === 'firebase') {
-        await window.AtlasFirebaseAuth.init(config.firebase);
+        await window.AtlasFirebaseAuth.init(config.firebase,config.verifiedEditors);
         if(!await window.AtlasFirebaseAuth.ensureSignedIn())return;
       }else{
       await loadClerk();
@@ -227,7 +227,7 @@
           bar.querySelector("[data-team-connect]").textContent =
             "Team setup pending";
         } else if(c.provider === 'firebase') {
-          window.AtlasFirebaseAuth.init(c.firebase).then(()=>{
+          window.AtlasFirebaseAuth.init(c.firebase,c.verifiedEditors).then(()=>{
             window.AtlasFirebaseAuth.listen(({id,verified})=>{
               if(active && (!id || id !== connectedActorId)){queue?.stop();active=false;actor=null;location.reload();return;}
               if(id && verified && !active)connect();
@@ -271,13 +271,14 @@
     },
     get draftSuffix() { return "-shared-" + encodeURIComponent(actor?.id || "signed-out"); },
     get readOnly() {return active && Boolean(actor?.readOnly);},
+    canAdmin() {return Boolean(actor?.manager);},
     canManage() {
-      return Boolean(actor?.manager);
+      return Boolean(actor?.editor || actor?.manager);
     },
     canOwn(w) {
       return (
         !active ||
-        (!actor?.readOnly && actor?.manager) ||
+        (!actor?.readOnly && (actor?.editor || actor?.manager)) ||
         (!actor?.readOnly && w.ownerEmail?.toLowerCase() === actor?.email)
       );
     },

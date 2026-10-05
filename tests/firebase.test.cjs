@@ -6,10 +6,10 @@ test('public Firebase config is complete, project-bound and excludes tracking co
  const env={ATLAS_FIREBASE_WEB_CONFIG:JSON.stringify({...config,measurementId:'excluded',storageBucket:'excluded'})};assert.deepEqual(webConfig(env),config);
  for(const bad of [null,{...config,authDomain:'attacker.example'},{...config,apiKey:''},{...config,projectId:'../../evil'}])assert.equal(webConfig({ATLAS_FIREBASE_WEB_CONFIG:JSON.stringify(bad)}),null);
 });
-test('only the approved exact verified email has editing rights; every other verified user is read-only',()=>{
- assert.equal(actorFromAccount(claims,account).manager,true);
+test('owner-only fallback remains read-only for other verified users when editing expansion is disabled',()=>{
+ assert.equal(actorFromAccount(claims,account,{}).manager,true);
  for(const email of ['viewer@example.com','other@intellibus.com','alex.hutchinson+alias@intellibus.com','alex.hutchinson@intellibus.com.evil.com']){
-  const actor=actorFromAccount({...claims,email},{...account,email});assert.equal(actor.manager,false);assert.equal(actor.readOnly,true);
+  const actor=actorFromAccount({...claims,email},{...account,email},{});assert.equal(actor.manager,false);assert.equal(actor.readOnly,true);
  }
 });
 test('changed, unverified, disabled or mismatched current accounts fail closed',()=>{
@@ -23,4 +23,13 @@ test('signed-out and malformed token requests never reach current-account lookup
  const previous=process.env.ATLAS_FIREBASE_WEB_CONFIG;process.env.ATLAS_FIREBASE_WEB_CONFIG=JSON.stringify(config);const previousFetch=global.fetch;let calls=0;global.fetch=async()=>{calls++;throw new Error('must not run');};
  try{await assert.rejects(identity({headers:{}}),e=>e.status===401);await assert.rejects(identity({headers:{authorization:'Bearer malformed'}}),e=>e.status===401);assert.equal(calls,0);}
  finally{global.fetch=previousFetch;if(previous===undefined)delete process.env.ATLAS_FIREBASE_WEB_CONFIG;else process.env.ATLAS_FIREBASE_WEB_CONFIG=previous;}
+});
+
+test('approved policy gives every verified email content editing without owner/admin rights',()=>{
+ for(const email of ['outside@example.com','other@intellibus.com','alex.hutchinson+alias@intellibus.com']) {
+  const actor=actorFromAccount({...claims,email},{...account,email},{ATLAS_VERIFIED_EDITORS:'true'});
+  assert.equal(actor.editor,true);assert.equal(actor.readOnly,false);assert.equal(actor.manager,false);
+ }
+ const owner=actorFromAccount(claims,account,{ATLAS_VERIFIED_EDITORS:'true'});assert.equal(owner.manager,true);
+ assert.throws(()=>actorFromAccount(claims,{...account,emailVerified:false},{ATLAS_VERIFIED_EDITORS:'true'}),e=>e.status===403);
 });

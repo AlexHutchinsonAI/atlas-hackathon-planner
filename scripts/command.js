@@ -884,6 +884,7 @@
       return;
     }
     if (action === "import") {
+      if(window.AtlasTeam?.active && !window.AtlasTeam.canAdmin()){alert("Only the planner owner may import a saved backup.");return;}
       document.getElementById("importFile").click();
       return;
     }

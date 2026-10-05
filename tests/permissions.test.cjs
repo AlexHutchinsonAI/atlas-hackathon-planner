@@ -61,3 +61,10 @@ test("manager still cannot save malformed or outsider data", () => {
     /verified/,
   );
 });
+
+test('verified external editor can change shared content but structural and evidence validation remain',()=>{
+ const actor={email:'outside@example.com',editor:true,manager:false};const next=copy();
+ next.workstreams[0].lists[0].items.reverse();next.workstreams[0].ownerEmail='owner@example.com';next.workstreams.pop();
+ assert.equal(authorize(seed,next,actor),null);assert.match(authorize(seed,{},actor),/Invalid/);
+ next.walkthrough={decisions:[{id:'d',status:'Decided'}]};assert.match(authorize(seed,next,actor),/evidence/);
+});
