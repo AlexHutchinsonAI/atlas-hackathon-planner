@@ -1,7 +1,7 @@
 /* One writer, durable pending snapshots, optimistic revisions, bounded retry. */
 (function(root) {
  class CloudQueue {
-  constructor({request,persist,status,online=()=>true,delay=600,setTimer=setTimeout,clearTimer=clearTimeout}) {
+  constructor({request,persist,status,online=()=>true,delay=600,setTimer=(fn,ms)=>root.setTimeout(fn,ms),clearTimer=id=>root.clearTimeout(id)}) {
    Object.assign(this,{request,persist,status,online,delay,setTimer,clearTimer});
    this.revision=null; this.pending=null; this.saving=false; this.blocked=false;this.timer=null;this.failures=0;this.epoch=0;
   }
