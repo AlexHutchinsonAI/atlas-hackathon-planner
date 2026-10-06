@@ -19,8 +19,12 @@
       activeSection = section;
       last = -1;
       // Give every view the same scroll distance, plus a viewport for the sticky stage.
+      section.style.setProperty("--read-tour-height", `${100 + stops.length * 80}svh`);
       section.style.height = `${100 + stops.length * 80}svh`;
     }
+    const manual = section.dataset.tourMode === 'manual';
+    section.querySelector('.venue-progress span').hidden = manual;
+    if (manual) return;
     const sticky = section.querySelector('.venue-sticky');
     const top = parseFloat(getComputedStyle(sticky).top) || 0;
     const distance = Math.max(1, section.offsetHeight - sticky.offsetHeight);
@@ -49,6 +53,13 @@
     }
   });
   document.addEventListener('click', event => {
+    if (event.target.closest('#venue-mode')) {
+      const section=document.querySelector('#journey-venue');
+      const manual=section.dataset.tourMode !== 'manual';
+      section.dataset.tourMode=manual?'manual':'scroll';
+      event.target.textContent=manual?'Switch to scroll tour':'Choose viewpoints manually';
+      update(true);
+    }
     if (event.target.closest('.venue-hint button')) event.target.closest('.venue-hint').remove();
   });
   // The planning app can rebuild its contents after an edit; initialize replacement sections too.

@@ -180,7 +180,7 @@
       )
       .join(
         "",
-      )}</tbody></table></div><h3>Assignment distribution</h3><p class="review-note">Counts show assignments, not hours or proof of overload.</p><div class="review-summary">${
+      )}</tbody></table></div><h2>Assignment distribution</h2><p class="review-note">Counts show assignments, not hours or proof of overload.</p><div class="review-summary">${
       Object.entries(
         ws.reduce((m, w) => {
           if (w.accountableOwner)
@@ -253,7 +253,7 @@
   function render() {
     model();
     const heading = tabs.find(([k]) => k === active)?.[1] || "Progress";
-    return `<div class="crumb"><button data-action="workspace">Workspace</button><span>›</span><span>${heading}</span></div><header class="compact-heading"><div><p class="eyebrow">ATLAS · DELIVERY WORKSPACE</p><h1>${heading}</h1></div><span class="live-label">${window.AtlasTeam?.active ? "Shared team plan" : "Saved in this browser"}</span></header><nav class="review-tabs" aria-label="Delivery views">${tabs.map(([key, label]) => `<button data-review-tab="${key}" aria-pressed="${active === key}">${label}</button>`).join("")}</nav><div id="review-content">${active === "progress" ? progress() : active === "owners" ? owners() : active === "recruitment" ? recruitment() : active === "dependencies" ? dependencies() : register(active)}</div><p id="review-message" role="status"></p>`;
+    return `<div class="crumb"><button data-action="workspace">Planning workspace</button><span>›</span><span>${heading}</span></div><header class="compact-heading"><div><p class="eyebrow">ATLAS · PLANNING WORKSPACE</p><h1>${heading}</h1></div><span class="live-label">${window.AtlasTeam?.active ? "Shared team plan" : "Saved in this browser"}</span></header><nav class="review-tabs" aria-label="Planning review views">${tabs.map(([key, label]) => `<button data-review-tab="${key}" aria-pressed="${active === key}">${label}</button>`).join("")}</nav><div id="review-content">${active === "progress" ? progress() : active === "owners" ? owners() : active === "recruitment" ? recruitment() : active === "dependencies" ? dependencies() : register(active)}</div><p id="review-message" role="status"></p>`;
   }
   function message(text) {
     const el = document.getElementById("review-message");
@@ -398,6 +398,7 @@
   window.AtlasReview = {
     init,
     render,
+    currentTab: () => active,
     flow() {
       model();
       return (

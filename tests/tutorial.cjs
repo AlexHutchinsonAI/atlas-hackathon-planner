@@ -10,7 +10,7 @@ const base=process.env.ATLAS_TEST_URL||'http://127.0.0.1:8768';
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'/index.html');
   const tour=page.locator('#atlas-tutorial');
-  await tour.getByRole('button',{name:'Start tutorial',exact:true}).click();
+  await tour.locator('#launch').click();
   await tour.getByRole('button',{name:'Skip tutorial',exact:true}).click();
   await page.reload();await page.waitForTimeout(850);assert(await tour.locator('#panel').isHidden());
   const routes=['index.html','workspace.html','atlas-reference.html#direction','atlas-reference.html#outcomes','atlas-reference.html#notebook','atlas-reference.html#people','atlas-reference.html#web','atlas-reference.html#transport','atlas-reference.html#open','virtual-walkthrough.html','venue/index.html'];

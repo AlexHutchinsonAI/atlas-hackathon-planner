@@ -2,6 +2,12 @@
 
 Source for [atlas-hackathon-planner.vercel.app](https://atlas-hackathon-planner.vercel.app/). The interface is static HTML/CSS/JavaScript. Optional Vercel API functions provide Firebase-verified team access and Neon-backed shared plans; no frontend build step is required.
 
+## Current redesign review — 6 October 2026
+
+The home now explains where to start, and every planning page uses readable spacing, clear purpose text and common navigation. Working records, source content, authentication and shared saves retain their existing implementation. The venue opens with manual controls and keeps the scroll tour available. Detailed route inventory, data boundaries and verification limits are in [REDESIGN.md](REDESIGN.md). Earlier visual-experience notes below document the retained legacy scene assets.
+
+For an isolated local review, run `python3 tools/preview.py --port 8765` and open `http://127.0.0.1:8765/`. This server disables auth and refuses shared API writes. Do not point write tests at production. With Playwright available, `node tests/readable-check.cjs` compares local baseline/updated fixtures (`ATLAS_BASELINE_URL`, `ATLAS_URL`) and uses mocked authentication/APIs for save and recovery tests. `ATLAS_EVIDENCE` selects the result JSON path. The existing `npm test` authorization, audit and cloud tests remain unchanged. No push or deployment has been made for this redesign.
+
 ## Screens and source structure
 
 - `index.html`: the planning command center, verified targets, searchable workstreams and editable lists.

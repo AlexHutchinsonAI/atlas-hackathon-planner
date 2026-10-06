@@ -3155,7 +3155,7 @@ function showView(v) {
     ].includes(v)
   )
     v = "direction";
-  history.replaceState(null, "", "#" + v);
+  if (location.hash !== "#" + v) history.pushState(null, "", "#" + v);
   document.body.dataset.section = v;
   el("views")
     .querySelectorAll(".vbtn")
@@ -3865,7 +3865,7 @@ function judgeCap() {
 }
 function goalBox(g, withTitle) {
   return `<div class="goalbox">
-    ${withTitle ? `<h4><span class="gnum">Goal ${g.id.slice(1)}</span>${esc(g.t)}</h4>` : ""}
+    ${withTitle ? `<h3><span class="gnum">Goal ${g.id.slice(1)}</span>${esc(g.t)}</h3>` : ""}
     ${g.c
       .map((c, i) => {
         const k = g.id + "c" + i;
@@ -3950,7 +3950,7 @@ function renderWeb() {
         <div class="grp">Also in the Content Readiness index — not named in Goal 1</div>${W.extra.map(row).join("")}
         <div class="grp">Technical — Jamari</div>${W.tech.map(row).join("")}</div>
     </nav>
-    <main class="panel" id="webPanel"></main>
+    <section class="panel" id="webPanel" aria-label="Selected website area"></section>
   </div>`;
   el("webView")
     .querySelectorAll("[data-wkey]")
@@ -4273,7 +4273,7 @@ function areaBlock(a) {
       `
       <div class="pubrow">
         <label>Publishing status</label>
-        <select data-pub="${a.id}" class="c${PUB.indexOf(st)}">${PUB.map((p) => `<option${st === p ? " selected" : ""}${gateBlocked && (p === "Ready to Publish" || p === "Published") ? " disabled" : ""}>${p}</option>`).join("")}</select>
+        <select aria-label="Publishing status for ${esc(a.name)}" data-pub="${a.id}" class="c${PUB.indexOf(st)}">${PUB.map((p) => `<option${st === p ? " selected" : ""}${gateBlocked && (p === "Ready to Publish" || p === "Published") ? " disabled" : ""}>${p}</option>`).join("")}</select>
         <span class="pubnote">${st === "Ready to Publish" ? `In Jamari's publishing queue${(webState[a.id] || {}).on ? " since " + esc(webState[a.id].on) : ""}.` : st === "Published" ? "Live on the website." : "Stays with " + esc(a.lead) + " until set to Ready to Publish."}</span>
       </div>
       ${isJ ? `<p class="gate">${gateBlocked ? "Ready to Publish is locked until at least one judge is Confirmed. " : ""}Only confirmed judges go to Jamari: ${conf.length ? conf.map(esc).join(", ") : "none yet"}.</p>` : ""}`,
@@ -4677,7 +4677,7 @@ try {
   firstView = location.hash.slice(1) || "people";
 } catch (e) {}
 if (
-  !["direction", "notebook", "people", "web", "transport", "open"].includes(
+  !["direction", "outcomes", "notebook", "people", "web", "transport", "open", "exec", "story", "baseline", "mobilize", "refs"].includes(
     firstView,
   )
 )

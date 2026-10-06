@@ -334,9 +334,33 @@
       mode: screen === "workstream" ? "list" : ui.mode,
       listTag: "",
     };
+    writeRoute();
     window.scrollTo(0, 0);
     render();
   }
+  // View state belongs in the URL, never in planning records.
+  function writeRoute() {
+    const enc = encodeURIComponent;
+    const hash = ui.screen === "home" ? "" : ui.screen === "area" ? `#area/${enc(ui.areaId)}` : ui.screen === "workstream" ? `#workstream/${enc(ui.wsId)}/${ui.mode}` : ui.screen === "list" ? `#list/${enc(ui.wsId)}/${enc(ui.listId)}` : `#review/${window.AtlasReview.currentTab()}`;
+    if (location.hash !== hash) history.pushState(null, "", location.pathname + location.search + hash);
+  }
+  function readRoute() {
+    let parts;
+    try { parts = location.hash.slice(1).split("/").map(decodeURIComponent); } catch { return false; }
+    const [view, first, second] = parts;
+    if (view === "workspace" && !location.pathname.endsWith("/workspace.html")) { location.replace("workspace.html"); return true; }
+    if (view === "review") { window.AtlasReview.open(first); return true; }
+    if (view === "area" && AREAS.some(([id]) => id === first)) { nav("area", null, null, first); return true; }
+    if (["workstream", "list"].includes(view) && wsById(first)) {
+      if (view === "list" && !findList(wsById(first), second)) return false;
+      ui = {...ui, screen:view, wsId:first, listId:view === "list" ? second : null, areaId:wsById(first).area, mode:["list","organize","validate","execute"].includes(second) ? second : "list", listTag:""};
+      render(); return true;
+    }
+    if (!view) { ui.screen = "home"; render(); return true; }
+    return false;
+  }
+  addEventListener("popstate", readRoute);
+  addEventListener("hashchange", readRoute);
   // Render the shared Intellibus navigation around the current planning view.
   function shell(inner) {
     document.body.classList.toggle("motion-paused", motionPaused);
@@ -550,7 +574,7 @@
     const items = data.workstreams.flatMap(allItems),
       done = items.filter((it) => it.status === "Done").length,
       waiting = items.filter((it) => it.status === "Waiting").length;
-    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">ATLAS / EVENT OPERATIONS</p><h2>Event dashboard</h2><p class="small">Destini’s saved plan is available inside 17 workstreams · 153 tasks · 153 deadlines.</p></div><p class="dashboard-state">${window.AtlasTeam?.active ? "Shared team plan" : "Personal browser draft"}<br><span>23–24 Jan 2027 · Montego Bay</span></p></header>
+    shell(`<div class="command-home"><section class="workspace-shell atlas-surface" id="workspace" aria-label="Planning workspace"><header class="workspace-heading"><div><p class="eyebrow">ATLAS / EVENT OPERATIONS</p><h1>Planning workspace</h1><p class="small">Review tasks, owners and deadlines. Search below, then open a workstream to see or edit its lists.</p></div><p class="dashboard-state">${window.AtlasTeam?.active ? "Shared team plan" : "Personal browser draft"}<br><span>23–24 Jan 2027 · Montego Bay</span></p></header>
       <nav class="review-tabs review-shortcuts" aria-label="Planning views">${[
         ["progress", "Progress & attention"],
         ["owners", "Ownership"],
@@ -595,22 +619,22 @@
       ${ui.homeFiltersOpen ? `<section class="filter-panel"><label class="field">Find a workstream<input id="search" type="search" placeholder="Search workstreams" value="${esc(ui.search)}"></label><label class="field">See tasks by tag<select id="globalTag">${tagOptions(tags, ui.tag)}</select></label></section>` : ""}
       ${ui.tag ? `<section class="sheet tag-results">${tagged.length ? tagged.map(({ w, l, it }) => `<button class="tag-result" type="button" data-action="open-tag-item" data-ws="${esc(w.id)}" data-list="${esc(l.id)}"><span>${esc(it.text)}</span><small>${esc(w.title)} · ${esc(l.title)}</small></button>`).join("") : '<p class="empty">No tasks have this tag yet.</p>'}</section>` : ""}
       <section class="sheet" id="homeRows">${list.length ? list.map((w, i) => plainRow(w.id, w.title, "", i, list.length, "workstream", "open-workstream", readinessDots(w))).join("") : '<p class="empty">No matching workstream. Try another word.</p>'}</section></details>
-      <details class="brief"><summary>Save or move this plan</summary><p>Your changes stay in this browser. Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></div></section></div>`);
+      <details class="brief"><summary>Save or move this plan</summary><p>${window.AtlasTeam?.active ? "Edits autosave to the shared plan. Check the save status before leaving; unresolved edits remain in this account’s recovery draft." : "You are editing a personal draft saved in this browser. Sign in to load the separate shared plan."} Export a copy to keep or share.</p><button class="btn" type="button" data-action="export">Export plan</button> <button class="btn" type="button" data-action="import">Import plan</button><input id="importFile" type="file" accept="application/json,.json" hidden><p><a href="atlas-reference.html#people">People, profiles & transport</a></p></details></div></section></div>`);
   }
   function areaView() {
     const id = ui.areaId,
       stats = areaStats(id),
       list = stats.workstreams;
     shell(
-      `<div class="crumb"><button type="button" data-action="home">Command view</button><span>›</span><span>${esc(areaName(id))}</span></div><header class="compact-heading"><div><p class="eyebrow">Main area</p><h1>${esc(areaName(id))}</h1><p class="small">${stats.ready} of ${stats.total} planning checks ready across ${list.length} workstreams</p></div></header><section class="sheet">${list.map((w, i) => plainRow(w.id, w.title, "", i, list.length, "workstream", "open-workstream", readinessDots(w))).join("")}</section>`,
+      `<div class="crumb"><button type="button" data-action="workspace">Planning workspace</button><span>›</span><span>${esc(areaName(id))}</span></div><header class="compact-heading"><div><p class="eyebrow">Main area</p><h1>${esc(areaName(id))}</h1><p class="small">${stats.ready} of ${stats.total} planning checks ready across ${list.length} workstreams</p></div></header><section class="sheet">${list.map((w, i) => plainRow(w.id, w.title, "", i, list.length, "workstream", "open-workstream", readinessDots(w))).join("")}</section>`,
     );
   }
   function modeBar() {
     return `<nav class="steps" aria-label="LOVE planning steps">${[
-      ["list", "List"],
-      ["organize", "Order"],
-      ["validate", "Validate"],
-      ["execute", "Execute"],
+      ["list", "Lists"],
+      ["organize", "Organize lists"],
+      ["validate", "Check lists"],
+      ["execute", "Work to finish"],
     ]
       .map(
         ([key, label]) =>
@@ -623,7 +647,7 @@
     if (!w) return nav("home");
     const total = allItems(w).length,
       done = allItems(w).filter((x) => x.status === "Done").length;
-    const head = `<div class="crumb"><button type="button" data-action="home">Command view</button><span>›</span><button type="button" data-action="open-area" data-id="${esc(w.area)}">${esc(areaName(w.area))}</button><span>›</span><span>${esc(w.title)}</span></div><header class="compact-heading"><div><p class="eyebrow">Workstream</p><h1>${esc(w.title)}</h1><div class="workstream-progress">${readinessDots(w)}</div></div></header>${modeBar()}`;
+    const head = `<div class="crumb"><button type="button" data-action="workspace">Planning workspace</button><span>›</span><button type="button" data-action="open-area" data-id="${esc(w.area)}">${esc(areaName(w.area))}</button><span>›</span><span>${esc(w.title)}</span></div><header class="compact-heading"><div><p class="eyebrow">Workstream</p><h1>${esc(w.title)}</h1><p class="small">${done} of ${total} items completed · Unweighted task count</p><div class="workstream-progress">${readinessDots(w)} <span>Planning completeness · five checks</span></div></div></header>${modeBar()}`;
     const after = `${readinessPanel(w)}<details class="brief"><summary>Edit this workstream</summary><div class="fields"><label class="field wide">Objective<textarea data-ws-brief="${esc(w.id)}">${esc(w.brief || "")}</textarea></label><label class="field wide">Measures of success<textarea data-ws-success="${esc(w.id)}">${esc(w.success || "")}</textarea></label><label class="field wide">Name<input data-ws-title="${esc(w.id)}" value="${esc(w.title)}" maxlength="100"></label></div></details>`;
     let body = "";
     if (
@@ -633,7 +657,7 @@
     ) {
       const roots = w.lists.filter((l) => CORE.includes(l.kind) || !l.kind);
       const five = w.lists.filter((l) => FIVE.includes(l.kind));
-      body = `<div class="bar"><div><h2>${ui.mode === "organize" ? "Put the lists in order" : ui.mode === "validate" ? "Check the lists" : "Lists"}</h2></div><button class="btn primary" type="button" data-action="show-add-list">+ Add</button></div><div id="addList"></div><section class="sheet" id="listRows">${roots.map((l, i) => plainRow(l.id, l.title, `${itemCount(l)} item${itemCount(l) === 1 ? "" : "s"}`, i, roots.length, "list", "open-list", reviewControl(l))).join("")}</section>
+      body = `<div class="bar"><div><h2>${ui.mode === "organize" ? "Put the lists in order" : ui.mode === "validate" ? "Check the lists" : "Lists"}</h2></div><button class="btn primary" type="button" data-action="show-add-list">+ Add list</button></div><div id="addList"></div><section class="sheet" id="listRows">${roots.map((l, i) => plainRow(l.id, l.title, `${itemCount(l)} item${itemCount(l) === 1 ? "" : "s"}`, i, roots.length, "list", "open-list", reviewControl(l))).join("")}</section>
       <details class="five"><summary>Map, Menu, Message, Metrics, Money</summary><section class="sheet" id="fiveRows">${five.map((l, i) => plainRow(l.id, l.title, `${itemCount(l)} item${itemCount(l) === 1 ? "" : "s"}`, i, five.length, "five", "open-list", reviewControl(l))).join("")}</section></details>`;
     } else {
       const open = allItems(w)
@@ -648,7 +672,7 @@
     shell(
       head +
         `<section class="workstream-purpose"><p><strong>Objective</strong> · ${esc(w.brief || "Objective needs review")}</p><p><strong>Accountable owner</strong> · ${esc(w.accountableOwner || "Not verified")}</p><p><strong>Success measures</strong> · ${esc(w.success || "Not yet defined")}</p><p class="small">Source planning content · review before approval</p></section>` +
-        window.AtlasSavedPlan.render(w) + window.AtlasPrizes.render(w.id) + body +
+        body + window.AtlasSavedPlan.render(w).replace(" open>", ' data-persist="saved-plan">') + window.AtlasPrizes.render(w.id) +
         after,
     );
   }
@@ -665,8 +689,8 @@
       visible = ui.listTag
         ? items.filter((it) => (it.tags || []).includes(ui.listTag))
         : items;
-    const crumbs = `<div class="crumb"><button type="button" data-action="home">Command view</button><span>›</span><button type="button" data-action="open-area" data-id="${esc(w.area)}">${esc(areaName(w.area))}</button><span>›</span><button type="button" data-action="open-workstream" data-id="${esc(w.id)}">${esc(w.title)}</button>${parents.map((p) => `<span>›</span><button type="button" data-action="open-list" data-id="${esc(p.id)}">${esc(p.title)}</button>`).join("")}<span>›</span><span>${esc(list.title)}</span></div>`;
-    shell(`${crumbs}<header class="compact-heading"><div><p class="eyebrow workstream-context">${esc(w.title)}</p><h1>${esc(list.title)}</h1></div><button class="btn primary" type="button" data-action="show-add-item">+ Add</button></header>
+    const crumbs = `<div class="crumb"><button type="button" data-action="workspace">Planning workspace</button><span>›</span><button type="button" data-action="open-area" data-id="${esc(w.area)}">${esc(areaName(w.area))}</button><span>›</span><button type="button" data-action="open-workstream" data-id="${esc(w.id)}">${esc(w.title)}</button>${parents.map((p) => `<span>›</span><button type="button" data-action="open-list" data-id="${esc(p.id)}">${esc(p.title)}</button>`).join("")}<span>›</span><span>${esc(list.title)}</span></div>`;
+    shell(`${crumbs}<header class="compact-heading"><div><p class="eyebrow workstream-context">${esc(w.title)}</p><h1>${esc(list.title)}</h1>${list.prompt ? `<p class="small">${esc(list.prompt)}</p>` : ""}</div><button class="btn primary" type="button" data-action="show-add-item">+ Add item</button></header>
       <div id="addItemMount"></div>
       <section class="sheet" id="itemRows">${
         visible.filter((it) => it.status !== "Done").length
@@ -674,7 +698,7 @@
               .filter((it) => it.status !== "Done")
               .map((it, i, arr) => itemRow(it, i, arr.length))
               .join("")
-          : `<p class="empty">${items.length ? "No items have this tag." : "Nothing here yet. Add the first item above."}</p>`
+          : `<p class="empty">${ui.listTag && !visible.length ? "No items have this tag. Choose another tag or clear the filter." : visible.length ? "All items shown are completed. Open Completed below to review them." : "Nothing here yet. Add the first item above."}</p>`
       }</section>
       <details class="brief completed-items" data-persist="completed"><summary>Completed · ${visible.filter((it) => it.status === "Done").length}</summary>${visible
         .filter((it) => it.status === "Done")
@@ -849,6 +873,7 @@
     if (action === "open-list") return nav("list", ui.wsId, id);
     if (action === "mode") {
       ui.mode = mode;
+      writeRoute();
       return render(true);
     }
     if (action === "show-home-filter") {
@@ -862,10 +887,15 @@
         document.querySelector("#addWorkstreamForm input").focus();
       return;
     }
+    if (action === "cancel-add") {
+      const form=button.closest("form");
+      const trigger=document.querySelector(form?.id === "addItem" ? '[data-action="show-add-item"]' : '[data-action="show-add-list"]');
+      form?.remove();trigger?.focus();return;
+    }
     if (action === "show-add-item") {
       const mount = document.getElementById("addItemMount");
       mount.innerHTML =
-        '<form class="form-row add-first" id="addItem"><input name="text" required maxlength="500" placeholder="New item" aria-label="New item"><button class="btn primary" type="submit">Add</button></form>';
+        '<form class="form-row add-first" id="addItem"><input name="text" required maxlength="500" placeholder="New item" aria-label="New item"><button class="btn primary" type="submit">Add item</button><button class="btn" type="button" data-action="cancel-add">Cancel</button></form>';
       mount.querySelector("input").focus();
       return;
     }
@@ -890,7 +920,7 @@
     }
     if (action === "show-add-list") {
       document.getElementById("addList").innerHTML =
-        '<form class="form-row" id="addListForm"><input name="title" required maxlength="100" placeholder="Name the list" aria-label="Name the list"><button class="btn primary">Add</button></form>';
+        '<form class="form-row" id="addListForm"><input name="title" required maxlength="100" placeholder="Name the list" aria-label="Name the list"><button class="btn primary">Add list</button><button class="btn" type="button" data-action="cancel-add">Cancel</button></form>';
       document.querySelector("#addList input").focus();
       return;
     }
@@ -1383,6 +1413,7 @@
   });
   // Open a shared workstream link directly without changing saved planning data.
   const linkedWorkstream = new URLSearchParams(location.search).get("workstream");
-  if (linkedWorkstream && wsById(linkedWorkstream)) nav("workstream", linkedWorkstream);
+  if (location.hash && readRoute()) {}
+  else if (linkedWorkstream && wsById(linkedWorkstream)) nav("workstream", linkedWorkstream);
   else render();
 })();

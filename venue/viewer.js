@@ -4,8 +4,8 @@ const groups={one:'Jamaica Room',two:'Open area',three:'Grand Ballroom',four:'Ba
 const names={BALLROOM2:'Grand Ballroom',BALLOUT2:'Ballroom exterior',OUTBALLONE:'Ballroom approach',BIGRONE:'Exhibition hall · viewpoint 1',BIGRTWO:'Exhibition hall · viewpoint 2',OUTTOWER2:'View from tower',OUTBIGROOM:'Exterior viewpoint',INDROOM:'Jamaica Room',OUTMIDDLE:'Open area'};
 const scenes=await (await fetch('./scenes.json')).json();
 const host=document.querySelector('#viewer'),select=document.querySelector('#scene'),status=document.querySelector('#status');
-const world=new THREE.Scene(),camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,10);
-const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);host.append(renderer.domElement);
+const world=new THREE.Scene(),camera=new THREE.PerspectiveCamera(75,host.clientWidth/host.clientHeight,.1,10);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(host.clientWidth,host.clientHeight);host.append(renderer.domElement);
 let yaw=0,pitch=0,drag=null,request=0,current=null,index=0;
 for(const [group,label] of Object.entries(groups)){const opt=document.createElement('optgroup');opt.label=label;scenes.forEach((s,i)=>{if(s.group===group){const o=new Option(names[s.name]||`${label} · ${s.name}`,String(i));opt.append(o)}});select.append(opt)}
 // Load only six faces for the selected stop and discard stale requests to avoid racing selections.
@@ -14,7 +14,7 @@ async function change(i){index=(i+scenes.length)%scenes.length;select.value=Stri
 function draw(){camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;renderer.render(world,camera)}
 host.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};host.setPointerCapture(e.pointerId);host.focus()});host.addEventListener('pointermove',e=>{if(!drag)return;yaw+=(e.clientX-drag.x)*.004;pitch=THREE.MathUtils.clamp(pitch+(e.clientY-drag.y)*.004,-1.45,1.45);drag={x:e.clientX,y:e.clientY};draw()});for(const event of ['pointerup','pointercancel'])host.addEventListener(event,()=>drag=null);
 host.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','='].includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')yaw+=.1;if(e.key==='ArrowRight')yaw-=.1;if(e.key==='ArrowUp')pitch+=.1;if(e.key==='ArrowDown')pitch-=.1;if(['+','='].includes(e.key))camera.fov-=5;if(e.key==='-')camera.fov+=5;pitch=THREE.MathUtils.clamp(pitch,-1.45,1.45);camera.fov=THREE.MathUtils.clamp(camera.fov,35,100);camera.updateProjectionMatrix();draw()});
-window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);draw()});select.addEventListener('change',()=>change(Number(select.value)));document.querySelector('#prev').onclick=()=>change(index-1);document.querySelector('#next').onclick=()=>change(index+1);
+function resizeView(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);draw()}window.addEventListener('resize',resizeView);new ResizeObserver(resizeView).observe(host);select.addEventListener('change',()=>change(Number(select.value)));document.querySelector('#prev').onclick=()=>change(index-1);document.querySelector('#next').onclick=()=>change(index+1);
 // Supplied drawings are displayed as reference images, not as a navigable surveyed map.
 ['Block D / ballroom','Hall A terrace','Exhibition hall','Plaza square'].forEach((label,i)=>{const a=document.createElement('a');a.href=`research/plan-${i+1}-1.png`;a.target='_blank';a.rel='noopener';a.textContent=`${label} plan ↗`;document.querySelector('#plans').append(a)});
 change(scenes.findIndex(s=>s.name==='BALLROOM2'));
