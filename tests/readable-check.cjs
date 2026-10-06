@@ -79,7 +79,7 @@ async function shared(browser,body,endpoint,records={}){
    const plan=await snapshot(p);
    await p.goto(origin+'/atlas-reference.html#notebook');
    for(const view of views)await p.evaluate(v=>showView(v),view);
-   for(const mode of ['stakeholders','map','schools','directory']){await p.evaluate(()=>showView('people'));const button=p.locator(`[data-pmode="${mode}"]`);if(await button.count())await button.click();}
+   for(const mode of ['stakeholders','map','schools','directory']){await p.evaluate(()=>showView('people'));const button=p.locator(`[data-pmode="${mode}"]`);if(await button.count())await p.evaluate(mode=>document.querySelector(`[data-pmode="${mode}"]`).click(),mode);}
    const ops=await snapshot(p);compared.push({plan,ops});await c.close();
   }
   assert.deepEqual(compared[1],compared[0]);
@@ -110,10 +110,10 @@ async function shared(browser,body,endpoint,records={}){
   await profile.click();await p.locator('#personDialog form[method="dialog"] button').click();assert.equal(await p.locator('#personDialog').evaluate(d=>d.open),false);
   await p.locator('#peopleSearch').fill('');await p.locator('[data-people-page="1"]').click();assert.match(await p.locator('#peopleResultCount').innerText(),/9–16/);
   for(const view of views){await p.goto(base+'/atlas-reference.html#'+view);assert.equal(await p.locator('body').getAttribute('data-section'),view);}
-  await p.goto(base+'/atlas-reference.html#people');await p.locator('[data-view="notebook"]').click();await p.locator('[data-view="outcomes"]').click();await p.goBack();assert.equal(await p.locator('body').getAttribute('data-section'),'notebook');await p.goForward();assert.equal(await p.locator('body').getAttribute('data-section'),'outcomes');
+  await p.goto(base+'/atlas-reference.html#people');if(!await p.locator('#atlas-sidebar a[href="atlas-reference.html#notebook"]').isVisible())await p.locator('#atlas-sidebar details[data-group="operations"] > summary').click();await p.locator('#atlas-sidebar a[href="atlas-reference.html#notebook"]').click();await p.locator('#atlas-sidebar a[href="atlas-reference.html#outcomes"]').click();await p.goBack();assert.equal(await p.locator('body').getAttribute('data-section'),'notebook');await p.goForward();assert.equal(await p.locator('body').getAttribute('data-section'),'outcomes');
   pass('All twelve operations deep links, directory search/pagination, profile Close/Escape, operations Back/Forward');
   await p.goto(base+'/atlas-reference.html#transport');await p.locator('#map-category').selectOption('highschool');await p.locator('#map-search').fill('Montego');await p.locator('#map-open-planning').click();assert(await p.locator('#map-planning-dialog').evaluate(d=>d.open));await p.keyboard.press('Escape');assert.equal(await p.locator('#map-planning-dialog').evaluate(d=>d.open),false);pass('Transport filters and full planning dialog in unavailable-map state');
-  await p.goto(base+'/virtual-walkthrough.html');const frame=p.frameLocator('iframe');await frame.locator('#scene').waitFor();const old=await frame.locator('#scene').inputValue();await frame.locator('#next').click();assert.notEqual(await frame.locator('#scene').inputValue(),old);await p.locator('#venue-mode').click();assert.equal(await p.locator('#journey-venue').getAttribute('data-tour-mode'),'scroll');await p.locator('#venue-mode').click();assert.equal(await p.locator('#journey-venue').getAttribute('data-tour-mode'),'manual');pass('Venue viewpoints and retained scroll-tour mode');
+  await p.goto(base+'/virtual-walkthrough.html');const frame=p.frameLocator('iframe');await frame.locator('#scene option').nth(1).waitFor({state:'attached'});await p.locator('iframe').scrollIntoViewIfNeeded();const old=await frame.locator('#scene').inputValue();await frame.locator('#next').click();assert.notEqual(await frame.locator('#scene').inputValue(),old);await p.locator('#venue-mode').click();assert.equal(await p.locator('#journey-venue').getAttribute('data-tour-mode'),'scroll');await p.locator('#venue-mode').click();assert.equal(await p.locator('#journey-venue').getAttribute('data-tour-mode'),'manual');pass('Venue viewpoints and retained scroll-tour mode');
   assert.deepEqual(errors,[]);await c.close();
   // Auth UI and cloud queue use mock SDK + documents. No account/email/database mutation.
   for(const endpoint of ['/api/team-plan','/api/team-operations']){
@@ -136,7 +136,7 @@ async function shared(browser,body,endpoint,records={}){
    assert(await page.evaluate(()=>Object.keys(localStorage).some(k=>k.startsWith('atlas-cloud-pending-'))),'An offline draft must remain recoverable');
    mock.online();await page.locator('#save-now').click();await page.waitForFunction(()=>document.querySelector('#team-bar').textContent.includes('Saved to cloud'));
    mock.conflict();if(isPlan)await page.locator('[data-metric-current="registrations"]').fill('124');else await page.locator('#panel textarea').first().fill('Conflict fixture');await page.locator('#save-now').click();await page.waitForFunction(()=>/changed|conflict/i.test(document.querySelector('#team-bar').textContent));const attempted=mock.puts.length;await page.waitForTimeout(1200);assert.equal(mock.puts.length,attempted,'Conflict must stop retries');assert.equal(mock.puts.at(-1).revision,9);
-   page.once('dialog',d=>d.dismiss());await page.locator('#atlas-account-control').click();assert(await page.evaluate(()=>window.AtlasTeam.active),'Cancel sign-out must retain shared draft');
+   page.once('dialog',d=>d.dismiss());await page.locator('#atlas-account-control').click();await page.locator('#account-logout').click();assert(await page.evaluate(()=>window.AtlasTeam.active),'Cancel sign-out must retain shared draft');
    pass('Mock verified sign-in, save, no-op, offline retry, conflict recovery and cancelled sign-out '+endpoint,{putCount:mock.puts.length,protectedRevision:9});
    await mock.c.close();
   }

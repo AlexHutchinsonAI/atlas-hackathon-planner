@@ -526,7 +526,12 @@ function renderRollup() {
   el("rollup").innerHTML =
     `<i style="flex:${done || 0.0001};background:var(--go)"></i>` +
     `<i style="flex:${part || 0.0001};background:var(--sea)"></i>` +
-    `<i style="flex:${none || 0.0001};background:var(--rule)"></i>`;
+      `<i style="flex:${none || 0.0001};background:var(--rule)"></i>`;
+  if(window.AtlasVisuals){
+    let visual=el('operations-observatory');
+    if(!visual){visual=document.createElement('section');visual.id='operations-observatory';el('views').after(visual);}
+    visual.innerHTML=window.AtlasVisuals.distribution('Planning completeness',[{label:'All 5 checks filled',value:done},{label:'Partly filled',value:part},{label:'No checks filled',value:none}],'Five recorded planning checks per workstream. This measures completeness, not task completion or approval.');
+  }
   void total;
 }
 
@@ -716,6 +721,7 @@ function renderPanel() {
   </div>
 
   ${w.gap ? '<p class="notice">No permanent accountable owner is named yet. Name one before decomposing — everything below needs somewhere to land.</p>' : ""}
+  <div class="planning-gates" role="group" aria-label="Five planning completeness checks">${['Outcome','Key results','Tasks','Sequence','Owners & dates'].map((label,i)=>`<div class="planning-gate" data-filled="${st[i]}"><b aria-hidden="true">${st[i]?'✓':i+1}</b><strong>${label}</strong><span>${st[i]?'Filled':'Needs input'}</span></div>`).join('')}</div>
   ${w.n === 9 ? coachProfilesBlock() : ""}
   ${w.n === 9 ? coachRosterBlock() : ""}
   ${w.n === 9 ? coachShiftBlock() : ""}
@@ -2238,9 +2244,11 @@ function renderDirection() {
   <section class="dash-section"><div class="dash-section-head"><div><h3>Attention now</h3><p>${critical} critical · ${attention} attention required</p></div></div>
     <div class="attention-list">${topAttention.length ? topAttention.map((x) => `<div class="attention-row"><strong>${esc(x.w.name)}</strong><span>${esc(x.h.reason)} · ${esc(x.next.text)}</span><button type="button" data-dash-ws="${x.w.id}">Open workstream →</button></div>`).join("") : `<div class="source-note"><b>No critical or attention workstreams based on the current recorded data.</b></div>`}</div>
   </section>
-  <section class="dash-section"><div class="dash-section-head"><div><h3>Workstream health</h3><p>One full-width row per workstream, ordered by attention required, then workstream number.</p></div><div class="dash-legend"><span><i style="background:var(--plum)"></i>Critical</span><span><i style="background:var(--amber)"></i>Attention</span><span><i style="background:var(--sea)"></i>Active</span><span><i style="background:var(--go)"></i>Ready</span><span><i style="background:var(--rule)"></i>Not started</span></div></div>
+  <section class="dash-section"><div class="dash-section-head"><div><h3>Workstream health</h3><p>Workstreams ordered by attention required, then workstream number.</p></div><div class="dash-legend"><span><i style="background:var(--plum)"></i>Critical</span><span><i style="background:var(--amber)"></i>Attention</span><span><i style="background:var(--sea)"></i>Active</span><span><i style="background:var(--go)"></i>Ready</span><span><i style="background:var(--rule)"></i>Not started</span></div></div>
     <div class="ws-health-grid">${cards.map(card).join("")}</div>
   </section>`;
+  if(window.AtlasVisuals){const states=[...new Set(cards.map(x=>x.h.label))];el('directionView').querySelector('.dash-head').insertAdjacentHTML('afterend',window.AtlasVisuals.distribution('Workstream health',states.map(label=>({label,value:cards.filter(x=>x.h.label===label).length})),'Uses the existing owner, overdue-action, setup and readiness rules shown below.'));
+  }
   el("directionView")
     .querySelectorAll("[data-dash-ws]")
     .forEach(
@@ -2925,7 +2933,7 @@ function bindPeople() {
     (b) =>
       (b.onclick = () => {
         peopleMode = b.dataset.pmode;
-        renderPeople();
+        showView("people/" + peopleMode);
       }),
   );
   document.querySelectorAll("[data-prole]").forEach(
@@ -2934,7 +2942,7 @@ function bindPeople() {
         peopleRole = b.dataset.prole;
         peopleMode = "directory";
         peoplePage = 0;
-        renderPeople();
+        showView("people/directory");
       }),
   );
   const search = el("peopleSearch");
@@ -3100,6 +3108,16 @@ function renderOutcomes() {
 
 // Switch operational sections while preserving their existing local storage models.
 function showView(v) {
+  const requested = v;
+  let detail;
+  try { [v,detail] = v.split('/').map(decodeURIComponent); } catch { v='direction'; }
+  if(v==='notebook' && detail){
+    if(detail==='prizes')prizeRegisterOpen=true;
+    else if(WS.some(w=>w.id===detail)){current=detail;prizeRegisterOpen=false;}
+    renderAll();
+  }
+  if(v==='people' && ['directory','stakeholders','map','schools'].includes(detail))peopleMode=detail;
+  if(v==='web' && detail)curArea=detail;
   document.body.classList.toggle('transport-fullscreen',v === 'transport');
   if (v !== 'transport') window.AtlasMap?.dispose();
   // The continuous view uses real sections and native nested scrolling; existing tabs remain available elsewhere.
@@ -3155,7 +3173,8 @@ function showView(v) {
     ].includes(v)
   )
     v = "direction";
-  if (location.hash !== "#" + v) history.pushState(null, "", "#" + v);
+  const route = requested.startsWith(v+'/') ? requested : v;
+  if (location.hash !== "#" + route) history.pushState(null, "", "#" + route);
   document.body.dataset.section = v;
   el("views")
     .querySelectorAll(".vbtn")
@@ -3963,6 +3982,7 @@ function renderWeb() {
     );
   bindGoalBoxes(el("webView"), renderWeb);
   renderArea();
+  if(window.AtlasVisuals){const chart=window.AtlasVisuals.distribution('Content workflow',PUB.map(label=>({label,value:W.all.filter(it=>itemStatus(it)===label).length})),'Counts the content groups in this register. Ready status records review; it does not publish the website.');el('webView').insertAdjacentHTML('afterbegin',chart);}
 }
 
 function detailTable(head, rows, cls = "") {
@@ -4678,11 +4698,15 @@ try {
 } catch (e) {}
 if (
   !["direction", "outcomes", "notebook", "people", "web", "transport", "open", "exec", "story", "baseline", "mobilize", "refs"].includes(
-    firstView,
+    firstView.split('/')[0],
   )
 )
   firstView = "direction";
 showView(firstView);
+window.AtlasOperationsNavigation = {
+  workstreams:()=>WS.filter(w=>!gapsOnly||w.gap).map(w=>({id:w.id,title:w.name,owner:w.leads})),
+  webAreas:()=>webItems().all.map(x=>({id:x.key,title:x.label})),
+};
 window.addEventListener("hashchange", () =>
   showView(location.hash.slice(1) || "people"),
 );

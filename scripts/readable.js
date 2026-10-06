@@ -5,7 +5,7 @@
   const sections = {
     direction: ['Operations overview', 'Review operational priorities, owner gaps and readiness. Open a workstream in the Operations register to work on its detail.'],
     outcomes: ['Event outcomes', 'See how workstreams support event results. Planning completeness and task completion measure different things.'],
-    notebook: ['Operations register', 'Choose a workstream below. Review its owner, intended outcome and five planning steps. The five steps measure planning and handover readiness, not tasks completed. These records are separate from the Planning workspace.'],
+    notebook: ['Operations register', 'Choose a workstream in the left menu. Review its owner, intended outcome and five planning steps. The five steps measure planning and handover readiness, not tasks completed. These records are separate from the Planning workspace.'],
     people: ['People directory', 'Search by name, role or organisation, then open a profile. Roster prospects are not confirmed attendees.'],
     web: ['Website readiness', 'Review the content and publication status for each website area. Open an area to check its detail and evidence.'],
     transport: ['Transport planning', 'Search and filter pickup locations, then open the full planning detail. Map locations and proposed routes are planning information.'],
@@ -18,6 +18,7 @@
   };
   let themeButton, scheduled = false;
   function nav() {
+    if(window.AtlasSidebar){window.AtlasSidebar.refresh();return;}
     let target = document.querySelector('.mission-nav');
     if (!target && !embedded && /assistant|virtual-walkthrough|\/venue\/index/.test(location.pathname)) {
       target = document.createElement('nav'); target.className = 'mission-nav'; const skipNav=document.querySelector('.read-skip-nav');if(skipNav)skipNav.after(target);else document.body.prepend(target);
@@ -64,7 +65,7 @@
       let guide=document.getElementById('read-section-guide');
       if(!guide){guide=document.createElement('header');guide.id='read-section-guide';guide.className='read-guide';guide.tabIndex=-1;views.after(guide);}
       const key=document.body.dataset.section||'people', [title,copy]=sections[key]||sections.direction;
-      if(guide.dataset.section!==key){guide.dataset.section=key;guide.innerHTML=`<h1>${title}</h1><p>${copy}</p>`;}
+      if(guide.dataset.section!==key){guide.dataset.section=key;guide.innerHTML=`<div class="section-cover-copy"><p class="read-eyebrow">ATLAS / ${String(Object.keys(sections).indexOf(key)+1).padStart(2,'0')} / WORKING RECORDS</p><h1>${title}</h1><p>${copy}</p></div><div class="section-cover-art" aria-hidden="true"><i></i><span>${title}</span></div>`;}
       let extra=document.getElementById('read-more-sections');
       if(!extra){
         extra=document.createElement('details');extra.id='read-more-sections';extra.className='read-more-sections';
@@ -76,6 +77,8 @@
     if(main){if(!main.id)main.id='read-main';main.tabIndex=-1;const skip=document.querySelector('.read-skip');if(skip && skip.hash!=='#'+main.id)skip.href='#'+main.id;}
     const wrap=document.querySelector('body.atlas-operations .wrap');if(wrap && wrap.getAttribute('role')!=='main')wrap.setAttribute('role','main');
     const panel=document.getElementById('panel');if(panel){panel.setAttribute('role','region');panel.setAttribute('aria-label','Selected operations workstream');}
+    const register=document.querySelector('#notebookView > nav.register');
+    if(register && !register.closest('.notebook-management')){const management=document.createElement('details');management.className='notebook-management';management.innerHTML='<summary>Manage workstreams · filter or add</summary>';register.before(management);management.append(register);}
     const footer=document.querySelector('body.atlas-operations footer.bar');if(footer)footer.setAttribute('role','group');
     document.querySelectorAll('header.atlas-page-intro,.read-guide').forEach(header=>header.setAttribute('role','group'));
     const map=document.getElementById('atlasMap');if(map)map.setAttribute('role','region');

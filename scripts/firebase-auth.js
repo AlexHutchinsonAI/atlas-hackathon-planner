@@ -35,6 +35,7 @@
  function show(){if(!dialog.open)dialog.showModal();dialog.querySelector('[data-verification]').hidden=Boolean(!auth.currentUser||auth.currentUser.emailVerified);}
  window.AtlasFirebaseAuth={
   init,
+  profile(){const user=auth?.currentUser;return user?{email:user.email||'',name:user.displayName||'',photo:user.photoURL||'',verified:Boolean(user.emailVerified)}:null;},
   async ensureSignedIn(){await ready;if(auth.currentUser?.emailVerified)return true;show();return false;},
   async token(){return auth.currentUser?.getIdToken();},
   listen(fn){return sdk.onIdTokenChanged(auth,user=>fn({id:user?.uid?'firebase:'+user.uid:null,verified:Boolean(user?.emailVerified)}));},

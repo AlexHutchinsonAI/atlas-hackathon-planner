@@ -32,8 +32,9 @@ const base=process.env.ATLAS_TEST_URL||'http://127.0.0.1:8768';
   await tour.locator('#skip').click();await page.locator('#listRows [data-action="open-list"]').first().click();await tour.locator('#launch').click();await page.waitForTimeout(200);assert.match(await tour.locator('#title').textContent(),/list/);await page.keyboard.press('Escape');assert(await tour.locator('#panel').isHidden());
   for(const mode of ['progress','owners','recruitment','dependencies','decisions','publication']){
    await page.goto(base+'/workspace.html',{waitUntil:'domcontentloaded'});
-   const button=page.locator('[data-action="delivery"][data-mode="'+mode+'"]').first();
-   if(!await button.count())continue;
+   const button=page.locator('#atlas-sidebar a[href="workspace.html#review/'+mode+'"]');
+   if(!await page.locator('#atlas-sidebar').isVisible())await page.locator('#atlas-menu-toggle').click();
+   await button.evaluate(el=>{for(let node=el.parentElement;node;node=node.parentElement)if(node.tagName==='DETAILS')node.open=true;});
    await button.click();await tour.locator('#launch').click();
    while(await tour.locator('#panel').isVisible()){await page.waitForTimeout(150);assert(await tour.locator('#ring').isVisible(),'review '+mode+' missing target');await tour.locator('#next').click();}
    console.log('PASS',width,'delivery',mode);

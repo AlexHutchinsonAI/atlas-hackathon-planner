@@ -588,7 +588,7 @@
             `<button data-action="delivery" data-mode="${key}">${label}</button>`,
         )
         .join("")}</nav>
-      <section class="dashboard-gauges" aria-label="Event status at a glance">${statusGauge({title:"Items completed",value:done,total:items.length,detail:"Unweighted planning checklist",action:"delivery",mode:"progress"})}${statusGauge({title:"Items waiting",value:waiting,total:items.length,detail:"Waiting items need follow-up",action:"delivery",mode:"progress",tone:"amber"})}${data.command.headlines.map(id => data.command.metrics.find(m => m.id === id)).filter(Boolean).map(m => statusGauge({title:m.name,value:m.current,total:m.target,detail:m.current == null || m.current === "" ? "No verified count entered yet" : "Recorded count against planning target",action:"edit-numbers"})).join("")}</section>
+      ${window.AtlasVisuals.command(data)}<section class="dashboard-gauges" aria-label="Event status at a glance">${statusGauge({title:"Items completed",value:done,total:items.length,detail:"Unweighted planning checklist",action:"delivery",mode:"progress"})}${statusGauge({title:"Items waiting",value:waiting,total:items.length,detail:"Waiting items need follow-up",action:"delivery",mode:"progress",tone:"amber"})}${data.command.headlines.map(id => data.command.metrics.find(m => m.id === id)).filter(Boolean).map(m => statusGauge({title:m.name,value:m.current,total:m.target,detail:m.current == null || m.current === "" ? "No verified count entered yet" : "Recorded count against planning target",action:"edit-numbers"})).join("")}</section>
       <p class="dashboard-caption">Counts reflect this plan. Targets are planning assumptions; missing counts are not zero.</p>
       <div class="flight-grid"><section class="command-panel explorer-panel"><div class="panel-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h2>Workstream register</h2></div><span class="live-label">${window.AtlasTeam?.active ? "Shared team plan" : "Browser-saved plan"}</span></div><div class="deck-tools"><label class="deck-search"><span aria-hidden="true">⌕</span><input id="deck-search" type="search" value="${esc(deck.query)}" placeholder="Search this view…" aria-label="Search planning data"></label><select id="deck-area" aria-label="Filter by main area"><option value="">All areas</option>${AREAS.map(([id, title]) => `<option value="${id}" ${deck.area === id ? "selected" : ""}>${esc(title)}</option>`).join("")}</select></div><div class="deck-tabs" role="group" aria-label="Data to explore">${[
         ["workstreams", "Workstreams"],
@@ -1411,6 +1411,12 @@
       render(true);
     },
   });
+  // Read-only navigation metadata. Route changes never enter saved records.
+  window.AtlasPlannerNavigation = {
+    context: () => ({screen:ui.screen,wsId:ui.wsId,listId:ui.listId,areaId:ui.areaId,mode:ui.mode}),
+    areas: () => AREAS.map(([id,title])=>({id,title})),
+    workstreams: () => data.workstreams.map(w=>({id:w.id,title:w.title,area:w.area,lists:allLists(w).map(l=>({id:l.id,title:l.title}))})),
+  };
   // Open a shared workstream link directly without changing saved planning data.
   const linkedWorkstream = new URLSearchParams(location.search).get("workstream");
   if (location.hash && readRoute()) {}
