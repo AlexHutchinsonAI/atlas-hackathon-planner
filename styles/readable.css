@@ -36,6 +36,11 @@
     border: 1px solid #8b9db7 !important; border-radius: 8px !important;
     box-shadow: none !important; transform: none !important; line-height: 1.4 !important;
   }
+  /* Mapbox icons fill their button. Form padding clips them to zero width. */
+  #atlasMap .mapboxgl-ctrl-group button {
+    width: 44px !important; height: 44px !important; padding: 0 !important;
+    border: 0 !important; border-radius: 0 !important; background: #fff !important;
+  }
   :is(.atlas-surface,.depth-flow,dialog,#team-bar,.venue-explorer,body.atlas-operations) :is(.primary,.act,button.on,button.is-on,button[aria-pressed="true"],button[aria-current="page"]) {
     background: #1955c7 !important; color: #fff !important; border-color: #1955c7 !important;
   }
