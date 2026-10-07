@@ -18,7 +18,7 @@ const block=route=>!['GET','HEAD'].includes(route.request().method())?route.abor
    const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});await context.route('**/*',block);
    await context.addInitScript(data=>{if(!localStorage.getItem('__header_editor_fixture')){localStorage.setItem('intellibus-love-speed-universe-v1',JSON.stringify(data));localStorage.setItem('__header_editor_fixture','1');}},fixture);
    const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(base+route);await page.locator('#itemRows').waitFor();
-   if(await page.locator('#atlas-sidebar').isVisible())await page.locator('#atlas-menu-close').click();
+   if(await page.locator('#atlas-sidebar').isVisible())await page.locator('#atlas-menu-toggle').click();
    assert.deepEqual(await snapshot(page),fixture);
    const expected=structuredClone(fixture),expectedItem=expected.workstreams[0].lists.find(l=>l.id===list.id).items.find(i=>i.id===item.id);
    const details=page.locator('.item-row[data-id="'+item.id+'"] details');await details.locator('summary').click();await details.locator('textarea[data-item-notes]').fill('Edited before breadcrumb navigation');

@@ -9,7 +9,7 @@
   const toolbar=document.createElement('header');toolbar.id='atlas-toolbar';toolbar.className='mission-nav';toolbar.dataset.readable='true';
   toolbar.innerHTML='<button type="button" id="atlas-menu-toggle" aria-controls="atlas-sidebar" aria-expanded="false" aria-label="Open navigation"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 4v16" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button><span class="toolbar-divider" aria-hidden="true"></span><nav class="toolbar-context" aria-label="Breadcrumb"><ol><li><a id="atlas-current-section" href="'+prefix+'index.html">Atlas</a></li><li><svg class="toolbar-chevron" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><strong id="atlas-current-page" aria-current="page">Home</strong></li></ol></nav><div class="nav-tools"></div>';
   const sidebar=document.createElement('aside');sidebar.id='atlas-sidebar';sidebar.setAttribute('aria-label','Atlas navigation');
-  sidebar.innerHTML=`<div class="sidebar-brand"><a href="${prefix}index.html" aria-label="Atlas home"><img src="${prefix}assets/intellibus-logo.svg" alt="Intellibus" width="140" height="27"></a><button type="button" id="atlas-menu-close" aria-label="Close navigation">×</button></div><p class="sidebar-caption">ATLAS · JAMAICA 2027</p><nav id="atlas-sidebar-links" aria-label="Planner pages and views"></nav><p class="sidebar-footnote">23–24 January · Montego Bay<br>Planning records & working proposals</p>`;
+  sidebar.innerHTML=`<div class="sidebar-brand"><a href="${prefix}index.html" aria-label="Atlas home"><img src="${prefix}assets/intellibus-logo.svg" alt="Intellibus" width="140" height="27"></a><button type="button" id="atlas-menu-close" aria-label="Close navigation"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 4v16" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div><p class="sidebar-caption">ATLAS · JAMAICA 2027</p><nav id="atlas-sidebar-links" aria-label="Planner pages and views"></nav><p class="sidebar-footnote">23–24 January · Montego Bay<br>Planning records & working proposals</p>`;
   const backdrop=document.createElement('button');backdrop.id='atlas-sidebar-backdrop';backdrop.type='button';backdrop.setAttribute('aria-label','Close navigation');backdrop.tabIndex=-1;
   document.body.prepend(toolbar,sidebar,backdrop);
   const toggle=toolbar.querySelector('button'),close=sidebar.querySelector('button'),links=sidebar.querySelector('nav');
@@ -18,7 +18,7 @@
   const accountState=()=>window.AtlasTeam?{active:window.AtlasTeam.active,email:document.getElementById('atlas-account-control')?.title||'',role:window.AtlasTeam.readOnly?'View only':window.AtlasTeam.canAdmin()?'Owner':'Editor'}:window.AtlasPageAccount?.current||{active:false};
   function modal(){return innerWidth<=900;}
   function setOpen(next,focus=false){
-    const changed=open!==next;
+    const changed=open!==next,wasModal=sidebar.hasAttribute('aria-modal');
     open=next;document.body.dataset.sidebarOpen=String(open);sidebar.hidden=!open;toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');backdrop.hidden=!(open&&modal());
     if(open&&modal()){
       sidebar.setAttribute('role','dialog');sidebar.setAttribute('aria-modal','true');
@@ -27,7 +27,7 @@
       for(const [node,value] of inert)if(sidebar.contains(node)){node.inert=value;inert.delete(node);}
       for(const node of document.body.children)if(![sidebar,backdrop].includes(node)&&!['SCRIPT','STYLE','LINK'].includes(node.tagName)){if(!inert.has(node))inert.set(node,node.inert);node.inert=true;}
     }else{sidebar.removeAttribute('role');sidebar.removeAttribute('aria-modal');for(const [node,value] of inert)node.inert=value;inert.clear();document.dispatchEvent(new Event('atlas-navigation-change'));}
-    if(focus)(open?close:toggle).focus();
+    if(focus||(open&&wasModal!==modal()&&!document.querySelector('dialog[open]')))(open&&modal()?close:toggle).focus();
     if(changed)setTimeout(()=>dispatchEvent(new Event('resize')),260);
   }
   toggle.onclick=()=>setOpen(!open,true);close.onclick=()=>setOpen(false,true);backdrop.onclick=()=>setOpen(false,true);

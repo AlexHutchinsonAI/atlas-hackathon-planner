@@ -15,7 +15,8 @@ const mainPages=[
 const sections=[['direction','Operations overview'],['outcomes','Event outcomes'],['notebook','Operations register'],['web','Website content'],['transport','Transport'],['open','Follow-up actions'],['exec','Leadership review'],['story','Event background'],['baseline','Planning baseline'],['mobilize','Team mobilisation'],['refs','Source references']];
 const reviews=[['progress','Progress'],['owners','Ownership'],['recruitment','Recruitment'],['dependencies','Dependencies'],['decisions','Decisions'],['publication','Website readiness']];
 async function recordState(page){return page.evaluate(()=>({snapshot:window.AtlasSave?.snapshot()||null,records:Object.fromEntries(Object.keys(localStorage).filter(k=>k==='intellibus-love-speed-universe-v1'||k.startsWith('atlas-workbook-v1')||k.startsWith('atlas-cloud-pending-')).map(k=>[k,localStorage.getItem(k)]))}));}
-async function closed(page){if(await page.locator('#atlas-sidebar').isVisible())await page.locator('#atlas-menu-close').click();await page.waitForFunction(()=>document.querySelector('#atlas-toolbar').getBoundingClientRect().left<.1);}
+async function closeControl(page){return page.locator(await page.locator('#atlas-menu-close').isVisible()?'#atlas-menu-close':'#atlas-menu-toggle');}
+async function closed(page){if(await page.locator('#atlas-sidebar').isVisible())await(await closeControl(page)).click();await page.waitForFunction(()=>document.querySelector('#atlas-toolbar').getBoundingClientRect().left<.1);}
 async function labels(page,section,title){await page.waitForFunction(({section,title})=>document.querySelector('#atlas-current-section')?.textContent===section&&document.querySelector('#atlas-current-page')?.textContent===title,{section,title});}
 async function arrive(page,route){await page.goto(base+'/'+route,{waitUntil:'domcontentloaded'});await page.locator('#atlas-menu-toggle').waitFor();if(/walkthrough|venue\/index/.test(route)){const scene=route.startsWith('venue/')?page.locator('#scene option'):page.frameLocator('.venue-window iframe').locator('#scene option');await scene.first().waitFor({state:'attached'});}}
 async function check(page,width,route,section,title,href){
@@ -28,11 +29,11 @@ async function check(page,width,route,section,title,href){
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'No horizontal page overflow: '+route);
  await page.locator('#atlas-menu-toggle').focus();await page.keyboard.press('Enter');
  assert.equal(await page.locator('#atlas-menu-toggle').getAttribute('aria-expanded'),'true');assert(await page.locator('#atlas-sidebar').isVisible());
- assert.equal(await page.evaluate(()=>document.activeElement.id),'atlas-menu-close');
+ assert.equal(await page.evaluate(()=>document.activeElement.id),width<=900?'atlas-menu-close':'atlas-menu-toggle');
  if(width<=900){assert.equal(await page.locator('#atlas-sidebar').getAttribute('aria-modal'),'true');assert(await page.locator('#atlas-toolbar').evaluate(el=>el.inert));await page.keyboard.press('Shift+Tab');assert(await page.locator('#atlas-sidebar').evaluate(el=>el.contains(document.activeElement)));await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'atlas-menu-close');}
  await page.keyboard.press('Escape');await closed(page);assert.equal(await page.evaluate(()=>document.activeElement.id),'atlas-menu-toggle');assert.equal(await page.locator('#atlas-toolbar').evaluate(el=>el.inert),false);
  if(width<600)await page.locator('#atlas-menu-toggle').tap();else await page.locator('#atlas-menu-toggle').click();
- await page.locator('#atlas-menu-close').click();await closed(page);assert.equal(await page.locator('#atlas-menu-toggle').getAttribute('aria-expanded'),'false');
+ await(await closeControl(page)).click();await closed(page);assert.equal(await page.locator('#atlas-menu-toggle').getAttribute('aria-expanded'),'false');
  assert.deepEqual(await recordState(page),before,'Header actions must preserve the entire snapshot and planning storage: '+route);
  results.routes.push({width,route,section,title,passed:true});
 }
