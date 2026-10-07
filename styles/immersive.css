@@ -155,3 +155,40 @@
   .status-gauge>header{flex-wrap:wrap!important;gap:8px!important}
   @media(max-width:900px){body[data-sidebar-open="true"] #atlas-toolbar{left:0!important}#atlas-sidebar{max-width:calc(100% - 40px)!important}}
 }
+@layer atlas-readable {
+  /* The compact sidebar control and page context stay visible when the drawer closes. */
+  :root{--atlas-header-height:calc(72px + env(safe-area-inset-top,0px))}
+  #atlas-toolbar{padding:calc(12px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) 12px max(24px,env(safe-area-inset-left,0px))!important;gap:16px!important}
+  #atlas-toolbar #atlas-menu-toggle{border:0!important;border-radius:6px!important;background:transparent!important;padding:10px!important;color:inherit!important}
+  #atlas-toolbar #atlas-menu-toggle:hover{background:#15396212!important}
+  #atlas-toolbar .toolbar-divider{height:26px;width:1px;flex:none;background:var(--read-line)}
+  #atlas-toolbar .toolbar-context{display:block;flex:1;min-width:0}
+  #atlas-toolbar .toolbar-context ol{list-style:none;display:flex;align-items:center;gap:14px;margin:0;padding:0;min-width:0}
+  #atlas-toolbar .toolbar-context li{display:flex;align-items:center;gap:14px;min-width:0}
+  #atlas-toolbar .toolbar-context li:first-child{flex:0 1 auto;max-width:48%}
+  #atlas-toolbar .toolbar-context li:last-child{flex:1}
+  #atlas-toolbar .toolbar-context a{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;line-height:1.5;font-weight:400;color:var(--read-muted)!important;text-decoration:none}
+  #atlas-toolbar .toolbar-context a:hover{text-decoration:underline;text-underline-offset:4px}
+  #atlas-toolbar #atlas-current-page{font-size:16px;line-height:1.5;font-weight:600;max-width:none;min-width:0;color:var(--read-ink)!important}
+  #atlas-toolbar .toolbar-chevron{flex:none;color:var(--read-muted)}
+  body[data-sidebar-open="false"] #atlas-toolbar{background:#102942!important;border-bottom-color:#31506b!important;color:#f4f7fa!important;box-shadow:none!important;backdrop-filter:none!important}
+  body[data-sidebar-open="false"] #atlas-toolbar .toolbar-divider{background:#496178}
+  body[data-sidebar-open="false"] #atlas-toolbar .toolbar-context a,body[data-sidebar-open="false"] #atlas-toolbar .toolbar-chevron{color:#b6c6d5!important}
+  body[data-sidebar-open="false"] #atlas-toolbar #atlas-current-page{color:#f4f7fa!important}
+  body[data-sidebar-open="false"] #atlas-toolbar #atlas-menu-toggle:hover{background:#ffffff12!important}
+  body[data-sidebar-open="false"] #atlas-toolbar :is(button,a):focus-visible{outline:2px solid #dbeafe!important;outline-offset:3px!important}
+  body[data-sidebar-open="false"] #atlas-toolbar #atlas-account-control{border:1px solid #567189!important;background:#1b4268!important}
+  #atlas-sidebar{z-index:130!important;padding-top:calc(28px + env(safe-area-inset-top,0px))!important;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))!important}
+  @media(max-width:900px){
+    #atlas-toolbar,body[data-sidebar-open="true"] #atlas-toolbar{padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px))!important;gap:10px!important}
+    #atlas-toolbar .toolbar-context ol,#atlas-toolbar .toolbar-context li{gap:8px}
+  }
+  @media(max-width:600px){
+    #atlas-toolbar .toolbar-context ol{flex-direction:column;align-items:stretch;gap:1px}
+    #atlas-toolbar .toolbar-context li:first-child{max-width:none}
+    #atlas-toolbar .toolbar-context li:last-child{display:block}
+    #atlas-toolbar .toolbar-context a{font-size:11px}
+    #atlas-toolbar #atlas-current-page{display:block;font-size:13px}
+    #atlas-toolbar .toolbar-chevron{display:none}
+  }
+}

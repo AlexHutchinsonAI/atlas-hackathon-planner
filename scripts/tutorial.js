@@ -102,6 +102,7 @@
     if(host.parentElement!==destination)destination.append(host);
   }
   document.addEventListener('close',followDialog,true);
+  document.addEventListener('atlas-navigation-change',followDialog);
   let pending;new MutationObserver(()=>{clearTimeout(pending);pending=setTimeout(()=>{followDialog();if(active&&context()!==key)start();else schedule();},120);}).observe(document.getElementById('app')||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','data-section','open']});
   let seen=false;try{seen=localStorage.getItem(seenKey)==='1';}catch{}
   if(new URLSearchParams(location.search).get('tutorial')==='1')setTimeout(start,500);
