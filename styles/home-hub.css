@@ -1,0 +1,60 @@
+@layer atlas-readable {
+  body:has(#atlas-sidebar) .readable-home.home-hub{max-width:1240px!important;padding:36px 0 64px!important}
+  .home-hub .home-intro{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:48px;align-items:center;padding:12px 0 36px}
+  .home-hub .read-eyebrow{font-size:11px;letter-spacing:.14em;margin:0 0 18px;color:var(--read-blue)!important}
+  .home-hub .home-welcome h1{font-size:clamp(36px,4.4vw,58px)!important;line-height:1.08!important;letter-spacing:-.045em!important;margin:0 0 20px;font-weight:700!important}
+  .home-hub .home-welcome>p:not(.read-eyebrow){font-size:17px;line-height:1.65;color:var(--read-muted);max-width:55ch;margin:0}
+  .home-start-actions{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin-top:24px}
+  .home-hub .home-start-button{display:inline-flex;align-items:center;justify-content:space-between;gap:24px;min-height:48px;padding:12px 18px;border-radius:8px;background:#153962;color:#fff!important;font-size:15px;font-weight:600;text-decoration:none!important}
+  .home-hub .home-start-button:hover{background:#1b4c80}
+  .home-hub .home-progress-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:14px;font-weight:600}
+  .home-hub .home-event{padding:26px;background:#153962;color:#fff!important;border:1px solid #315779;border-radius:14px;box-shadow:0 6px 20px #1029420a}
+  .home-hub .home-event-label{margin:0 0 12px;letter-spacing:.16em;font-size:10px;font-weight:600;color:#c5d7eb!important}
+  .home-hub .home-event h2{font-size:22px!important;line-height:1.3!important;color:#fff!important;margin:0 0 22px;letter-spacing:-.02em!important}
+  .home-event dl{display:grid;gap:16px;margin:0}
+  .home-event dt{display:flex;align-items:center;gap:10px}
+  .home-event dt svg{width:20px;height:20px;color:#c5d7eb}
+  .home-event dt span{font-size:11px;color:#c5d7eb}
+  .home-event dd{margin:2px 0 0 30px;font-size:14px;color:#fff}
+  .home-hub .home-event-note{border-top:1px solid #466687;padding-top:18px;margin:22px 0 0;font-size:12px;line-height:1.6;color:#dce7f4!important}
+  .home-sections{border-top:1px solid var(--read-line);padding-top:30px}
+  .home-hub .home-section-heading h2{font-size:25px!important;letter-spacing:-.025em!important;margin:0 0 6px}
+  .home-section-heading p{font-size:15px;color:var(--read-muted);margin:0 0 22px}
+  .home-section-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  .home-hub .home-section-card{display:flex;flex-direction:column;min-width:0;padding:24px;border:1px solid var(--read-line);border-radius:12px;background:var(--read-panel);color:var(--read-ink)!important;text-decoration:none!important;box-shadow:0 3px 12px #10294203;transition:border-color .15s,box-shadow .15s}
+  .home-hub .home-section-card:hover{border-color:var(--read-blue);box-shadow:0 6px 18px #1029420b}
+  .home-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .home-card-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:#eef3fc;color:#174ba8}
+  .home-hub .home-start-label{border:1px solid #c7d8f7;border-radius:20px;background:#eef3fc;padding:4px 9px;font-size:11px;font-weight:600;color:#174ba8!important}
+  .home-hub .home-section-card h3{font-size:20px!important;line-height:1.3!important;letter-spacing:-.02em!important;margin:0 0 10px}
+  .home-hub .home-section-card p{margin:0 0 24px;font-size:15px;line-height:1.65;color:var(--read-muted)}
+  .home-card-action{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:16px;margin-top:auto;border-top:1px solid var(--read-line);color:var(--read-blue);font-size:13px;font-weight:600}
+  .home-card-action>span{font-size:20px;line-height:1}
+  .home-hub .home-first-visit{display:flex;gap:18px;align-items:flex-start;padding:24px;margin-top:24px;border:1px solid var(--read-line);border-radius:12px;background:var(--read-panel)}
+  .home-guide-icon{display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:50%;color:var(--read-blue);background:var(--read-paper);font-size:17px;font-weight:600}
+  .home-hub .home-first-visit h2{font-size:17px!important;margin:0 0 6px}
+  .home-first-visit p{margin:0;font-size:14px;line-height:1.65;color:var(--read-muted);max-width:95ch}
+  html[data-theme="dark"] .home-card-icon,html[data-theme="dark"] .home-start-label{background:#243d60;color:#c1d9ff!important;border-color:#4b6d99}
+  @media(max-width:1200px){.home-hub .home-intro{gap:28px;grid-template-columns:minmax(0,1fr) 280px}.home-section-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:900px){.home-hub .home-intro{grid-template-columns:minmax(0,1fr) 270px;gap:24px}.home-hub .home-welcome h1{font-size:42px!important}.home-hub .home-welcome>p:not(.read-eyebrow){font-size:16px}}
+  @media(max-width:650px){
+    body:has(#atlas-sidebar) .readable-home.home-hub{padding:24px 0 48px!important}
+    .home-hub .home-intro{grid-template-columns:1fr;gap:24px;padding:8px 0 28px}
+    .home-hub .home-welcome h1{font-size:36px!important;margin-bottom:16px}
+    .home-hub .read-eyebrow{font-size:10px;letter-spacing:.11em;margin-bottom:14px}
+    .home-start-actions{gap:8px;margin-top:20px}
+    .home-hub .home-start-button{width:100%;gap:12px;font-size:14px}
+    .home-hub .home-progress-link{padding-inline:2px}
+    .home-hub .home-event{padding:22px}
+    .home-event dl{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .home-event dt svg{display:none}.home-event dt{display:block}
+    .home-event dd{margin-left:0;font-size:13px;overflow-wrap:anywhere}
+    .home-hub .home-event h2{font-size:20px!important;margin-bottom:18px}.home-event h2 br{display:none}
+    .home-hub .home-event-note{margin-top:18px;padding-top:14px}
+    .home-section-grid{grid-template-columns:1fr;gap:12px}
+    .home-hub .home-section-heading h2{font-size:23px!important}
+    .home-hub .home-section-card{padding:22px}
+    .home-hub .home-first-visit{padding:20px;gap:12px}
+  }
+  @media(prefers-reduced-motion:reduce){.home-hub .home-section-card{transition:none}}
+}

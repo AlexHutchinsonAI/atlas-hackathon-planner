@@ -1,5 +1,9 @@
 # Readable Atlas redesign — review notes
 
+## Local landing-page follow-up — 7 October 2026
+
+Alex requested a different landing page. The local branch `redesign/clear-landing-page` starts at tested sidebar revision `b77202c`. Home now shows a compact welcome, the unchanged event dates/location, six direct section cards, a planning-workspace starting point and a progress-review shortcut. All six previous destination URLs and their explanations/caveats remain. The home tutorial follows the new controls. `index.html#workspace` still opens the workspace. Source records, shared APIs, authentication, permissions, schemas and persistence code are unchanged. This follow-up is local and unpublished; the earlier review below documents the preceding design.
+
 This change improves the existing application's presentation and navigation. It retains the existing repository, Vercel project, planning records, authentication and persistence implementation. The initial readable redesign was published after approval. This revision adds album-style page layouts, a collapsible left navigation and account settings. Alex subsequently requested publication to the existing live Vercel site; publication follows verification.
 
 ## Baseline and review
