@@ -10,7 +10,8 @@
   const bar = document.createElement("aside");
   bar.id = "team-bar";
   const accountButton=document.createElement('button');accountButton.id='atlas-account-control';accountButton.type='button';accountButton.textContent='Sign in';accountButton.setAttribute('aria-label','Sign in to Atlas');
-  const accountStyle=document.createElement('style');accountStyle.textContent='#atlas-account-control{position:relative;flex:none;margin-left:8px;padding:9px 15px;border:1px solid #8eb5e4;border-radius:999px;background:#153b68!important;color:#fff!important;font:600 14px system-ui;box-shadow:0 3px 12px #102d5140;cursor:pointer;white-space:nowrap}@media(max-width:640px){.mission-nav:has(#atlas-account-control){height:auto;min-height:62px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}.mission-nav:has(#atlas-account-control) .nav-tools{width:100%;margin-left:0;justify-content:space-between;gap:8px;flex-wrap:wrap}#atlas-account-control{margin-left:0;padding:8px 12px;font-size:13px}}';document.head.append(accountStyle);document.body.append(accountButton);
+  // Account appearance is defined in the shared component stylesheet.
+  document.body.append(accountButton);
   accountButton.onclick=()=>active?bar.querySelector('[data-team-leave]').click():connect();
   bar.setAttribute("aria-label", "Team connection");
   const setMessage = (text) => {

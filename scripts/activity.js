@@ -1,7 +1,8 @@
 /* Shared account attribution and bounded recent history; no sign-in/session tracking. */
 (()=>{
  const panel=document.createElement('details');panel.id='atlas-activity';panel.innerHTML='<summary>Recent changes · Sign in to view shared history</summary><div class="activity-content"><p data-activity-account></p><p data-activity-notice></p><ol data-activity-events></ol><button type="button" data-activity-refresh>Refresh activity</button></div>';
- const style=document.createElement('style');style.textContent='#atlas-activity{margin:10px auto;width:calc(100% - 28px);max-width:1440px;box-sizing:border-box;border:1px solid #a8bfdd;border-radius:12px;background:#f6f9ff;color:#163853!important;font:14px system-ui}#atlas-activity summary{padding:12px;cursor:pointer;overflow-wrap:anywhere}#atlas-activity .activity-content{padding:0 14px 12px}#atlas-activity ol{padding-left:22px;max-height:360px;overflow:auto}#atlas-activity li{padding:10px 0;border-top:1px solid #c9d8ea;overflow-wrap:anywhere}#atlas-activity li p{margin:5px 0}#atlas-activity time{color:#49627e}#atlas-activity button{padding:8px 12px}#atlas-activity [data-activity-notice]{font-size:12px;color:#49627e}@media(max-width:640px){#atlas-activity{font-size:13px}#atlas-activity summary{padding:10px}}';document.head.append(style);document.body.append(panel);
+ // Activity appearance is defined in the shared component stylesheet.
+ document.body.append(panel);
  const place=()=>{const dock=document.querySelector('.save-dock');if(dock&&dock.nextElementSibling!==panel)dock.after(panel);};place();new MutationObserver(place).observe(document.body,{childList:true,subtree:true});
  let load,actor,timer,inflight=false,epoch=0;
  const format=value=>{const d=new Date(value);return Number.isNaN(d.getTime())?'Time unavailable':d.toLocaleString();};

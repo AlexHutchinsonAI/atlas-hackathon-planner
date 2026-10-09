@@ -64,8 +64,15 @@
       });
       let guide=document.getElementById('read-section-guide');
       if(!guide){guide=document.createElement('header');guide.id='read-section-guide';guide.className='read-guide';guide.tabIndex=-1;views.after(guide);}
-      const key=document.body.dataset.section||'people', [title,copy]=sections[key]||sections.direction;
-      if(guide.dataset.section!==key){guide.dataset.section=key;guide.innerHTML=`<div class="section-cover-copy"><p class="read-eyebrow">ATLAS / ${String(Object.keys(sections).indexOf(key)+1).padStart(2,'0')} / WORKING RECORDS</p><h1>${title}</h1><p>${copy}</p></div><div class="section-cover-art" aria-hidden="true"><i></i><span>${title}</span></div>`;}
+      const key=document.body.dataset.section||'people';let [title,copy]=sections[key]||sections.direction;
+      const peopleMode=document.querySelector('[data-pmode][aria-pressed="true"]')?.dataset.pmode||'directory';
+      const peopleViews={stakeholders:['Stakeholders','Review engagement groups and available contacts. Recommendations and prospects remain separate from confirmations.'],map:['Communication map','Explore the recorded communication stages and open the people in each stage.'],schools:['Schools & institutions','Explore the institution network, its locations and the supporting school records.']};
+      if(key==='people'&&peopleViews[peopleMode])[title,copy]=peopleViews[peopleMode];
+      let detail='';try{detail=decodeURIComponent(location.hash.slice(1).split('/')[1]||'');}catch{}
+      const contentArea=key==='web'&&window.AtlasOperationsNavigation?.webAreas().find(area=>area.id===detail);
+      if(contentArea){title=contentArea.title;copy='Review this content area, its owner, recorded review notes and publication status. Ready status does not publish the website.';}
+      const guideKey=key+'|'+(key==='people'?peopleMode:detail)+'|'+title;
+      if(guide.dataset.view!==guideKey){guide.dataset.section=key;guide.dataset.view=guideKey;guide.innerHTML=`<div class="section-cover-copy"><p class="read-eyebrow">ATLAS / ${String(Object.keys(sections).indexOf(key)+1).padStart(2,'0')} / WORKING RECORDS</p><h1></h1><p></p></div>`;guide.querySelector('h1').textContent=title;guide.querySelector('.section-cover-copy>p:last-child').textContent=copy;}
       let extra=document.getElementById('read-more-sections');
       if(!extra){
         extra=document.createElement('details');extra.id='read-more-sections';extra.className='read-more-sections';
@@ -78,7 +85,11 @@
     const wrap=document.querySelector('body.atlas-operations .wrap');if(wrap && wrap.getAttribute('role')!=='main')wrap.setAttribute('role','main');
     const panel=document.getElementById('panel');if(panel){panel.setAttribute('role','region');panel.setAttribute('aria-label','Selected operations workstream');}
     const register=document.querySelector('#notebookView > nav.register');
-    if(register && !register.closest('.notebook-management')){const management=document.createElement('details');management.className='notebook-management';management.innerHTML='<summary>Manage workstreams · filter or add</summary>';register.before(management);management.append(register);}
+    if(register && !register.closest('.notebook-management')){const management=document.createElement('details');management.className='notebook-management';management.open=true;management.innerHTML='<summary>Workstream register · filter or add</summary>';register.before(management);management.append(register);}
+    const observatory=document.getElementById('operations-observatory');
+    if(observatory&&!observatory.closest('.operations-overview-summary')){const summary=document.createElement('details');summary.className='brief operations-overview-summary';summary.innerHTML='<summary>Planning completeness · all operations workstreams</summary>';observatory.before(summary);summary.append(observatory);}
+    const web=document.getElementById('webView');
+    for(const [node,label] of [[web?.querySelector(':scope>.visual-distribution'),'Content workflow · all website areas'],[web?.querySelector(':scope>.goalbox'),'Website launch checklist']])if(node){const summary=document.createElement('details');summary.className='brief website-context';summary.innerHTML='<summary></summary>';summary.querySelector('summary').textContent=label;node.before(summary);summary.append(node);}
     const footer=document.querySelector('body.atlas-operations footer.bar');if(footer)footer.setAttribute('role','group');
     document.querySelectorAll('header.atlas-page-intro,.read-guide').forEach(header=>header.setAttribute('role','group'));
     const map=document.getElementById('atlasMap');if(map)map.setAttribute('role','region');
