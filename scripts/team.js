@@ -123,6 +123,7 @@
       lockView();
       window.AtlasActivity?.connect({actor,load:()=>request("GET",null,"/api/team-activity")});
       setMessage(`Signed in as ${actor.email} · ${actor.readOnly ? 'view only' : 'cloud autosave enabled'}`);
+      window.AtlasMembers?.connect({id:actor.id,token:()=>config.provider==='firebase'?window.AtlasFirebaseAuth.token():window.Clerk.session?.getToken(),profile:()=>config.provider==='firebase'?window.AtlasFirebaseAuth.profile():{name:window.Clerk.user?.fullName||''}});
     } catch (e) {
       setMessage(e.message || "Sign-in unavailable. Your draft is unchanged.");
     } finally {connecting=false;}
@@ -219,6 +220,7 @@
         queue?.stop();
         active = false;
         window.AtlasActivity?.disconnect();
+        await window.AtlasMembers?.disconnect();
         if(config.provider === "firebase")await window.AtlasFirebaseAuth.signOut();else await window.Clerk?.signOut();
         location.reload();
       }
@@ -233,7 +235,8 @@
         } else if(c.provider === 'firebase') {
           window.AtlasFirebaseAuth.init(c.firebase,c.verifiedEditors).then(()=>{
             window.AtlasFirebaseAuth.listen(({id,verified})=>{
-              if(active && (!id || id !== connectedActorId)){queue?.stop();active=false;actor=null;window.AtlasActivity?.disconnect();location.reload();return;}
+              if(id&&verified)window.AtlasMembers?.connect({id,token:()=>window.AtlasFirebaseAuth.token(),profile:()=>window.AtlasFirebaseAuth.profile()});else window.AtlasMembers?.disconnect({keepalive:true});
+              if(active && (!id || id !== connectedActorId)){queue?.stop();active=false;actor=null;window.AtlasActivity?.disconnect();window.AtlasMembers?.disconnect({keepalive:true});location.reload();return;}
               if(id && verified && !active)connect();
             });
           }).catch(()=>setMessage('Sign-in could not load. Personal drafts remain available.'));
@@ -242,8 +245,9 @@
           loadClerk()
             .then(() => {
               window.Clerk.addListener(({ session, user }) => {
+                if(session&&user?.id)window.AtlasMembers?.connect({id:user.id,token:()=>window.Clerk.session?.getToken(),profile:()=>({name:window.Clerk.user?.fullName||''})});else window.AtlasMembers?.disconnect({keepalive:true});
                 if (session && !active) connect();
-                if (active && (!session || (user?.id && user.id !== connectedActorId))) {queue?.stop();active=false;actor=null;window.AtlasActivity?.disconnect();location.reload();}
+                if (active && (!session || (user?.id && user.id !== connectedActorId))) {queue?.stop();active=false;actor=null;window.AtlasActivity?.disconnect();window.AtlasMembers?.disconnect({keepalive:true});location.reload();}
               });
             })
             .catch(() =>

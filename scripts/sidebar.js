@@ -12,7 +12,7 @@
   const sidebar=document.createElement('aside');sidebar.id='atlas-sidebar';sidebar.setAttribute('aria-label','Atlas navigation');
   sidebar.innerHTML=`<div class="sidebar-brand"><a href="${prefix}index.html" aria-label="Atlas home"><img src="${prefix}assets/intellibus-logo.svg" alt="Intellibus" width="140" height="27"></a><button type="button" id="atlas-menu-close" aria-label="Close navigation"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 4v16" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div><p class="sidebar-caption">ATLAS · JAMAICA 2027</p><nav id="atlas-sidebar-links" aria-label="Planner pages and views"></nav><p class="sidebar-footnote">23–24 January · Montego Bay<br>Planning records & working proposals</p>`;
   const backdrop=document.createElement('button');backdrop.id='atlas-sidebar-backdrop';backdrop.type='button';backdrop.setAttribute('aria-label','Close navigation');backdrop.tabIndex=-1;
-  sidebar.querySelector('.sidebar-brand').innerHTML=`<a href="${prefix}index.html" aria-label="Atlas dashboard"><span class="brand-mark">${icon('panels-top-left')}</span><span class="brand-wordmark">ATLAS</span></a><button type="button" id="atlas-menu-close" aria-label="Collapse navigation">${icon('panel-left',18)}</button>`;
+  sidebar.querySelector('.sidebar-brand').innerHTML=`<a href="${prefix}index.html" aria-label="Atlas dashboard"><span class="brand-mark"><img src="${prefix}assets/intellibus-logo.svg" alt="Intellibus" width="166" height="31"></span><span class="brand-wordmark">ATLAS</span></a><button type="button" id="atlas-menu-close" aria-label="Collapse navigation">${icon('panel-left',18)}</button>`;
   sidebar.querySelector('.sidebar-caption').textContent='Hackathon planning · Jamaica 2027';
   sidebar.querySelector('.sidebar-footnote').remove();
   const footer=document.createElement('div');footer.className='sidebar-footer';
@@ -20,10 +20,16 @@
   sidebar.append(footer);
   const searchButton=document.createElement('button');searchButton.type='button';searchButton.className='toolbar-search';searchButton.id='atlas-search-open';searchButton.setAttribute('aria-haspopup','dialog');searchButton.setAttribute('aria-label','Find pages and planning views');searchButton.innerHTML=`${icon('search',17)}<span>Find pages & views</span><kbd>⌘ K</kbd>`;toolbar.querySelector('.nav-tools').prepend(searchButton);
   document.body.prepend(toolbar,sidebar,backdrop);
+  window.AtlasMembers?.mountToolbar(toolbar);
   const toggle=toolbar.querySelector('button'),close=sidebar.querySelector('button'),links=sidebar.querySelector('nav');
   let open=innerWidth>900,key='',scheduled=false,pendingFocus=false;
   const groups={},inert=new Map();
-  const accountState=()=>window.AtlasTeam?{active:window.AtlasTeam.active,email:document.getElementById('atlas-account-control')?.title||'',role:window.AtlasTeam.readOnly?'View only':window.AtlasTeam.canAdmin()?'Owner':'Editor'}:window.AtlasPageAccount?.current||{active:false};
+  const accountState=()=>{
+    if(!window.AtlasTeam)return window.AtlasPageAccount?.current||{active:false};
+    if(window.AtlasTeam.active)return {active:true,email:document.getElementById('atlas-account-control')?.title||'',role:window.AtlasTeam.readOnly?'View only':window.AtlasTeam.canAdmin()?'Owner':'Editor'};
+    if(window.AtlasMembers?.current.signedIn)return {active:true,email:window.AtlasFirebaseAuth?.profile()?.email||window.Clerk?.user?.primaryEmailAddress?.emailAddress||'',role:'Shared plan not connected'};
+    return {active:false};
+  };
   function modal(){return innerWidth<=900;}
   function setOpen(next,focus=false){
     const changed=open!==next,wasModal=sidebar.hasAttribute('aria-modal');
@@ -82,8 +88,9 @@
     links.querySelectorAll('details[data-group]').forEach(detail=>{groups[detail.dataset.group]=detail.open;});
     const account=document.getElementById('atlas-account-control'),theme=document.getElementById('atlas-theme-toggle'),tools=toolbar.querySelector('.nav-tools');
     for(const node of [account,theme])if(node&&node.parentElement!==tools)tools.append(node);
-    if(account&&accountState().active){const email=accountState().email;if(account.dataset.profileEmail!==email||!account.querySelector('.account-avatar')){account.dataset.profileEmail=email;account.innerHTML=`<span class="account-avatar" aria-hidden="true">${esc(email.slice(0,1).toUpperCase())}</span><span class="sr-only">Account settings</span>`;}account.setAttribute('aria-label','Open account settings');account.setAttribute('aria-haspopup','dialog');}
-    else if(account){account.removeAttribute('aria-haspopup');account.setAttribute('aria-label','Sign in to Atlas');delete account.dataset.profileEmail;}
+    const member=window.AtlasMembers?.current;
+    if(account&&accountState().active){const email=accountState().email,avatarKey=email+'|'+(member?.photo||'');if(account.dataset.profileEmail!==avatarKey||!account.querySelector('.account-avatar,.member-avatar')){account.dataset.profileEmail=avatarKey;account.innerHTML='<span class="sr-only">Account settings</span>';if(window.AtlasMembers)account.prepend(window.AtlasMembers.avatar(member.name,member.photo));else account.insertAdjacentHTML('afterbegin',`<span class="account-avatar" aria-hidden="true">${esc(email.slice(0,1).toUpperCase())}</span>`);}account.setAttribute('aria-label','Open account settings');account.setAttribute('aria-haspopup','dialog');}
+    else if(account){if(account.querySelector('.account-avatar,.member-avatar'))account.textContent='Sign in';account.removeAttribute('aria-haspopup');account.setAttribute('aria-label','Sign in to Atlas');delete account.dataset.profileEmail;}
     const planner=window.AtlasPlannerNavigation,ctx=planner?.context(),workstreams=planner?.workstreams()||[],operations=window.AtlasOperationsNavigation?.workstreams()||[];
     let workspace=link('workspace.html','Workspace overview',true)+reviews.map(([id,label])=>link('workspace.html#review/'+id,label,true)).join('');
     if(planner){workspace+=group('areas','Planning areas',planner.areas().map(a=>link('workspace.html#area/'+encodeURIComponent(a.id),a.title,true)).join(''));workspace+=group('workstreams','Planning workstreams',workstreams.map(w=>link('workspace.html#workstream/'+encodeURIComponent(w.id)+'/list',w.title,true)).join(''),!!ctx?.wsId);}
@@ -100,9 +107,10 @@
     if(sectionLink.getAttribute('href')!==prefix+url)sectionLink.setAttribute('href',prefix+url);
     if(pageLabel.textContent!==title){pageLabel.textContent=title;pageLabel.title=title;}
     const state=accountState(),profile=footer.querySelector('#atlas-sidebar-profile');
-    const profileHTML=`${icon(state.active?'users':'log-in',18)}<span>${state.active?'Your account':'Sign in'}<small>${esc(state.active?state.email:'Open the shared team plan')}</small></span>`;
-    const profileKey=String(Boolean(state.active))+'|'+(state.email||'');
-    if(profile.dataset.profileKey!==profileKey){profile.dataset.profileKey=profileKey;profile.innerHTML=profileHTML;}
+    const memberStatus=member?.state==='online'?'Online':member?.state==='offline'?'Offline':'Connection unknown';
+    const profileHTML=`${icon(state.active?'users':'log-in',18)}<span>${state.active?'Your account':'Sign in'}<small>${esc(state.active?state.email:'Open the shared team plan')}</small>${state.active&&member?`<span class="member-presence ${esc(member.state)}">${memberStatus}</span>`:''}</span>`;
+    const profileKey=String(Boolean(state.active))+'|'+(state.email||'')+'|'+(member?.photo||'')+'|'+(member?.state||'');
+    if(profile.dataset.profileKey!==profileKey){profile.dataset.profileKey=profileKey;profile.innerHTML=profileHTML;if(state.active&&window.AtlasMembers){profile.firstElementChild.replaceWith(window.AtlasMembers.avatar(member.name,member.photo));}}
     profile.title=state.active?'Your account · '+state.email:'Sign in to Atlas';
     searchIndex=[
       {title:'Dashboard',href:'index.html',type:'Home',icon:'layout-dashboard'},
@@ -121,15 +129,17 @@
   function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(refresh);}}
   // The original account button and sign-out action retain all authentication guards.
   const dialog=document.createElement('dialog');dialog.id='atlas-account-settings';dialog.setAttribute('aria-labelledby','account-settings-title');
-  dialog.innerHTML='<form method="dialog"><button aria-label="Close account settings">×</button></form><p class="read-eyebrow">YOUR ACCOUNT</p><h2 id="account-settings-title">Account settings</h2><div id="account-current-info"></div><p>Shared edits use this signed-in account. Personal browser drafts remain separate.</p><button type="button" id="account-appearance">Change light / dark mode</button><button type="button" id="account-logout">Sign out</button>';
+  dialog.innerHTML='<form method="dialog"><button aria-label="Close account settings">×</button></form><p class="read-eyebrow">YOUR ACCOUNT</p><h2 id="account-settings-title">Account settings</h2><div id="account-current-info"></div><p>Shared edits use this signed-in account. Personal browser drafts remain separate.</p><button type="button" id="account-connect" hidden>Load shared plan</button><button type="button" id="account-appearance">Change light / dark mode</button><button type="button" id="account-logout">Sign out</button>';
   document.body.append(dialog);
+  window.AtlasMembers?.mountSettings(dialog);
   let settingsTrigger;
-  function showSettings(trigger){const state=accountState();settingsTrigger=trigger;if(open&&modal())setOpen(false);dialog.querySelector('#account-current-info').innerHTML=state.active?`<p><strong>Email</strong><br>${esc(state.email)}</p><p><strong>${window.AtlasTeam?'Planner access':'Account status'}</strong><br>${esc(state.role)}</p>`:'<p>You are signed out. Sign in to open the shared team plan.</p>';dialog.querySelector('#account-logout').hidden=!state.active;dialog.showModal();}
+  function showSettings(trigger){const state=accountState();settingsTrigger=trigger;if(open&&modal())setOpen(false);dialog.querySelector('#account-current-info').innerHTML=state.active?`<p><strong>Email</strong><br>${esc(state.email)}</p><p><strong>${window.AtlasTeam?'Planner access':'Account status'}</strong><br>${esc(state.role)}</p>`:'<p>You are signed out. Sign in to open the shared team plan.</p>';dialog.querySelector('#account-logout').hidden=!state.active;dialog.querySelector('#account-connect').hidden=!(state.active&&window.AtlasTeam&&!window.AtlasTeam.active);dialog.showModal();}
   document.addEventListener('click',e=>{if(e.target.closest('#atlas-account-control')&&accountState().active){e.preventDefault();e.stopImmediatePropagation();showSettings(e.target.closest('#atlas-account-control'));}},true);
   footer.querySelector('#atlas-sidebar-settings').onclick=e=>showSettings(e.currentTarget);
   footer.querySelector('#atlas-sidebar-profile').onclick=()=>document.getElementById('atlas-account-control')?.click();
   footer.querySelector('#atlas-sidebar-help').onclick=()=>{if(modal())setOpen(false);document.getElementById('atlas-tutorial')?.shadowRoot?.getElementById('launch')?.click();};
   dialog.querySelector('#account-appearance').onclick=()=>document.getElementById('atlas-theme-toggle')?.click();
+  dialog.querySelector('#account-connect').onclick=()=>{dialog.close();document.querySelector('#team-bar [data-team-connect]')?.click();};
   dialog.querySelector('#account-logout').onclick=()=>{dialog.close();if(window.AtlasTeam)document.querySelector('#team-bar [data-team-leave]')?.click();else window.AtlasPageAccount?.signOut();};
   dialog.addEventListener('close',()=>{const destination=settingsTrigger?.getClientRects().length?settingsTrigger:toggle;destination?.focus();});
   let searchIndex=[],searchTrigger;
