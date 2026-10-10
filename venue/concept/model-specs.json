@@ -1,0 +1,194 @@
+{
+  "folding-table-6ft": {
+    "label": "6 ft centre-fold coding table",
+    "sourceDimensionsM": {
+      "length": 1.8288,
+      "width": null,
+      "height": null
+    },
+    "illustrativeGeometryM": {
+      "length": 1.8288,
+      "width": 0.9144,
+      "height": 0.74,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "event-chair": {
+    "label": "Host/guest event chair",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.48,
+      "depth": 0.55,
+      "height": 0.86,
+      "seatHeight": 0.45,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "sit-stand-desk": {
+    "label": "Height-adjustable operations desk",
+    "sourceDimensionsM": {
+      "topThickness": 0.025
+    },
+    "illustrativeGeometryM": {
+      "width": 1.4,
+      "depth": 0.7,
+      "height": 0.75,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "acrylic-podium": {
+    "label": "Clear acrylic podium",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.6,
+      "depth": 0.5,
+      "height": 1.1,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "acrylic-counter": {
+    "label": "Clear acrylic registration counter",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 1.2,
+      "depth": 0.55,
+      "height": 1.05,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "stage-chair": {
+    "label": "Low-profile stage chair",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.75,
+      "depth": 0.8,
+      "height": 0.82,
+      "seatHeight": 0.43,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "decor-plant": {
+    "label": "Artificial decor plant",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "diameter": 0.55,
+      "height": 1.5,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "water-dispenser": {
+    "label": "Water refill dispenser",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.35,
+      "depth": 0.4,
+      "height": 1.1,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "registration-kiosk": {
+    "label": "Self-service registration kiosk",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.55,
+      "depth": 0.45,
+      "height": 1.5,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "stage": {
+    "label": "Black-skirted modular stage",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 15.24,
+      "depth": 3.6576,
+      "height": 0.762,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    },
+    "conceptDimensionStatus": "User confirmed footprint; height, structural fit and placement remain conceptual"
+  },
+  "main-led": {
+    "label": "Main LED screen",
+    "sourceDimensionsM": {
+      "cabinetWidth": 0.5,
+      "cabinetHeight": 0.5
+    },
+    "illustrativeGeometryM": {
+      "width": 22.86,
+      "height": 6.096,
+      "depth": 0.12,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    },
+    "conceptDimensionStatus": "User confirmed screen face; elevation, mounting and rigging remain conceptual"
+  },
+  "cable-ramp": {
+    "label": "Protected cable crossing",
+    "sourceDimensionsM": {
+      "moduleLength": 1,
+      "minChannelWidth": 0.035,
+      "minChannelHeight": 0.035
+    },
+    "illustrativeGeometryM": {
+      "length": 1,
+      "width": 0.5,
+      "height": 0.05,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "main-pa-array": {
+    "label": "Six-cabinet speech PA array",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.65,
+      "depth": 0.5,
+      "height": 1.8,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "broadcast-camera-tripod": {
+    "label": "Broadcast camera with tripod",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.8,
+      "depth": 0.8,
+      "height": 1.55,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "audio-mixer": {
+    "label": "24-channel audio mixer",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.75,
+      "depth": 0.6,
+      "height": 0.18,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "power-strip": {
+    "label": "Ten-outlet table power strip",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "length": 0.65,
+      "width": 0.075,
+      "height": 0.04,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 /* Navigation and account presentation only. Never writes a planning record or browser storage. */
 (() => {
   if(self!==top)return;
-  const prefix=location.pathname.includes('/venue/')?'../':'';
+  const prefix=location.pathname.includes('/venue/concept/')?'../../':location.pathname.includes('/venue/')?'../':'';
   const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const icon=window.AtlasIcon;
   const reviews=[['progress','Progress'],['owners','Ownership'],['recruitment','Recruitment'],['dependencies','Dependencies'],['decisions','Decisions'],['publication','Website readiness']];
@@ -61,6 +61,8 @@
   const group=(id,label,body,defaultOpen=false)=>`<details data-group="${id}" ${(groups[id]??defaultOpen)?'open':''}><summary>${icon(({workspace:'clipboard-list',operations:'panels-top-left',people:'users',venue:'map-pin',areas:'building-2',workstreams:'list-todo'})[id]||'file-text',18)}<span>${esc(label)}</span>${icon('chevron-right',14).replace('atlas-icon','atlas-icon sidebar-chevron')}</summary><div>${body}</div></details>`;
   function pageContext(planner,ctx,selected,operations){
     const path=location.pathname;
+    if(path.endsWith('/venue/concept/index.html'))return ['Venue tours','venue-tours.html','AI Concept Tour'];
+    if(path.endsWith('venue-tours.html'))return ['Atlas','index.html','Venue tours'];
     if(path.endsWith('/venue/index.html'))return ['Venue','virtual-walkthrough.html','Venue explorer'];
     if(path.endsWith('virtual-walkthrough.html'))return ['Venue','virtual-walkthrough.html','Virtual walkthrough'];
     if(path.endsWith('assistant.html'))return ['Atlas','index.html','Atlas Tech assistant'];
@@ -100,7 +102,7 @@
     if(operations.length)operationLinks+=group('operation-workstreams','Workstream plans',link('atlas-reference.html#notebook/prizes','Prizes & recognition',true)+operations.map(w=>link('atlas-reference.html#notebook/'+encodeURIComponent(w.id),w.title,true)).join(''),document.body.dataset.section==='notebook');
     if(document.body.dataset.section==='web'){const items=window.AtlasOperationsNavigation?.webAreas()||[];operationLinks+=group('web-content','Content areas',items.map(x=>link('atlas-reference.html#web/'+encodeURIComponent(x.id),x.title,true)).join(''),true);}
     const rail=[['workspace.html','Planning workspace','clipboard-list'],['workspace.html#review/progress','Delivery reviews','chart-no-axes-combined'],['atlas-reference.html#notebook','Operations register','panels-top-left'],['atlas-reference.html#people/directory','People directory','users'],['atlas-reference.html#transport','Transport','truck'],['virtual-walkthrough.html','Venue walkthrough','map-pin'],['assistant.html','Atlas Tech assistant','bot']];
-    const html=link('index.html','Dashboard',false,'layout-dashboard')+`<div class="sidebar-rail-links">${rail.map(([url,label,shape])=>link(url,label,false,shape)).join('')}</div><p class="sidebar-section-label">Plan & deliver</p>`+group('workspace','Planning workspace',workspace,location.pathname.endsWith('workspace.html'))+group('operations','Operations & delivery',operationLinks,location.pathname.endsWith('atlas-reference.html')&&document.body.dataset.section!=='people')+`<p class="sidebar-section-label">People & places</p>`+group('people','People',people.map(([id,label])=>link('atlas-reference.html#people/'+id,label,true)).join(''),document.body.dataset.section==='people')+link('atlas-reference.html#transport','Transport',false,'truck')+group('venue','Venue',link('virtual-walkthrough.html','Virtual walkthrough',true)+link('venue/index.html','Venue explorer',true)+link('https://virtualtour.mbconventioncentre.com/','Original venue tour ↗',true),/venue|walkthrough/.test(location.pathname))+`<p class="sidebar-section-label">Tools</p>`+link('assistant.html','Atlas Tech assistant',false,'bot');
+    const html=link('index.html','Dashboard',false,'layout-dashboard')+`<div class="sidebar-rail-links">${rail.map(([url,label,shape])=>link(url,label,false,shape)).join('')}</div><p class="sidebar-section-label">Plan & deliver</p>`+group('workspace','Planning workspace',workspace,location.pathname.endsWith('workspace.html'))+group('operations','Operations & delivery',operationLinks,location.pathname.endsWith('atlas-reference.html')&&document.body.dataset.section!=='people')+`<p class="sidebar-section-label">People & places</p>`+group('people','People',people.map(([id,label])=>link('atlas-reference.html#people/'+id,label,true)).join(''),document.body.dataset.section==='people')+link('atlas-reference.html#transport','Transport',false,'truck')+group('venue','Venue',link('venue-tours.html','Choose a venue tour',true)+link('virtual-walkthrough.html','Original Venue Tour',true)+link('venue/index.html','Venue explorer',true)+link('venue/concept/index.html','AI Concept Tour',true)+link('https://virtualtour.mbconventioncentre.com/','Venue source website ↗',true),/venue|walkthrough/.test(location.pathname))+`<p class="sidebar-section-label">Tools</p>`+link('assistant.html','Atlas Tech assistant',false,'bot');
     if(key!==html){key=html;links.innerHTML=html;}
     const [section,url,title]=pageContext(planner,ctx,selected,operations),sectionLink=toolbar.querySelector('#atlas-current-section'),pageLabel=toolbar.querySelector('#atlas-current-page');
     if(sectionLink.textContent!==section){sectionLink.textContent=section;sectionLink.title=section;}
@@ -115,6 +117,9 @@
     searchIndex=[
       {title:'Dashboard',href:'index.html',type:'Home',icon:'layout-dashboard'},
       ...rail.map(([href,title,shape])=>({title,href,type:'Page',icon:shape})),
+      {title:'Choose a venue tour',href:'venue-tours.html',type:'Venue',icon:'map-pin'},
+      {title:'AI Concept Tour',href:'venue/concept/index.html',type:'Venue',icon:'map-pin'},
+      {title:'Original Venue Tour',href:'virtual-walkthrough.html',type:'Venue',icon:'map-pin'},
       ...reviews.map(([id,title])=>({title,href:'workspace.html#review/'+id,type:'Delivery review',icon:'chart-no-axes-combined'})),
       ...ops.map(([id,title])=>({title,href:'atlas-reference.html#'+id,type:'Operations section',icon:'panels-top-left'})),
       ...people.map(([id,title])=>({title,href:'atlas-reference.html#people/'+id,type:'People',icon:'users'})),

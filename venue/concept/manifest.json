@@ -1,0 +1,220 @@
+{
+  "version": 2,
+  "kind": "ai-concept-3d",
+  "initialSceneId": "five-BIGRONE",
+  "model": "exhibition-proof",
+  "layoutStatus": "Exact original CAD table centers, group breaks, two chair marks per table, column footprints and well references retained",
+  "categories": [
+    {
+      "id": "exhibition",
+      "title": "Hall B · Original CAD layout with concept equipment"
+    },
+    {
+      "id": "hall-a",
+      "title": "Hall A · Original CAD layout"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "five-BIGRONE",
+      "sourceViewpointId": "five-BIGRONE",
+      "sourceName": "BIGRONE",
+      "category": "exhibition",
+      "title": "Hall B · Main stage",
+      "position": [
+        27,
+        1.75,
+        78
+      ],
+      "view": {
+        "yaw": 180,
+        "pitch": 8,
+        "fov": 70
+      },
+      "summary": "The original Hall B CAD table centers and group breaks are preserved. Table heights, physical chair silhouettes, venue elevations and additional event equipment are conceptual; this is not a certified room fit.",
+      "hall": "B"
+    },
+    {
+      "id": "five-BIGRTWO",
+      "sourceViewpointId": "five-BIGRTWO",
+      "sourceName": "BIGRTWO",
+      "category": "exhibition",
+      "title": "Hall B · Coding pods",
+      "position": [
+        8,
+        1.75,
+        77
+      ],
+      "view": {
+        "yaw": 90,
+        "pitch": -5,
+        "fov": 70
+      },
+      "summary": "The original Hall B CAD table centers and group breaks are preserved. Table heights, physical chair silhouettes, venue elevations and additional event equipment are conceptual; this is not a certified room fit.",
+      "hall": "B"
+    },
+    {
+      "id": "hall-registration",
+      "sourceViewpointId": "five-BIGRONE",
+      "sourceName": "BIGRONE",
+      "category": "exhibition",
+      "title": "Hall B · Registration & arrival",
+      "position": [
+        44.5,
+        1.75,
+        63
+      ],
+      "view": {
+        "yaw": 0,
+        "pitch": 0,
+        "fov": 70
+      },
+      "summary": "The original Hall B CAD table centers and group breaks are preserved. Table heights, physical chair silhouettes, venue elevations and additional event equipment are conceptual; this is not a certified room fit.",
+      "hall": "B"
+    },
+    {
+      "id": "hall-production",
+      "sourceViewpointId": "five-BIGRTWO",
+      "sourceName": "BIGRTWO",
+      "category": "exhibition",
+      "title": "Hall B · Production & crew",
+      "position": [
+        13,
+        1.75,
+        65.5
+      ],
+      "view": {
+        "yaw": -120,
+        "pitch": -2,
+        "fov": 70
+      },
+      "summary": "The original Hall B CAD table centers and group breaks are preserved. Table heights, physical chair silhouettes, venue elevations and additional event equipment are conceptual; this is not a certified room fit.",
+      "hall": "B"
+    },
+    {
+      "id": "hall-a-coding",
+      "sourceViewpointId": "five-BIGRONE",
+      "sourceName": "BIGRONE",
+      "category": "hall-a",
+      "hall": "A",
+      "title": "Hall A · Coding layout",
+      "position": [
+        27,
+        1.75,
+        1.5
+      ],
+      "view": {
+        "yaw": 180,
+        "pitch": -2,
+        "fov": 70
+      },
+      "summary": "All 256 original Hall A table positions and their two schematic chair marks are retained. Heights, materials and physical chair silhouettes are illustrative. The photographic source’s Hall A/B identity remains unverified."
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "stage",
+      "title": "Main stage & screen",
+      "description": "User-confirmed concept footprint: stage 50 × 12 ft (15.24 × 3.6576 m), main LED face 75 × 20 ft (22.86 × 6.096 m). This does not approve height, mounting, structural loads or room fit. The proposed stage overlaps two equipment-well references that require review.",
+      "position": [
+        27,
+        4,
+        95.6288
+      ],
+      "sceneId": "five-BIGRONE",
+      "hall": "B"
+    },
+    {
+      "id": "coding",
+      "title": "Four-table coding pods",
+      "description": "All 192 original Hall B table centers, row/group IDs and four-table group breaks are preserved. The 6 × 3 ft table footprint is sourced. Two original schematic chair marks per table remain at their source bounds; 3D chair dimensions and table heights are illustrative. No three extra occupied chairs have been invented.",
+      "position": [
+        17,
+        1.3,
+        76
+      ],
+      "sceneId": "five-BIGRTWO",
+      "hall": "B"
+    },
+    {
+      "id": "production",
+      "title": "Production & crew",
+      "description": "Height-adjustable operations desks, audio controls, a camera position and black production screening. Furniture silhouettes and all positions are illustrative; no whole-event inventory totals are assigned to this zone.",
+      "position": [
+        8,
+        1.7,
+        68.5
+      ],
+      "sceneId": "hall-production",
+      "hall": "B"
+    },
+    {
+      "id": "registration",
+      "title": "Registration & arrival",
+      "description": "A conceptual arrival point with self-service registration kiosks, an acrylic counter, blue-and-white wayfinding, plants and water refill. This is a proposed function inside the exhibition proof, not a verified venue room allocation.",
+      "position": [
+        44.5,
+        1.7,
+        59.5
+      ],
+      "sceneId": "hall-registration",
+      "hall": "B"
+    },
+    {
+      "id": "architecture",
+      "title": "Venue architecture reference",
+      "description": "Column and equipment-well footprints follow the supplied venue geometry. Cream walls, ceiling grid and blue glazing reference historic photographs. Wall/ceiling elevations and clear wall faces are unverified. Photographic Hall A/B identity remains unverified.",
+      "position": [
+        9,
+        4,
+        90
+      ],
+      "hall": "B"
+    },
+    {
+      "id": "cables",
+      "title": "Cable crossing",
+      "description": "A visible protected crossing illustrates the cable-management requirement. Its position does not establish approved electrical routing, circulation or emergency egress.",
+      "position": [
+        22,
+        0.35,
+        65
+      ],
+      "hall": "B"
+    },
+    {
+      "id": "layout-review",
+      "title": "Original layout review flags",
+      "hall": "B",
+      "description": "The supplied geometry flags 32 chair-boundary positions, 14 equipment-well positions and two wells under the proposed stage across the full layout. These source flags are preserved; no table or chair mark was moved to hide them. Occupied-chair fit, clearances, well access and egress remain to be reviewed.",
+      "position": [
+        27,
+        1.2,
+        90
+      ]
+    },
+    {
+      "id": "hall-a-layout",
+      "title": "Hall A source positions",
+      "hall": "A",
+      "description": "256 original tables and 512 original schematic chair marks, with their row and four-table group identities. Column/well footprints and source review flags are retained. Physical chair dimensions, all heights and as-built clearances remain unverified.",
+      "position": [
+        27,
+        1.3,
+        25
+      ]
+    }
+  ],
+  "stills": [
+    {
+      "title": "Exhibition concept still",
+      "url": "stills/exhibition-concept-preview.png",
+      "description": "AI concept image · ordinary still preview, not a spherical panorama. Hall A/B identity remains unverified."
+    },
+    {
+      "title": "Coding area concept still",
+      "url": "stills/coding-concept-preview.png",
+      "description": "AI styling preview · ordinary still. Its pictured furniture count is illustrative; the interactive model retains the source CAD positions."
+    }
+  ]
+}

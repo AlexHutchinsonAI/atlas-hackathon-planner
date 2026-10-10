@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI Concept Tour · Atlas</title>
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+  <link rel="stylesheet" href="../../styles/shell.css">
+  <link rel="stylesheet" href="../../styles/members.css">
+  <link rel="stylesheet" href="tour.css">
+  <script src="../../scripts/ui-icons.js"></script>
+  <script src="../../scripts/theme.js"></script>
+</head>
+<body class="atlas-tour-page">
+  <main id="read-main" class="tour-main" tabindex="-1">
+    <header class="tour-intro tour-view-intro">
+      <div><p class="tour-eyebrow">VENUE / AI CONCEPT</p><h1>Explore the event concept</h1>
+      <p>Look around a continuous 3D model inspired by the venue photography.</p></div>
+      <a href="../../venue-tours.html">Choose a different tour <span aria-hidden="true">↗</span></a>
+    </header>
+    <p class="tour-disclosure"><strong>AI concept · Not as built.</strong> Geometry and placement are illustrative. This model does not establish final layouts, equipment totals, purchases or certified fit.</p>
+    <section class="concept-layout" aria-label="Concept tour">
+      <div class="concept-stage">
+        <div id="concept-view" class="concept-view" tabindex="0" role="region" aria-label="Interactive 3D event concept" aria-describedby="concept-instructions" aria-busy="true">
+          <div id="concept-pins" class="concept-pins"></div>
+        </div>
+        <div id="concept-cover" class="concept-cover">
+          <span class="tour-badge" id="concept-state">Loading tour</span>
+          <h2 id="concept-cover-title">Preparing the 3D room</h2>
+          <p id="concept-cover-copy">Please wait a moment.</p>
+          <button type="button" id="concept-retry" hidden>Try again</button>
+          <button type="button" id="concept-cover-original" hidden>Compare original viewpoint</button>
+        </div>
+        <div class="concept-controls" role="group" aria-label="3D view controls">
+          <button type="button" data-look="left" aria-label="Look left" disabled>←</button>
+          <button type="button" data-look="right" aria-label="Look right" disabled>→</button>
+          <button type="button" data-look="up" aria-label="Look up" disabled>↑</button>
+          <button type="button" data-look="down" aria-label="Look down" disabled>↓</button>
+          <button type="button" data-look="in" aria-label="Zoom in" disabled>+</button>
+          <button type="button" data-look="out" aria-label="Zoom out" disabled>−</button>
+          <button type="button" id="concept-overview" aria-pressed="false" disabled>Room overview</button>
+          <button type="button" data-look="reset" disabled>Reset view</button>
+        </div>
+        <p id="concept-instructions" class="concept-instructions">Drag or swipe to look around. Arrow keys turn; + and − zoom. Room overview shows a cutaway you can orbit. Labelled controls offer the same actions.</p>
+      </div>
+      <aside class="concept-sidebar" aria-label="Choose a concept viewpoint">
+        <div><p class="tour-eyebrow">YOUR VIEWPOINT</p><h2 id="concept-title">Loading viewpoints…</h2><p id="concept-category"></p></div>
+        <label for="concept-scene">Choose an event zone</label>
+        <select id="concept-scene" disabled></select>
+        <div class="concept-step-controls"><button type="button" id="concept-prev" disabled>← Previous</button><button type="button" id="concept-next" disabled>Next →</button></div>
+        <p id="concept-progress"></p>
+        <p id="concept-status" role="status" aria-live="polite">Loading the concept tour…</p>
+        <button type="button" id="concept-original" disabled>Compare original viewpoint</button>
+        <section class="concept-details" aria-label="Viewpoint details"><h3>About this concept</h3><p id="concept-summary"></p><p id="concept-source" class="tour-note"></p></section>
+        <section class="concept-details" aria-labelledby="concept-hotspot-title"><h3 id="concept-hotspot-title">Explore the details</h3><div id="concept-hotspots"></div></section>
+      </aside>
+    </section>
+    <p class="tour-note" id="concept-layout-status">Original CAD table positions retained. Concept stage 50 × 12 ft and screen 75 × 20 ft; heights, rigging and fit remain unverified. Original tour unchanged.</p>
+    <section class="concept-stills" aria-labelledby="concept-stills-title"><h2 id="concept-stills-title">AI concept image previews</h2><p>Ordinary still images for styling review. The interactive room above is a continuous 3D scene.</p><div id="concept-stills"></div></section>
+    <noscript><p>This concept viewer needs JavaScript. <a href="../../virtual-walkthrough.html">Open the Original Venue Tour</a>.</p></noscript>
+  </main>
+  <dialog id="concept-detail-dialog" aria-labelledby="concept-detail-title"><form method="dialog"><button aria-label="Close concept detail">Close</button></form><span class="tour-badge">AI concept · Illustrative</span><h2 id="concept-detail-title"></h2><p id="concept-detail-copy"></p><button type="button" id="concept-detail-go" hidden>Open linked viewpoint</button></dialog>
+  <dialog id="concept-original-dialog" class="original-compare" aria-labelledby="concept-original-title"><header><h2 id="concept-original-title">Original venue photography</h2><form method="dialog"><button aria-label="Close original comparison">Close</button></form></header><p id="concept-original-label"></p><div id="concept-original-frame"></div><p class="tour-note">Historic venue photography · Original viewer, unchanged.</p></dialog>
+  <script type="module" src="viewer.js"></script>
+  <script src="../../scripts/tutorial.js"></script>
+  <script src="../../scripts/readable.js"></script>
+  <script src="../../scripts/member-account.js"></script>
+  <script src="../../scripts/firebase-auth.js"></script>
+  <script src="../../scripts/account-pages.js"></script>
+  <script src="../../scripts/sidebar.js"></script>
+</body>
+</html>
