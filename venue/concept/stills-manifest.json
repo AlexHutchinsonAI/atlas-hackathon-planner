@@ -1,0 +1,120 @@
+[
+  {
+    "id": "main-stage",
+    "title": "Proposed main-stage setup",
+    "url": "stills/main-stage.png",
+    "sourceSceneIds": [
+      "five-BIGRTWO"
+    ],
+    "description": "AI concept still · 50 × 12 ft stage and 75 × 20 ft LED concept dimensions confirmed by user; source photo's A/B identity remains unverified. Still proportions are illustrative, not measured CAD.",
+    "width": 1672,
+    "height": 941,
+    "panorama": false,
+    "sha256": "d7a5da8411018234244fac39b462df9d2917e6dd7b4c77c900f7a7b138d1f56f"
+  },
+  {
+    "id": "coding-exhibition",
+    "title": "Proposed coding and exhibition area",
+    "url": "stills/coding-exhibition.png",
+    "sourceSceneIds": [
+      "five-BIGRONE"
+    ],
+    "description": "AI concept still · Representative table groups and a few blank demonstration pods. Exact floor-plan coordinates and count are not depicted; source photo's A/B identity unverified.",
+    "width": 1536,
+    "height": 1024,
+    "panorama": false,
+    "sha256": "82c38b9f7e69e90ec2a73479fdf7a4f74543243b60c90612920c33adef20b172"
+  },
+  {
+    "id": "registration",
+    "title": "Proposed registration foyer",
+    "url": "stills/registration.png",
+    "sourceSceneIds": [
+      "three-OUTBALLONE"
+    ],
+    "description": "AI concept still · Based on authentic foyer architecture; event registration location and kiosk allocation are proposals.",
+    "width": 1536,
+    "height": 1024,
+    "panorama": false,
+    "sha256": "57d0cb0c5481001d916766aced9c38b1d3f29839bd8018c9775e865620ff132b"
+  },
+  {
+    "id": "rest-wellness",
+    "title": "Proposed rest and wellness area",
+    "url": "stills/rest-wellness.png",
+    "sourceSceneIds": [
+      "three-BALLROOM2"
+    ],
+    "description": "AI concept still · Representative cot section and wellness pocket. No 300/500-cot capacity claim. Final circulation and room allocation need venue confirmation.",
+    "width": 1536,
+    "height": 1024,
+    "panorama": false,
+    "sha256": "e0c501087476505963d6c00b0378e40a9d2fdc42a4b07b78e6e257a66537cd00"
+  },
+  {
+    "id": "judges-vip",
+    "title": "Proposed judges/VIP lounge style",
+    "url": "stills/judges-vip.png",
+    "sourceSceneIds": [
+      "six-C456"
+    ],
+    "description": "AI concept still · Style view of larger combined meeting-room architecture, not an approved room assignment. About ten sofas visibly shown, so this image does NOT demonstrate all 14. Procedural model must separately instantiate seven of each user-reference type; actual fit and dimensions unknown.",
+    "width": 1536,
+    "height": 1024,
+    "panorama": false,
+    "sha256": "4db17edd364a703ca9afa54eed8479a3688f1eb113c3920c87fdc971112f6346"
+  },
+  {
+    "id": "covered-dining",
+    "title": "Proposed covered dining area",
+    "url": "stills/covered-dining.png",
+    "sourceSceneIds": [
+      "four-OUTWED1"
+    ],
+    "description": "AI concept still · Covered exterior walkway/courtyard reference; dining furniture allocation is illustrative and circulation remains open. No sourced kitchen/vendor package implied.",
+    "width": 1536,
+    "height": 1024,
+    "panorama": false,
+    "sha256": "461c1384e4defcff8b9864e56416a785cdef3a73ba9e12f97527034f0ef79a06"
+  },
+  {
+    "id": "private-meeting",
+    "title": "Proposed private meeting room",
+    "url": "stills/private-meeting.png",
+    "sourceSceneIds": [
+      "six-3F"
+    ],
+    "description": "AI concept still · Retains source-inspired boardroom character with event notebooks, water and whiteboard. Does not place the fourteen judges' sofas in private rooms.",
+    "width": 1536,
+    "height": 1024,
+    "panorama": false,
+    "sha256": "fd245389c9c08397a5538312735780ca3c1e0bd3e188dd25a3823c92471d228d"
+  },
+  {
+    "id": "small-business-hub",
+    "title": "Proposed small-business hub",
+    "url": "stills/small-business-hub.png",
+    "sourceSceneIds": [
+      "one-INDROOM"
+    ],
+    "description": "AI concept still · Jamaica Room architecture is an inspiration, not an approved event allocation. Small platform, bistro seating and sample pods only. Doorway-blocking first draft was corrected; use this final image only.",
+    "width": 1536,
+    "height": 1024,
+    "panorama": false,
+    "sha256": "d002f3460ae703489fde7bf7163846beab889ac6d8def437bd4313dbf92512bc"
+  },
+  {
+    "id": "exterior-arrival",
+    "title": "Proposed exterior arrival",
+    "url": "stills/exterior-arrival.png",
+    "sourceSceneIds": [
+      "seven-OUTBIGROOM",
+      "two-OUTMIDDLE"
+    ],
+    "description": "AI concept still · Representative feather banners and INTELLIBUS letter sign, all locations/structure/wind approval provisional. No all-banner quantity or installation claim.",
+    "width": 1536,
+    "height": 1024,
+    "panorama": false,
+    "sha256": "0de5e8a64330e4434bdf43567129ee856837ad87bc758e5b9edd75071b29b5e7"
+  }
+]

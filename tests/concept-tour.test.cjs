@@ -17,3 +17,14 @@ test('rendered CAD table matrices and chair-mark bounds preserve source coordina
   group.traverse(node=>{node.geometry?.dispose();node.material?.dispose();});
  }
 });
+test('nine source-mapped previews retain their reviewed image bytes and ordinary image format',()=>{
+ const crypto=require('node:crypto'),stills=read('stills-manifest.json');assert.equal(manifest.stills.length,9);assert.equal(stills.length,9);
+ for(const still of stills){const bytes=fs.readFileSync(path.join(root,'venue/concept',still.url));assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),still.sha256);assert.equal(bytes.readUInt32BE(16),still.width);assert.equal(bytes.readUInt32BE(20),still.height);assert.equal(still.panorama,false);}
+ assert.equal(new Set(manifest.scenes.map(s=>s.model)).size,8);assert.equal(manifest.scenes.length,11);
+});
+test('only one allocation study contains exactly seven full-scale sofas of each requested model',async()=>{
+ const THREE=await import('../vendor/three/three.module.min.js'),{buildConceptSpace}=await import('../venue/concept/spaces.js');
+ const prior=global.document;global.document={createElement:()=>({getContext:()=>({fillRect(){},fillText(){}})})};
+ try{for(const key of new Set(manifest.scenes.filter(s=>s.model!=='exhibition').map(s=>s.model))){const model=buildConceptSpace(THREE,specs,key),sofas=[];model.room.traverse(n=>{if(n.userData.catalogId?.startsWith('sofa-'))sofas.push(n);});assert.equal(sofas.length,key==='judges-vip'?14:0);assert.equal(model.statistics.sofas,sofas.length);for(const sofa of sofas)assert.deepEqual(sofa.scale.toArray(),[1,1,1]);if(key==='judges-vip'){assert.equal(model.statistics.sofaSA50,7);assert.equal(model.statistics.sofaSA21,7);assert.equal(model.statistics.roomFitVerified,false);}model.dispose();}}
+ finally{global.document=prior;}
+});

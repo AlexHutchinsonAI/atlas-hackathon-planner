@@ -2,7 +2,7 @@
   "version": 2,
   "kind": "ai-concept-3d",
   "initialSceneId": "five-BIGRONE",
-  "model": "exhibition-proof",
+  "model": "multi-space-concept",
   "layoutStatus": "Exact original CAD table centers, group breaks, two chair marks per table, column footprints and well references retained",
   "categories": [
     {
@@ -12,6 +12,34 @@
     {
       "id": "hall-a",
       "title": "Hall A · Original CAD layout"
+    },
+    {
+      "id": "registration",
+      "title": "Proposed registration"
+    },
+    {
+      "id": "rest-wellness",
+      "title": "Proposed rest & wellness"
+    },
+    {
+      "id": "judges-vip",
+      "title": "Judges / VIP allocation study"
+    },
+    {
+      "id": "covered-dining",
+      "title": "Proposed covered dining"
+    },
+    {
+      "id": "private-meeting",
+      "title": "Proposed private meeting"
+    },
+    {
+      "id": "small-business",
+      "title": "Proposed small-business hub"
+    },
+    {
+      "id": "exterior-arrival",
+      "title": "Proposed exterior arrival"
     }
   ],
   "scenes": [
@@ -32,7 +60,10 @@
         "fov": 70
       },
       "summary": "The original Hall B CAD table centers and group breaks are preserved. Table heights, physical chair silhouettes, venue elevations and additional event equipment are conceptual; this is not a certified room fit.",
-      "hall": "B"
+      "hall": "B",
+      "model": "exhibition",
+      "stillId": "main-stage",
+      "overviewDistance": 52
     },
     {
       "id": "five-BIGRTWO",
@@ -51,26 +82,10 @@
         "fov": 70
       },
       "summary": "The original Hall B CAD table centers and group breaks are preserved. Table heights, physical chair silhouettes, venue elevations and additional event equipment are conceptual; this is not a certified room fit.",
-      "hall": "B"
-    },
-    {
-      "id": "hall-registration",
-      "sourceViewpointId": "five-BIGRONE",
-      "sourceName": "BIGRONE",
-      "category": "exhibition",
-      "title": "Hall B · Registration & arrival",
-      "position": [
-        44.5,
-        1.75,
-        63
-      ],
-      "view": {
-        "yaw": 0,
-        "pitch": 0,
-        "fov": 70
-      },
-      "summary": "The original Hall B CAD table centers and group breaks are preserved. Table heights, physical chair silhouettes, venue elevations and additional event equipment are conceptual; this is not a certified room fit.",
-      "hall": "B"
+      "hall": "B",
+      "model": "exhibition",
+      "stillId": "coding-exhibition",
+      "overviewDistance": 52
     },
     {
       "id": "hall-production",
@@ -89,7 +104,10 @@
         "fov": 70
       },
       "summary": "The original Hall B CAD table centers and group breaks are preserved. Table heights, physical chair silhouettes, venue elevations and additional event equipment are conceptual; this is not a certified room fit.",
-      "hall": "B"
+      "hall": "B",
+      "model": "exhibition",
+      "stillId": "coding-exhibition",
+      "overviewDistance": 52
     },
     {
       "id": "hall-a-coding",
@@ -108,7 +126,157 @@
         "pitch": -2,
         "fov": 70
       },
-      "summary": "All 256 original Hall A table positions and their two schematic chair marks are retained. Heights, materials and physical chair silhouettes are illustrative. The photographic source’s Hall A/B identity remains unverified."
+      "summary": "All 256 original Hall A table positions and their two schematic chair marks are retained. Heights, materials and physical chair silhouettes are illustrative. The photographic source’s Hall A/B identity remains unverified.",
+      "model": "exhibition",
+      "stillId": "coding-exhibition",
+      "overviewDistance": 52
+    },
+    {
+      "id": "hall-registration",
+      "model": "registration",
+      "sourceViewpointId": "three-OUTBALLONE",
+      "sourceName": "OUTBALLONE",
+      "category": "registration",
+      "title": "Proposed registration foyer",
+      "position": [
+        0,
+        1.75,
+        9
+      ],
+      "view": {
+        "yaw": 0,
+        "pitch": 0,
+        "fov": 70
+      },
+      "overviewDistance": 28,
+      "stillId": "registration",
+      "summary": "Source-inspired foyer with acrylic counters, self-service kiosks, wayfinding, plants and water. Its event assignment, dimensions and fit remain proposals."
+    },
+    {
+      "id": "rest-wellness",
+      "model": "rest-wellness",
+      "sourceViewpointId": "three-BALLROOM2",
+      "sourceName": "BALLROOM2",
+      "category": "rest-wellness",
+      "title": "Proposed rest & wellness",
+      "position": [
+        -5,
+        1.75,
+        9
+      ],
+      "view": {
+        "yaw": 0,
+        "pitch": -4,
+        "fov": 70
+      },
+      "overviewDistance": 39,
+      "stillId": "rest-wellness",
+      "summary": "A representative cot section and wellness pocket inspired by Grand Ballroom photography. The model does not select a 300- or 500-cot capacity, approve circulation or assign the room."
+    },
+    {
+      "id": "judges-vip",
+      "model": "judges-vip",
+      "sourceViewpointId": "six-C456",
+      "sourceName": "C456",
+      "category": "judges-vip",
+      "title": "Judges / VIP sofa allocation study",
+      "position": [
+        0,
+        1.75,
+        11
+      ],
+      "view": {
+        "yaw": 0,
+        "pitch": -4,
+        "fov": 70
+      },
+      "overviewDistance": 43,
+      "stillId": "judges-vip",
+      "summary": "Exactly seven SA-50 and seven SA-21 sofas are shown in one open allocation study. Larger combined meeting-room architecture provides a style reference. Actual room assignment, sofa dimensions and fit remain unverified; no measured room boundary is implied."
+    },
+    {
+      "id": "covered-dining",
+      "model": "covered-dining",
+      "sourceViewpointId": "four-OUTWED1",
+      "sourceName": "OUTWED1",
+      "category": "covered-dining",
+      "title": "Proposed covered dining",
+      "position": [
+        0,
+        1.75,
+        12
+      ],
+      "view": {
+        "yaw": 0,
+        "pitch": -2,
+        "fov": 70
+      },
+      "overviewDistance": 38,
+      "stillId": "covered-dining",
+      "summary": "Representative dining furniture in a concept inspired by the stone-column exterior covered walkway. The source does not approve this dining location, its furniture total, kitchen provision or circulation."
+    },
+    {
+      "id": "private-meeting",
+      "model": "private-meeting",
+      "sourceViewpointId": "six-3F",
+      "sourceName": "3F",
+      "category": "private-meeting",
+      "title": "Proposed private meeting room",
+      "position": [
+        0,
+        1.75,
+        3.4
+      ],
+      "view": {
+        "yaw": 0,
+        "pitch": -8,
+        "fov": 70
+      },
+      "overviewDistance": 16,
+      "stillId": "private-meeting",
+      "summary": "Source-inspired oval boardroom with meeting chairs, notebooks, water and a mobile whiteboard. Room dimensions and event allocation are illustrative. The judges’ fourteen sofas are not repeated here."
+    },
+    {
+      "id": "small-business",
+      "model": "small-business",
+      "sourceViewpointId": "one-INDROOM",
+      "sourceName": "INDROOM",
+      "category": "small-business",
+      "title": "Proposed small-business hub",
+      "position": [
+        0,
+        1.75,
+        6.5
+      ],
+      "view": {
+        "yaw": 0,
+        "pitch": -2,
+        "fov": 70
+      },
+      "overviewDistance": 28,
+      "stillId": "small-business-hub",
+      "summary": "Jamaica Room architecture inspires sample blank exhibition pods, bistro seating and a small presentation platform. Final room allocation, pod quantity, circulation and fit remain unconfirmed."
+    },
+    {
+      "id": "exterior-arrival",
+      "model": "exterior-arrival",
+      "sourceViewpointId": "seven-OUTBIGROOM",
+      "sourceName": "OUTBIGROOM",
+      "category": "exterior-arrival",
+      "title": "Proposed exterior arrival",
+      "position": [
+        0,
+        1.75,
+        17
+      ],
+      "view": {
+        "yaw": 0,
+        "pitch": 4,
+        "fov": 70
+      },
+      "overviewDistance": 65,
+      "stillId": "exterior-arrival",
+      "summary": "Source-inspired exterior approach with blue-and-white arrival signs and representative banners. Their positions, structures and installation remain conceptual, with no whole-event banner total implied."
     }
   ],
   "hotspots": [
@@ -122,7 +290,8 @@
         95.6288
       ],
       "sceneId": "five-BIGRONE",
-      "hall": "B"
+      "hall": "B",
+      "model": "exhibition"
     },
     {
       "id": "coding",
@@ -134,7 +303,8 @@
         76
       ],
       "sceneId": "five-BIGRTWO",
-      "hall": "B"
+      "hall": "B",
+      "model": "exhibition"
     },
     {
       "id": "production",
@@ -146,19 +316,8 @@
         68.5
       ],
       "sceneId": "hall-production",
-      "hall": "B"
-    },
-    {
-      "id": "registration",
-      "title": "Registration & arrival",
-      "description": "A conceptual arrival point with self-service registration kiosks, an acrylic counter, blue-and-white wayfinding, plants and water refill. This is a proposed function inside the exhibition proof, not a verified venue room allocation.",
-      "position": [
-        44.5,
-        1.7,
-        59.5
-      ],
-      "sceneId": "hall-registration",
-      "hall": "B"
+      "hall": "B",
+      "model": "exhibition"
     },
     {
       "id": "architecture",
@@ -169,7 +328,8 @@
         4,
         90
       ],
-      "hall": "B"
+      "hall": "B",
+      "model": "exhibition"
     },
     {
       "id": "cables",
@@ -180,7 +340,8 @@
         0.35,
         65
       ],
-      "hall": "B"
+      "hall": "B",
+      "model": "exhibition"
     },
     {
       "id": "layout-review",
@@ -191,7 +352,8 @@
         27,
         1.2,
         90
-      ]
+      ],
+      "model": "exhibition"
     },
     {
       "id": "hall-a-layout",
@@ -202,19 +364,370 @@
         27,
         1.3,
         25
-      ]
+      ],
+      "model": "exhibition"
+    },
+    {
+      "id": "registration-counters",
+      "model": "registration",
+      "title": "Check-in counters",
+      "position": [
+        0,
+        1.4,
+        -3
+      ],
+      "description": "Two illustrative acrylic counter forms and representative self-service kiosks. This is a proposed foyer function; it does not confirm procurement or event location."
+    },
+    {
+      "id": "registration-reference",
+      "model": "registration",
+      "title": "Foyer architecture",
+      "position": [
+        5,
+        3,
+        0
+      ],
+      "description": "Glazing, columns and timber accents reference three-OUTBALLONE. Model dimensions, clearances and event assignment remain illustrative."
+    },
+    {
+      "id": "registration-hydration",
+      "model": "registration",
+      "title": "Welcome & hydration",
+      "position": [
+        4.5,
+        1.4,
+        6
+      ],
+      "description": "Blue-and-white wayfinding, plants and a water refill point provide an illustrative arrival setup; equipment allocations remain provisional."
+    },
+    {
+      "id": "sa50-allocation",
+      "model": "judges-vip",
+      "title": "Seven SA-50 sectionals",
+      "position": [
+        -4,
+        1,
+        -2.1
+      ],
+      "description": "Seven distinct upper-reference SA-50 sofa objects, with three broad seat masses and curved padded backs. Dimensions are modeling assumptions, not verified vendor specifications."
+    },
+    {
+      "id": "sa21-allocation",
+      "model": "judges-vip",
+      "title": "Seven SA-21 sofas",
+      "position": [
+        -4,
+        1,
+        -5.9
+      ],
+      "description": "Seven distinct lower-reference SA-21 sofa objects, with a crescent base, wraparound back and forward-projecting chaise end. Dimensions remain illustrative."
+    },
+    {
+      "id": "vip-fit",
+      "model": "judges-vip",
+      "title": "Allocation study, room fit unverified",
+      "position": [
+        0,
+        1.2,
+        3
+      ],
+      "description": "The model contains fourteen sofas in total in one proposed judges/VIP allocation. It is an open furniture study, not proof that six-C456 or another measured room can fit them. The still image does not verify the full fourteen."
+    },
+    {
+      "id": "vip-furniture",
+      "model": "judges-vip",
+      "title": "Coffee, bistro & lounge details",
+      "position": [
+        14,
+        1,
+        8.8
+      ],
+      "description": "Representative coffee tables, bistro tables, swivel stools, royal-blue rugs, plants and water appear in lounge functions. Whole-event procurement totals are not distributed across this scene."
+    },
+    {
+      "id": "rest-cots",
+      "model": "rest-wellness",
+      "title": "Representative cot section",
+      "position": [
+        -6,
+        0.8,
+        1
+      ],
+      "description": "Sixteen sample cots illustrate the furniture and blue-and-white pillows/blankets. This sample does not resolve the source’s 300/500 capacity conflict or approve the room allocation."
+    },
+    {
+      "id": "wellness-pocket",
+      "model": "rest-wellness",
+      "title": "Wellness equipment",
+      "position": [
+        10,
+        1.2,
+        0
+      ],
+      "description": "An illustrative automatic massage chair, portable therapy chair, massage table and aroma diffuser are shown separately from the cot section. Quantities and placements are not final."
+    },
+    {
+      "id": "rest-hydration",
+      "model": "rest-wellness",
+      "title": "Water & calm surroundings",
+      "position": [
+        11,
+        1.2,
+        8
+      ],
+      "description": "Water refill, plants and a screened wellness pocket are conceptual elements. Room dimensions and circulation are unverified."
+    },
+    {
+      "id": "dining-furniture",
+      "model": "covered-dining",
+      "title": "Sample dining furniture",
+      "position": [
+        -2.8,
+        1,
+        1
+      ],
+      "description": "Eight representative commercial tables and event chairs are shown, without claiming a final dining total or measured circulation."
+    },
+    {
+      "id": "dining-source",
+      "model": "covered-dining",
+      "title": "Covered exterior walkway",
+      "position": [
+        5,
+        2.5,
+        -5
+      ],
+      "description": "Stone-column, roof-beam and paving cues reference four-OUTWED1, an exterior covered walkway. Indoor six-DINNEROUT1/2 are not described as outdoor terraces."
+    },
+    {
+      "id": "dining-water",
+      "model": "covered-dining",
+      "title": "Shared water point",
+      "position": [
+        4.2,
+        1.2,
+        13
+      ],
+      "description": "A representative water refill point; no kitchen or food-vendor equipment package is invented."
+    },
+    {
+      "id": "boardroom-table",
+      "model": "private-meeting",
+      "title": "Oval meeting table",
+      "position": [
+        0,
+        1,
+        0
+      ],
+      "description": "The oval table and timber room character follow six-3F photography. Physical dimensions and occupancy are illustrative."
+    },
+    {
+      "id": "boardroom-tools",
+      "model": "private-meeting",
+      "title": "Meeting tools",
+      "position": [
+        4,
+        1.4,
+        -2
+      ],
+      "description": "A mobile whiteboard, notebooks and water illustrate a private meeting function. No judges/VIP sofas are placed in this room."
+    },
+    {
+      "id": "boardroom-source",
+      "model": "private-meeting",
+      "title": "Source-inspired room character",
+      "position": [
+        0,
+        3.5,
+        0
+      ],
+      "description": "Cream panels, timber accents and a central lighting feature reference the original boardroom. The model is not a surveyed reconstruction."
+    },
+    {
+      "id": "business-pods",
+      "model": "small-business",
+      "title": "Sample blank exhibition pods",
+      "position": [
+        -5,
+        1.5,
+        -5
+      ],
+      "description": "Two sample 10 × 10 ft footprint pods illustrate the sourced pod size. Their wall height, quantity and placement are conceptual; the 10/100 source quantity conflict is not resolved here."
+    },
+    {
+      "id": "business-bistro",
+      "model": "small-business",
+      "title": "Bistro conversations",
+      "position": [
+        4,
+        1.2,
+        1
+      ],
+      "description": "Bistro tables and swivel stools appear as representative discussion furniture. Their allocations are not whole-event inventory counts."
+    },
+    {
+      "id": "business-room",
+      "model": "small-business",
+      "title": "Jamaica Room reference",
+      "position": [
+        8,
+        3,
+        3
+      ],
+      "description": "Tall cream walls and blue glazing reference one-INDROOM. This does not confirm Jamaica Room as the event small-business hub."
+    },
+    {
+      "id": "arrival-signs",
+      "model": "exterior-arrival",
+      "title": "Arrival signs",
+      "position": [
+        0,
+        6,
+        -11.5
+      ],
+      "description": "Intellibus/Atlas signage illustrates a proposed welcome sequence. Its structure, positions and installation remain unapproved."
+    },
+    {
+      "id": "arrival-banners",
+      "model": "exterior-arrival",
+      "title": "Representative banners",
+      "position": [
+        9,
+        2.2,
+        8
+      ],
+      "description": "Six sample banners appear for styling review, not as a confirmed banner inventory or installation plan."
+    },
+    {
+      "id": "arrival-reference",
+      "model": "exterior-arrival",
+      "title": "Exterior architecture",
+      "position": [
+        18,
+        4,
+        -11
+      ],
+      "description": "Cream facade, glazed entrance, paving and palm-tree cues reference seven-OUTBIGROOM. Geometry and event placement remain illustrative."
     }
   ],
   "stills": [
     {
-      "title": "Exhibition concept still",
-      "url": "stills/exhibition-concept-preview.png",
-      "description": "AI concept image · ordinary still preview, not a spherical panorama. Hall A/B identity remains unverified."
+      "id": "main-stage",
+      "title": "Proposed main-stage setup",
+      "url": "stills/main-stage.png",
+      "sourceSceneIds": [
+        "five-BIGRTWO"
+      ],
+      "description": "AI concept still · 50 × 12 ft stage and 75 × 20 ft LED concept dimensions confirmed by user; source photo's A/B identity remains unverified. Still proportions are illustrative, not measured CAD.",
+      "width": 1672,
+      "height": 941,
+      "panorama": false,
+      "sha256": "d7a5da8411018234244fac39b462df9d2917e6dd7b4c77c900f7a7b138d1f56f"
     },
     {
-      "title": "Coding area concept still",
-      "url": "stills/coding-concept-preview.png",
-      "description": "AI styling preview · ordinary still. Its pictured furniture count is illustrative; the interactive model retains the source CAD positions."
+      "id": "coding-exhibition",
+      "title": "Proposed coding and exhibition area",
+      "url": "stills/coding-exhibition.png",
+      "sourceSceneIds": [
+        "five-BIGRONE"
+      ],
+      "description": "AI concept still · Representative table groups and a few blank demonstration pods. Exact floor-plan coordinates and count are not depicted; source photo's A/B identity unverified.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sha256": "82c38b9f7e69e90ec2a73479fdf7a4f74543243b60c90612920c33adef20b172"
+    },
+    {
+      "id": "registration",
+      "title": "Proposed registration foyer",
+      "url": "stills/registration.png",
+      "sourceSceneIds": [
+        "three-OUTBALLONE"
+      ],
+      "description": "AI concept still · Based on authentic foyer architecture; event registration location and kiosk allocation are proposals.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sha256": "57d0cb0c5481001d916766aced9c38b1d3f29839bd8018c9775e865620ff132b"
+    },
+    {
+      "id": "rest-wellness",
+      "title": "Proposed rest and wellness area",
+      "url": "stills/rest-wellness.png",
+      "sourceSceneIds": [
+        "three-BALLROOM2"
+      ],
+      "description": "AI concept still · Representative cot section and wellness pocket. No 300/500-cot capacity claim. Final circulation and room allocation need venue confirmation.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sha256": "e0c501087476505963d6c00b0378e40a9d2fdc42a4b07b78e6e257a66537cd00"
+    },
+    {
+      "id": "judges-vip",
+      "title": "Proposed judges/VIP lounge style",
+      "url": "stills/judges-vip.png",
+      "sourceSceneIds": [
+        "six-C456"
+      ],
+      "description": "AI concept still · Style view of larger combined meeting-room architecture, not an approved room assignment. About ten sofas visibly shown, so this image does NOT demonstrate all 14. Procedural model must separately instantiate seven of each user-reference type; actual fit and dimensions unknown.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sha256": "4db17edd364a703ca9afa54eed8479a3688f1eb113c3920c87fdc971112f6346"
+    },
+    {
+      "id": "covered-dining",
+      "title": "Proposed covered dining area",
+      "url": "stills/covered-dining.png",
+      "sourceSceneIds": [
+        "four-OUTWED1"
+      ],
+      "description": "AI concept still · Covered exterior walkway/courtyard reference; dining furniture allocation is illustrative and circulation remains open. No sourced kitchen/vendor package implied.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sha256": "461c1384e4defcff8b9864e56416a785cdef3a73ba9e12f97527034f0ef79a06"
+    },
+    {
+      "id": "private-meeting",
+      "title": "Proposed private meeting room",
+      "url": "stills/private-meeting.png",
+      "sourceSceneIds": [
+        "six-3F"
+      ],
+      "description": "AI concept still · Retains source-inspired boardroom character with event notebooks, water and whiteboard. Does not place the fourteen judges' sofas in private rooms.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sha256": "fd245389c9c08397a5538312735780ca3c1e0bd3e188dd25a3823c92471d228d"
+    },
+    {
+      "id": "small-business-hub",
+      "title": "Proposed small-business hub",
+      "url": "stills/small-business-hub.png",
+      "sourceSceneIds": [
+        "one-INDROOM"
+      ],
+      "description": "AI concept still · Jamaica Room architecture is an inspiration, not an approved event allocation. Small platform, bistro seating and sample pods only. Doorway-blocking first draft was corrected; use this final image only.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sha256": "d002f3460ae703489fde7bf7163846beab889ac6d8def437bd4313dbf92512bc"
+    },
+    {
+      "id": "exterior-arrival",
+      "title": "Proposed exterior arrival",
+      "url": "stills/exterior-arrival.png",
+      "sourceSceneIds": [
+        "seven-OUTBIGROOM",
+        "two-OUTMIDDLE"
+      ],
+      "description": "AI concept still · Representative feather banners and INTELLIBUS letter sign, all locations/structure/wind approval provisional. No all-banner quantity or installation claim.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sha256": "0de5e8a64330e4434bdf43567129ee856837ad87bc758e5b9edd75071b29b5e7"
     }
   ]
 }

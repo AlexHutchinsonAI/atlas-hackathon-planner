@@ -2,17 +2,18 @@
 const text=value=>typeof value==='string'&&value.trim().length>0;
 const vector=value=>Array.isArray(value)&&value.length===3&&value.every(x=>Number.isFinite(x)&&Math.abs(x)<=100);
 export function validateManifest(data, sources) {
-  if(data?.version!==2||data.kind!=='ai-concept-3d'||data.model!=='exhibition-proof'||!Array.isArray(data.scenes)||!data.scenes.length||!Array.isArray(data.categories)||!Array.isArray(data.hotspots)||!Array.isArray(data.stills))throw new Error('Invalid 3D concept manifest.');
+  if(data?.version!==2||data.kind!=='ai-concept-3d'||data.model!=='multi-space-concept'||!Array.isArray(data.scenes)||!data.scenes.length||!Array.isArray(data.categories)||!Array.isArray(data.hotspots)||!Array.isArray(data.stills))throw new Error('Invalid 3D concept manifest.');
   const categories=new Set(data.categories.map(x=>x.id)),ids=new Set();
   if(categories.size!==data.categories.length||data.categories.some(x=>!text(x.id)||!text(x.title)))throw new Error('Invalid concept categories.');
   for(const scene of data.scenes){
-    if(!text(scene.id)||!/^[a-zA-Z0-9-]+$/.test(scene.id)||ids.has(scene.id)||!text(scene.title)||!text(scene.summary)||!categories.has(scene.category)||!['A','B'].includes(scene.hall)||!vector(scene.position)||!scene.view||['yaw','pitch','fov'].some(key=>!Number.isFinite(scene.view[key])))throw new Error('Invalid concept camera stop.');
+    if(!text(scene.id)||!/^[a-zA-Z0-9-]+$/.test(scene.id)||ids.has(scene.id)||!text(scene.title)||!text(scene.summary)||!categories.has(scene.category)||!['exhibition','registration','judges-vip','rest-wellness','covered-dining','private-meeting','small-business','exterior-arrival'].includes(scene.model)||(scene.model==='exhibition'&&!['A','B'].includes(scene.hall))||!vector(scene.position)||!scene.view||['yaw','pitch','fov'].some(key=>!Number.isFinite(scene.view[key])))throw new Error('Invalid concept camera stop.');
     if(sources&&!sources.some(x=>x.id===scene.sourceViewpointId&&x.name===scene.sourceName))throw new Error('Unknown original reference viewpoint.');
     ids.add(scene.id);
   }
   const hotspots=new Set();
-  for(const hotspot of data.hotspots){if(!text(hotspot.id)||hotspots.has(hotspot.id)||!text(hotspot.title)||!text(hotspot.description)||!vector(hotspot.position)||(hotspot.sceneId&&!ids.has(hotspot.sceneId)))throw new Error('Invalid spatial concept detail.');hotspots.add(hotspot.id);}
-  for(const still of data.stills)if(!text(still.title)||!text(still.description)||!/^stills\/[a-zA-Z0-9_-]+\.(png|jpg|jpeg|webp)$/.test(still.url))throw new Error('Invalid concept still reference.');
+  for(const hotspot of data.hotspots){if(!text(hotspot.id)||hotspots.has(hotspot.id)||!text(hotspot.title)||!text(hotspot.description)||!vector(hotspot.position)||!text(hotspot.model)||(hotspot.sceneId&&!ids.has(hotspot.sceneId)))throw new Error('Invalid spatial concept detail.');hotspots.add(hotspot.id);}
+  for(const still of data.stills)if(!text(still.id)||still.panorama!==false||!text(still.title)||!text(still.description)||!/^stills\/[a-zA-Z0-9_-]+\.(png|jpg|jpeg|webp)$/.test(still.url))throw new Error('Invalid concept still reference.');
+  for(const scene of data.scenes)if(!data.stills.some(x=>x.id===scene.stillId))throw new Error('Missing concept styling preview.');
   if(!ids.has(data.initialSceneId))throw new Error('Invalid initial concept view.');
   return data;
 }

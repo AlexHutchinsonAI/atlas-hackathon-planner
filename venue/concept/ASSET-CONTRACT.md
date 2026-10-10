@@ -21,3 +21,17 @@ Put ordinary reviewed concept previews under `stills/`, keep their original imag
 ## Routes and interaction
 
 `venue-tours.html` offers Original Venue Tour and AI Concept Tour. The existing `virtual-walkthrough.html`, `venue/index.html`, all 25 original viewpoints, photographs and reference drawings stay unchanged. `venue/concept/index.html#<concept-stop-id>` supports first-person looking, touch/drag/pinch/keyboard controls, a cutaway orbit overview, spatial pins plus equivalent detail buttons, source comparison, loading/error/retry, reduced motion and Back/Forward. Local previews disable authentication and all shared API writes. No new backend or provider is required.
+
+## Completed scene inventory
+
+Nine modeled spaces are reached through eleven camera stops: CAD Hall A and Hall B (four stops across the halls), registration foyer, rest/wellness, one judges/VIP allocation study, exterior covered dining, private meeting room, small-business room and exterior arrival. Existing first-proof fragments remain valid. Each stop points to its actual photographic source ID and one of nine reviewed ordinary stills. All nine PNG files retain their supplied bytes and include SHA256 metadata in `stills-manifest.json`.
+
+The judges/VIP study derives its displayed totals by traversing the rendered, catalog-tagged objects: seven SA-50 and seven SA-21, scale 1. No other modeled space contains these sofas. Its open floor is an allocation diagram, not a measured room fit. The private meeting reference has ten representative chairs and no repeated sofa inventory.
+
+One renderer/context is reused when changing scenes; outgoing geometry, materials, textures and shadow targets are disposed. Native dialogs return focus, Escape closes comparisons/details/images, and malformed fragments return to the first view with a notice. With WebGL unavailable, source comparisons display the unchanged front-face photograph explicitly labelled as a photograph; the nine still previews remain usable. No panorama projection is applied to generated images.
+
+## Verification and data boundary
+
+`npm test` includes the concept metadata, exact rendered CAD matrices, image hashes/dimensions and actual sofa allocation tests. `node --test tests/members.test.cjs` remains separate. Browser checks use disposable Chrome/WebKit contexts with record writes and external providers blocked. This change adds no database schema, migration, authentication rules, permissions, providers or planning storage keys. Existing source-tour files, data seeds and backend/persistence modules are checked against release `6d9f071`.
+
+The reviewable local preview uses `python3 tools/preview.py --port 8790`. It disables auth and refuses shared writes. Production publication uses the established GitHub main-to-Vercel integration after the explicit October 10 user instruction to push live when complete. No direct Vercel upload is used.

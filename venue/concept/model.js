@@ -2,7 +2,7 @@
 // Architecture follows visible source features; dimensions and placements are illustrative.
 import {addCadLayout} from './cad-model.js';
 export function buildExhibition(THREE, specs, cad, hall='B') {
-  const root=new THREE.Group(),room = new THREE.Group(), shell = new THREE.Group(), ceiling = new THREE.Group(),stageGroup=new THREE.Group();
+  const root=new THREE.Group(),room = new THREE.Group(), shell = new THREE.Group(), ceiling = new THREE.Group(),stageGroup=new THREE.Group(),crewGroup=new THREE.Group();
   const center=[27,hall==='B'?76.5:22.5];room.position.set(center[0],0,center[1]);room.rotation.y=Math.PI;root.add(room);
   let activeParent=room;
   const geometry = new Map(), materials = new Map(), ownedTextures = [];
@@ -38,7 +38,7 @@ export function buildExhibition(THREE, specs, cad, hall='B') {
     cylinder(.25,.45,x,.225,z,0xf0eee7);
     for(let i=0;i<9;i++){const a=i*2.4;const leaf=new THREE.Mesh(new THREE.SphereGeometry(.18,8,6),mat(i%2?0x397b46:0x245c37));leaf.scale.set(1,2.5,.5);leaf.rotation.z=Math.sin(a)*.55;leaf.position.set(x+Math.sin(a)*.25,.65+i*.1,z+Math.cos(a)*.25);activeParent.add(leaf);}
   }
-  function chair(x,z,rotation=0,parent=room,y=0,stage=false) {
+  function chair(x,z,rotation=0,parent=activeParent,y=0,stage=false) {
     const s=spec(stage?'stage-chair':'event-chair');const group=new THREE.Group();parent.add(group);group.position.set(x,y,z);group.rotation.y=rotation;
     const width=s.width,depth=s.depth,seat=s.seatHeight;
     box(width,.09,depth,0,seat,0,stage?0x5b6373:c.chair,group);
@@ -46,18 +46,6 @@ export function buildExhibition(THREE, specs, cad, hall='B') {
     for(const xx of [-width*.38,width*.38])for(const zz of [-depth*.35,depth*.35])box(.025,seat,.025,xx,seat/2,zz,c.black,group);
     if(stage)for(const xx of [-width*.45,width*.45])box(.12,.16,depth,xx,seat+.15,0,0x5b6373,group);
     return group;
-  }
-  function table(x,z,blue=false) {
-    const s=spec('folding-table-6ft'),group=new THREE.Group();group.position.set(x,0,z);room.add(group);
-    box(s.length,.04,s.width,0,s.height,0,blue?c.blue:c.white,group);
-    for(const xx of [-s.length*.39,s.length*.39])for(const zz of [-s.width*.35,s.width*.35])box(.04,s.height-.02,.04,xx,(s.height-.02)/2,zz,c.steel,group);
-    // Tailored edge and visible commercial frame, rather than a solid floor-reaching block.
-    box(s.length,.16,.012,0,s.height-.09,-s.width/2,blue?c.blue:c.white,group);
-    box(s.length,.16,.012,0,s.height-.09,s.width/2,blue?c.blue:c.white,group);
-    box(.3,.02,.22,-.35,s.height+.035,0,c.black,group);
-    const laptop=box(.3,.19,.012,-.35,s.height+.12,-.1,0x1d293c,group);laptop.rotation.x=-.15;
-    box(.65,.04,.075,.43,s.height+.04,0,0xf1f3f7,group);
-    for(let i=0;i<5;i++)box(.04,.006,.025,.19+i*.1,s.height+.063,0,0x697789,group);
   }
   room.add(shell,ceiling);
   // Nominal 54 × 45 m envelope supplied in the source catalogue; usable area is unverified.
@@ -114,22 +102,17 @@ export function buildExhibition(THREE, specs, cad, hall='B') {
   // Protected cable crossing: a conceptual position, not electrical/egress sign-off.
   box(30,.05,.5,0,.025,11.5,0x272c35);
   for(let x=-14.5;x<=14.5;x++)box(.22,.008,.48,x,.055,11.5,0xf2ca47);
+  room.add(crewGroup);crewGroup.visible=hall==='B';activeParent=crewGroup;
   const desk=spec('sit-stand-desk');
   for(const x of [18,20]){
     box(desk.width,.025,desk.depth,x,desk.height,8,c.white);
     for(const xx of [-.5,.5])box(.07,desk.height,.12,x+xx,desk.height/2,8,c.steel);
     box(.75,.18,.6,x,desk.height+.1,8,0x263040);chair(x,9.1,0);
   }
-  box(5.8,2.5,.12,19.5,1.25,10.8,c.black);sign(['PRODUCTION','CREW AREA'],3,1,19.5,1.6,10.7,room,Math.PI);
+  box(5.8,2.5,.12,19.5,1.25,10.8,c.black);sign(['PRODUCTION','CREW AREA'],3,1,19.5,1.6,10.7,crewGroup,Math.PI);
   cylinder(.04,1.5,16, .75,6,c.black);box(.25,.16,.38,16,1.65,6,c.black);
   for(const a of [0,2.1,4.2]){const leg=box(.03,1.6,.03,16+Math.sin(a)*.25,.75,6+Math.cos(a)*.25,c.black);leg.rotation.z=Math.sin(a)*.3;}
-  const counter=spec('acrylic-counter');
-  for(const x of [-19,-16]){
-    box(counter.width,.06,counter.depth,x,counter.height,17,0xe1f2ff,room,{transparent:true,opacity:.6});
-    box(counter.width,counter.height,.07,x,counter.height/2,17.15,0xd7ecfc,room,{transparent:true,opacity:.5});
-    box(.5,1.15,.42,x-.2,.575,18.7,c.white);box(.4,.45,.08,x-.2,1.4,18.7,c.black);
-  }
-  sign(['WELCOME','ATLAS / INTELLIBUS'],2.2,1.6,-17.5,2.5,20.7,room,Math.PI);
+  activeParent=room;
   for(const x of [-22,23]){
     plant(x,18);box(.35,1.1,.4,x, .55,15,c.white);cylinder(.13,.3,x,1.25,15,0xafd9ef);
   }
@@ -144,6 +127,6 @@ export function buildExhibition(THREE, specs, cad, hall='B') {
     setOverview(value){shell.visible=!value;ceiling.visible=!value;},
     dimensions:{nominalWidth:54,nominalDepth:45,heightIllustrative:9,clearUsableAreaVerified:false},
     statistics:{originalTables:sourceLayout.tables.length,originalChairMarks:sourceLayout.chairMarks.length,tablesPerGroup:4,tableLengthM:1.8288,tableWidthM:.9144,sofas:0},
-    dispose(){const gs=new Set(),ms=new Set();root.traverse(node=>{if(node.geometry)gs.add(node.geometry);if(node.material)for(const m of Array.isArray(node.material)?node.material:[node.material])ms.add(m);});for(const g of gs)g.dispose();for(const m of ms)m.dispose();for(const t of ownedTextures)t.dispose();}
+    dispose(){const gs=new Set(),ms=new Set();root.traverse(node=>{node.shadow?.map?.dispose();node.shadow?.mapPass?.dispose();if(node.geometry)gs.add(node.geometry);if(node.material)for(const m of Array.isArray(node.material)?node.material:[node.material])ms.add(m);});for(const g of gs)g.dispose();for(const m of ms)m.dispose();for(const t of ownedTextures)t.dispose();}
   };
 }

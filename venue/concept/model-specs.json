@@ -61,6 +61,28 @@
       "for": "concept rendering only; not procurement, capacity, clearance or fit"
     }
   },
+  "swivel-stool": {
+    "label": "Swivel bar stool",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.45,
+      "depth": 0.45,
+      "height": 0.9,
+      "seatHeight": 0.72,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "bistro-table": {
+    "label": "Bistro table",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "diameter": 0.7,
+      "height": 1,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
   "stage-chair": {
     "label": "Low-profile stage chair",
     "sourceDimensionsM": {},
@@ -69,6 +91,41 @@
       "depth": 0.8,
       "height": 0.82,
       "seatHeight": 0.43,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "coffee-table": {
+    "label": "Lounge coffee table",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 1.1,
+      "depth": 0.6,
+      "height": 0.4,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "sofa-sa50-reference": {
+    "label": "Upper reference curved sectional (label SA-50)",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 3.6,
+      "depth": 1.5,
+      "height": 0.8,
+      "seatHeight": 0.42,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "sofa-sa21-reference": {
+    "label": "Lower reference curved sofa (label SA-21)",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 3.2,
+      "depth": 1.4,
+      "height": 0.8,
+      "seatHeight": 0.42,
       "assumption": true,
       "for": "concept rendering only; not procurement, capacity, clearance or fit"
     }
@@ -90,6 +147,137 @@
       "width": 0.35,
       "depth": 0.4,
       "height": 1.1,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "sleeping-cot": {
+    "label": "Folding sleeping cot",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "length": 1.9,
+      "width": 0.7,
+      "height": 0.4,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "massage-therapy-chair": {
+    "label": "Portable therapy chair",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.55,
+      "depth": 1,
+      "height": 1.15,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "automatic-massage-chair": {
+    "label": "Automatic massage chair",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.85,
+      "depth": 1.3,
+      "height": 1.15,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "massage-table": {
+    "label": "Portable massage table",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "length": 1.85,
+      "width": 0.7,
+      "height": 0.75,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "royal-blue-rug": {
+    "label": "Royal-blue area rug",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 2.4,
+      "depth": 1.8,
+      "thickness": 0.008,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "mini-pillow": {
+    "label": "Blue-and-white mini pillow",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.35,
+      "depth": 0.25,
+      "height": 0.1,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "small-blanket": {
+    "label": "Blue-and-white small blanket",
+    "sourceDimensionsM": {
+      "length": 1.524,
+      "width": 1.27
+    },
+    "illustrativeGeometryM": {
+      "length": 1.524,
+      "width": 1.27,
+      "thickness": 0.01,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "aroma-diffuser": {
+    "label": "Aroma diffuser",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "diameter": 0.15,
+      "height": 0.22,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "mobile-whiteboard": {
+    "label": "Locking mobile whiteboard",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 1.5,
+      "depth": 0.55,
+      "height": 1.85,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "modular-booth-small": {
+    "label": "Blank 10 \u00d7 10 ft exhibition pod",
+    "sourceDimensionsM": {
+      "width": 3.048,
+      "depth": 3.048,
+      "height": null
+    },
+    "illustrativeGeometryM": {
+      "width": 3.048,
+      "depth": 3.048,
+      "height": 2.4,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "modular-booth-large": {
+    "label": "Blank 20 \u00d7 10 ft exhibition pod",
+    "sourceDimensionsM": {
+      "width": 6.096,
+      "depth": 3.048,
+      "height": null
+    },
+    "illustrativeGeometryM": {
+      "width": 6.096,
+      "depth": 3.048,
+      "height": 2.4,
       "assumption": true,
       "for": "concept rendering only; not procurement, capacity, clearance or fit"
     }
@@ -128,9 +316,23 @@
       "height": 6.096,
       "depth": 0.12,
       "assumption": true,
-      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+      "for": "Width/height user-confirmed concept; depth illustrative. Not certified fit."
     },
     "conceptDimensionStatus": "User confirmed screen face; elevation, mounting and rigging remain conceptual"
+  },
+  "box-truss": {
+    "label": "400 \u00d7 400 mm black box truss",
+    "sourceDimensionsM": {
+      "crossSectionWidth": 0.4,
+      "crossSectionHeight": 0.4
+    },
+    "illustrativeGeometryM": {
+      "crossSectionWidth": 0.4,
+      "crossSectionHeight": 0.4,
+      "segmentLength": 2,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
   },
   "cable-ramp": {
     "label": "Protected cable crossing",
@@ -147,6 +349,99 @@
       "for": "concept rendering only; not procurement, capacity, clearance or fit"
     }
   },
+  "pull-up-banner": {
+    "label": "80 \u00d7 200 cm retractable banner",
+    "sourceDimensionsM": {
+      "graphicWidth": 0.8,
+      "graphicHeight": 2
+    },
+    "illustrativeGeometryM": {
+      "width": 0.85,
+      "depth": 0.3,
+      "height": 2.1,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "floor-decal": {
+    "label": "Removable floor decal",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.6,
+      "depth": 0.6,
+      "thickness": 0.001,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "sign-uplight": {
+    "label": "Rechargeable sign uplight",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.15,
+      "depth": 0.15,
+      "height": 0.18,
+      "assumption": true,
+      "for": "concept rendering only; not procurement, capacity, clearance or fit"
+    }
+  },
+  "key-light": {
+    "label": "Stage key light",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.35,
+      "depth": 0.45,
+      "height": 0.35,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "fill-light": {
+    "label": "Stage/interview fill light",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.3,
+      "depth": 0.4,
+      "height": 0.3,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "rgb-backlight": {
+    "label": "RGB back/accent light",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.35,
+      "depth": 0.4,
+      "height": 0.35,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "par-wash": {
+    "label": "LED wash fixture",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.3,
+      "depth": 0.25,
+      "height": 0.3,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "light-stand": {
+    "label": "Weighted lighting stand",
+    "sourceDimensionsM": {
+      "maxMentionedHeight": 4.4,
+      "context": "up to 4.4 m as appropriate; no final deployment height stated"
+    },
+    "illustrativeGeometryM": {
+      "diameter": 1,
+      "height": 2.5,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
   "main-pa-array": {
     "label": "Six-cabinet speech PA array",
     "sourceDimensionsM": {},
@@ -154,6 +449,17 @@
       "width": 0.65,
       "depth": 0.5,
       "height": 1.8,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "stage-monitor": {
+    "label": "Stage monitor speaker",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.55,
+      "depth": 0.4,
+      "height": 0.3,
       "assumption": true,
       "for": "concept rendering only; not vendor specification or approved mounting"
     }
@@ -180,6 +486,16 @@
       "for": "concept rendering only; not vendor specification or approved mounting"
     }
   },
+  "podium-mic": {
+    "label": "Podium gooseneck microphone",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "height": 0.45,
+      "diameter": 0.02,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
   "power-strip": {
     "label": "Ten-outlet table power strip",
     "sourceDimensionsM": {},
@@ -187,6 +503,17 @@
       "length": 0.65,
       "width": 0.075,
       "height": 0.04,
+      "assumption": true,
+      "for": "concept rendering only; not vendor specification or approved mounting"
+    }
+  },
+  "wifi-ap": {
+    "label": "Wi-Fi access point",
+    "sourceDimensionsM": {},
+    "illustrativeGeometryM": {
+      "width": 0.3,
+      "depth": 0.3,
+      "height": 0.07,
       "assumption": true,
       "for": "concept rendering only; not vendor specification or approved mounting"
     }
