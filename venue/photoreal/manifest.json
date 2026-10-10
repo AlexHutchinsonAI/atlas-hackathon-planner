@@ -1,0 +1,207 @@
+{
+  "title": "Atlas 10-room spherical concept review",
+  "status": "qualified concept preview; desktop and mobile runtime checked",
+  "createdAtUtc": "2026-10-10T02:18:00Z",
+  "projection": {
+    "type": "equirectangular",
+    "horizontalDegrees": 360,
+    "verticalDegrees": 180,
+    "imageDimensions": [
+      1774,
+      887
+    ]
+  },
+  "rooms": [
+    {
+      "id": "hall-b",
+      "label": "Hall B \u00b7 stage & production",
+      "source": "five-BIGRTWO (historic exhibition view; Hall B assignment is conceptual)",
+      "library_file_id": "libfile_116882d23d68819196b0a23021b713b5",
+      "qa_library_file_id": "libfile_d00c4ec4319c8191963b79ff56b0cd97",
+      "yaw": 0,
+      "notes": "Corrected stage is at the window wall; inter-hall opening and flank doors are visible. Minor seam/floor joins and polar texture artifacts remain. Stage/screen dimensions, table positions and clearance are not verified.",
+      "sourceSceneId": "five-BIGRTWO",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "6962ae1d20179718ffcae9e9228249b1fcff58037e91fb45f708aea7357181fd",
+      "sourcePngSha256": "0d21a9645e921bdbb9741e398be66881c733abd4490dc07c87d75d796fd9a50d",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "hall-a",
+      "label": "Hall A \u00b7 coding & support",
+      "source": "five-BIGRONE (historic exhibition view; Hall A assignment is conceptual)",
+      "library_file_id": "libfile_b12b2d229d848191bb5db66a4a83279d",
+      "qa_library_file_id": "libfile_d870348c56088191826073742740a2af",
+      "yaw": 0,
+      "notes": "Coding groups and support activity. Visible small rear seam step and polar texture pinching. Functional concept only; exact furniture layout, capacities and shirt palette are unverified.",
+      "sourceSceneId": "five-BIGRONE",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "3e827477e3082a47c4992536187aa7d38f9c71cf6a565a7e5bb85ce1427b42e3",
+      "sourcePngSha256": "f5aba7eae39934659d1bcc977e68d480d54b2bd107f477e70e00667118f967ce",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "registration",
+      "label": "Registration foyer",
+      "source": "three-OUTBALLONE (historic source; event-function assignment is conceptual)",
+      "sourceSceneId": "three-OUTBALLONE",
+      "library_file_id": "libfile_e1f00fb8f82c81919379e34803b62daf",
+      "qa_library_file_id": "libfile_2bfc82191194819190554a1aeabd4e19",
+      "yaw": -90,
+      "notes": "Check-in furniture consolidated into the existing lounge bay; central exits and thresholds appear clear. Fine details are soft, the floor pole is mildly distorted and some exit-sign lettering changed. This is not approved signage or a measured layout.",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "9357733c3380809cabacd03a6bb5e9661c0e47440ac32f8a23bcdf3a2aacd0d1",
+      "sourcePngSha256": "e1f168b0e7d0f1861781829ace5e7d52e2c67948b6f86a8deff20a6e77a6d9a6",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "rest",
+      "label": "Rest & wellness",
+      "source": "three-BALLROOM2 (historic source; event-function assignment is conceptual)",
+      "sourceSceneId": "three-BALLROOM2",
+      "library_file_id": "libfile_c0cc4bd6877c8191a2d5e55011fd729a",
+      "qa_library_file_id": "libfile_f70a2cd39c248191bf645ab8c3fc4087",
+      "yaw": 90,
+      "notes": "Representative cot banks with blue/white pillows and blankets, adults and care support. Clear broad central/door routes shown. Minor carpet pinching and seam/texture changes; the optional massage-chair pocket was omitted. Cot totals and occupancy are not validated.",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "f88b2381b0e8134a42e2d2dcf2e2084c7bb7af668fdd09e08281d48f77f0299f",
+      "sourcePngSha256": "1d71ee3c3a327bf9c4b6eb33ea57adf6e65fb9d9a2b3aaa064173cca444e5879",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "vip",
+      "label": "Judges & VIP lounge",
+      "source": "six-C456 (historic source; event-function assignment is conceptual)",
+      "sourceSceneId": "six-C456",
+      "library_file_id": "libfile_6f9f2630cc8c8191b7756e4d9c30fd96",
+      "qa_library_file_id": "libfile_558b56a4ab448191baf0457944613dc9",
+      "yaw": 90,
+      "notes": "Gray lounge groups and guests in the combined meeting-room source. Minor seam/pole artifacts. Fourteen sofas were requested, but exact count, SA-50/SA-21 shape fidelity and room fit are not verified.",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "ee735b268a064d5adb13096567ea58d295d28a6647e57d3e2cc437092eebbf58",
+      "sourcePngSha256": "4e737ed614e37da2b4891c0ade4bc87858ed6cea2db8fee0329da01abe5ea0d3",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "dining",
+      "label": "Covered dining",
+      "source": "four-OUTWED1 (historic source; event-function assignment is conceptual)",
+      "sourceSceneId": "four-OUTWED1",
+      "library_file_id": "libfile_27067f78623881918ff3e07a5c61354e",
+      "qa_library_file_id": "libfile_f7f28c907ddc8191a002122083164a83",
+      "yaw": 45,
+      "notes": "A modest dining group occupies a side pocket; front/rear covered walkway stays clear. Minor roof/paving pole pinching and seam-texture change. Food/water station and yellow helper were omitted to preserve circulation.",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "c42e9541c12814d9aedd098867b618e0de2c30973deeeb3b3c273393a99975c9",
+      "sourcePngSha256": "73d6903ab30474b849106ff0841180c232d75d1690685e6c34593650234fb0a2",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "private-meeting",
+      "label": "Private meeting",
+      "source": "six-3F (historic source; event-function assignment is conceptual)",
+      "sourceSceneId": "six-3F",
+      "library_file_id": "libfile_cd4e107ff340819191134c102a475ffc",
+      "qa_library_file_id": "libfile_78057fe3bc5c8191ac84e364a25a2f9c",
+      "yaw": 0,
+      "notes": "Original boardroom furniture with four judges/leads, notebooks and water. Apparent door access is clear. Minor seam/panel alignment and pole/carpet distortion; optional whiteboard omitted.",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "bbb0fc50b34d96daca116ac2166871550fe24eb50307b8672624f84156de1d05",
+      "sourcePngSha256": "5ec706f417738d6fe092804986d73b8521191d0a6dce2b2a8a80e094592979f6",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "business-hub",
+      "label": "Small-business hub",
+      "source": "one-INDROOM (historic source; event-function assignment is conceptual)",
+      "sourceSceneId": "one-INDROOM",
+      "library_file_id": "libfile_281ddcb00d6c8191aeb55aed19dc163e",
+      "qa_library_file_id": "libfile_2d9cc087c1f08191a8145fc01be6d17d",
+      "yaw": 0,
+      "notes": "One demo table, two display backdrops, bistro discussion and small platform/screen. Door approaches visually cleared in correction. Fine ceiling-grid shimmer, seam drift and curved nadir tiles remain. Actual fit and capacity unverified.",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "5e1c14dc49b54ac0c94cec67b5fe25f3c5fb03f666bb342409715b6e966e963e",
+      "sourcePngSha256": "306ba7de6455093fe0618385472c2d3dede746aacc71918d66203777f7e61867",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "exterior",
+      "label": "Exterior arrival",
+      "source": "seven-OUTBIGROOM (historic source; event-function assignment is conceptual)",
+      "sourceSceneId": "seven-OUTBIGROOM",
+      "library_file_id": "libfile_c9b63145a0f88191b08e67d5cc0c33ef",
+      "qa_library_file_id": "libfile_2d9782291de08191af81e64a21faa9d4",
+      "yaw": 180,
+      "notes": "Restrained blue/white banners and arrow boards, sparse arrivals and security. Open plaza and original arcade retained after removing invented planters. Visible brick-pattern warp at the exact floor pole, softer detail, sky drift and slight tonal joins remain.",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "0cae7d13b432153c96ae6ac98504b41b6c64845aeb44e88461f96a325905915e",
+      "sourcePngSha256": "26ccde43818ad85ad20fcb01b02b7ac9f933a7e2e71270767ac7c2dd73161267",
+      "embeddedIn": "viewer.html"
+    },
+    {
+      "id": "meeting-proof",
+      "label": "Meeting lounge \u00b7 accepted proof",
+      "source": "six-C6EMPTY (historic meeting-room view; lounge use is conceptual)",
+      "library_file_id": "libfile_46648207090481919a36f4f676fcd33a",
+      "qa_library_file_id": "libfile_380c799883808191a0ceb199db930fac",
+      "yaw": 90,
+      "notes": "Four illustrative sofas. This is the accepted visual-direction proof, not the fourteen-sofa VIP fit plan. Small carpet pinch at nadir, faint zenith texture artifact and minor seam discontinuity.",
+      "sourceSceneId": "six-C6EMPTY",
+      "actualDimensions": [
+        1774,
+        887
+      ],
+      "imageSha256": "5193b83fb39175010fb0c60fe10370ca19c0060073bea1c4d03e7c5fa9fe77ff",
+      "sourcePngSha256": "b88d0f42c9ad5ea061d34135f929cac2ef612694cb7d06d406b32690d8ef55f5",
+      "embeddedIn": "viewer.html"
+    }
+  ],
+  "sourceMethod": "Each complete six-face original photograph was converted into one equirectangular sphere before geometry-preserving imagegen edits. Not independent generated angles.",
+  "originalTourUnchanged": true,
+  "browserVerification": "All ten views passed desktop Chrome, Chrome native mobile touch and mobile WebKit; original image artifacts and fit limitations remain.",
+  "sourceExportVerified": "42 source cubefaces plus two metadata files passed SHA256 verification.",
+  "viewerImprovements": [
+    "Status moved inside information card to avoid mobile control overlap",
+    "Canvas accessible label changes per room",
+    "One WebGL texture reused across room switches"
+  ],
+  "encoding": {
+    "format": "WebP",
+    "quality": 95,
+    "method": 6,
+    "nativeDimensionsPreserved": [
+      1774,
+      887
+    ],
+    "sourceImagesUntouched": true,
+    "visualContentEdits": false
+  },
+  "roleColours": "Participant royal blue; other role colours are provisional October2025 references, not a confirmed current-event palette."
+}

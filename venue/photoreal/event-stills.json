@@ -1,0 +1,36 @@
+{
+  "kind": "ordinary-ai-concept-stills",
+  "images": [
+    {
+      "id": "hall-b",
+      "title": "Hall B \u00b7 production, IT & camera activity",
+      "url": "stills/hall-b.webp",
+      "description": "Anonymous coding teams, a presenter and panelists, camera operators, a production desk and proposed network equipment. Positions, stage dimensions and clearance are illustrative.",
+      "width": 1672,
+      "height": 941,
+      "panorama": false,
+      "sourceImageSha256": "b4f96b200954f0548c7666b078ddeacccf0dd7b05d81be1efe27eaf7fb3d1bdd",
+      "sha256": "5aa0f4afc813c40a71650e6e1c06fb1edef58aed35a9c5c858a002745ccaa940",
+      "sourceLibraryId": "libfile_f43ef1eac81481919fa230b31c5154b0",
+      "photographicHallIdentityVerified": false
+    },
+    {
+      "id": "hall-a",
+      "title": "Hall A \u00b7 coding & attendee support",
+      "url": "stills/hall-a.webp",
+      "description": "Anonymous coding teams, demo activity, event support and a proposed IT position. Table totals, staff counts and room fit are not depicted or verified.",
+      "width": 1536,
+      "height": 1024,
+      "panorama": false,
+      "sourceImageSha256": "b9a3b52eb748ea92b3d9019418fd378069d4aac81f1026aaded0de38477e09b8",
+      "sha256": "d7130376d06326f05f1cccbff169a9133ddd4f7db8e2474b7eb03b645302d2af",
+      "sourceLibraryId": "libfile_4209afd1cb548191b3b4ff3865e411b7",
+      "photographicHallIdentityVerified": false
+    }
+  ],
+  "sourceNotesLibraryId": "libfile_4801ac83731c8191b4c67183c27bf629",
+  "sourceNotesPreparedAt": "2026-10-10",
+  "sourceNotes": "ATLAS EVENT CONCEPTS: POPULATED DRAFT STILLS\nPrepared 10 October 2026 (UTC)\n\nDELIVERABLES\n1. Atlas-Hall-B-production-IT-cameras-people-v1.png\n   1672 x 941 pixels. Proposed Hall B production, IT, camera and stage activity.\n2. Atlas-Hall-A-coding-support-people-v1.png\n   1536 x 1024 pixels. Proposed Hall A coding, attendee support and IT activity.\n\nThese are AI-generated, normal-perspective concept stills. They are not photographs of an installed event, 360-degree panoramas, surveyed layouts or capacity/clearance certification.\n\nWHAT WAS ADDED\nHall B: active coding teams; presenter and panelists; two tripod-camera operators; a peripheral PTZ camera; a staffed production-control position with multiview monitor, laptops, video/audio controls and generic rack equipment; a proposed column-mounted AP; visible participant and role shirts.\n\nHall A: active coding teams and merchant/demo activity; coach, care, judge, lead, manager, founder and security roles; an edge IT-support position and generic network rack; proposed column/wall APs; tabletop power strips and protected cable edges; a broad central circulation aisle. A camera was requested in the generation prompt but did not appear clearly in this draft. Camera operation is visibly represented in Hall B.\n\nSOURCE BASIS\nArchitecture: the original convention-hall reference imagery supplied for the existing venue walkthrough, including the five-BIGRTWO view, plus the already-created main-stage and coding concept stills. The source image itself does not establish a surveyed Hall A/B identity; these Hall A and Hall B labels are proposed functional assignments carried forward from the event concept.\n\nEquipment: China Procurement Tracker, Procurement Master tab, checked 10 October 2026.\nhttps://docs.google.com/spreadsheets/d/1kcuwOXEX5SKrTqhARUsNVvVQJUSZoP_NCoG2Xv-5Zig/edit#gid=791915729\n\nRelevant source rows:\n- 18-23: production intercom, main speech PA, stage monitors, microphones and digital audio mixer\n- 49, 53-54: LED package, alternate LED processors and H9 active-control requirement\n- 62-68: camera platform, stage and support requirements\n- 72-79: PTZ cameras/controller, teleprompter, converters and media storage\n- 84-88: power strips, cable ramps and event furniture\n- 159-170: network, video and table-power cabling\n- 173-174: production computers and presentation receiver\n- 177-180: URSA Broadcast G2 camera, Canon lens, tripod and ATEM switcher selections\n- 183: TVLogic multiview monitor\n- 186-188: core-switch, AP and gateway requirements\n\nThe equipment is depicted by category and plausible appearance. The renders do not reproduce verified product geometry, identify exact models visually, prove purchase/delivery, or constitute a signal-flow diagram.\n\nUSER PLANNING REFERENCES\n- Hall B stage: 50 x 12 ft; main LED: 75 x 20 ft. These are concept requirements, not a measured fit verified in these images.\n- Coding-table reference: 6 x 3 ft; five planned seats per table.\n- Planning allocations: 256 tables in the larger Hall A and 192 in the smaller Hall B. These stills do not depict or verify those totals.\n- APs were reported at columns/public entrances. The precise AP locations drawn here are illustrative.\n- Tabletop plug strips and protected cable routing are intended; the images do not replace an electrical or accessibility plan.\n\nWARDROBE AND PEOPLE\nPeople are anonymous illustrative adults, with no real attendees' identities supplied or reproduced. A busy event atmosphere is shown without attempting to depict all 2,300 attendees or exact staff counts.\n\nRoyal blue is the current participant-shirt reference. Other role colours reuse the October 2025 palette provisionally:\n- Care: yellow\n- Coaches: gray\n- Judges: white\n- Security: black\n- Leads: purple\n- Managers: red\n- Founders: dark blue\n\nThe staff palette and shirt graphics are not confirmed for the current event. Generated lettering, credentials and any small shirt marks are illustrative, not approved or print-ready artwork. Production crew clothing and all individual poses are visual assumptions.\n\nOPEN DESIGN ASSUMPTIONS\n- Camera, control desk, rack, AP and staff positions are proposed; they are not installed locations.\n- Furniture arrangement, crowd distribution, sightlines, stage access, clearances, cable paths and equipment footprints remain illustrative.\n- The live procurement sheet has conflicting LED dimensions and support concepts: the main package includes a 75 x 20 ft screen, while H9 and ground-support rows reference a 15 x 4 m / roughly 50 x 13 ft main wall. These images follow the user's 75 x 20 ft concept direction, without resolving the engineering design.\n- The core-switch row title says 48 PoE, while its described port mix and related cabling refer to a 24-port configuration. A generic rack switch is shown; the conflicting specification is not resolved here.\n- No rigging, electrical-load, egress, camera-platform or capacity approval is implied.\n- These are first populated drafts for visual review. No website was edited or published.\n\nMETHOD\nBoth stills were edited with the built-in image-generation tool from the existing local concept image plus a real venue architectural reference. Original source images were preserved. Full generation prompts are retained alongside the working image files.\n\n",
+  "rolePaletteStatus": "provisional",
+  "purchasesDeliveryAndFitVerified": false
+}
