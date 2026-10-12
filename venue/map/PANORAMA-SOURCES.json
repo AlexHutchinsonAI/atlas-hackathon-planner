@@ -1,0 +1,93 @@
+[
+  {
+    "id": "ballroom",
+    "section": "three",
+    "base": "ic_files/visualFiles/BALLROOM2",
+    "name": "Grand Ballroom",
+    "source": "https://virtualtour.mbconventioncentre.com/three/index.html"
+  },
+  {
+    "id": "hall-a",
+    "section": "five",
+    "base": "ic_files/visualFiles/BIGRONE",
+    "name": "Exhibition Hall A",
+    "source": "https://virtualtour.mbconventioncentre.com/five/index.html"
+  },
+  {
+    "id": "hall-b",
+    "section": "five",
+    "base": "ic_files/visualFiles/BIGRTWO",
+    "name": "Exhibition Hall B",
+    "source": "https://virtualtour.mbconventioncentre.com/five/index.html"
+  },
+  {
+    "id": "meeting-c1",
+    "section": "six",
+    "base": "ic_files/visualFiles/4F",
+    "name": "Meeting Room C1",
+    "source": "https://virtualtour.mbconventioncentre.com/six/index.html"
+  },
+  {
+    "id": "meeting-c3",
+    "section": "six",
+    "base": "ic_files/visualFiles/C3",
+    "name": "Meeting Room C3",
+    "source": "https://virtualtour.mbconventioncentre.com/six/index.html"
+  },
+  {
+    "id": "meeting-c45",
+    "section": "six",
+    "base": "ic_files/visualFiles/1F",
+    "name": "Meeting Rooms C4 & C5",
+    "source": "https://virtualtour.mbconventioncentre.com/six/index.html"
+  },
+  {
+    "id": "meeting-c6",
+    "section": "six",
+    "base": "ic_files/visualFiles/2F",
+    "name": "Meeting Room C6",
+    "source": "https://virtualtour.mbconventioncentre.com/six/index.html"
+  },
+  {
+    "id": "meeting-c7",
+    "section": "six",
+    "base": "ic_files/visualFiles/3F",
+    "name": "Meeting Room C7",
+    "source": "https://virtualtour.mbconventioncentre.com/six/index.html"
+  },
+  {
+    "id": "meeting-c89",
+    "section": "six",
+    "base": "ic_files/visualFiles/7F",
+    "name": "Meeting Rooms C8 & C9",
+    "source": "https://virtualtour.mbconventioncentre.com/six/index.html"
+  },
+  {
+    "id": "ballroom-steps",
+    "section": "four",
+    "base": "ic_files/visualFiles/BALLOUTSUN",
+    "name": "Ballroom steps",
+    "source": "https://virtualtour.mbconventioncentre.com/four/index.html"
+  },
+  {
+    "id": "tower",
+    "section": "seven",
+    "base": "ic_files/visualFiles/OUTTOWER2",
+    "name": "Tower viewpoint",
+    "source": "https://virtualtour.mbconventioncentre.com/seven/index.html"
+  },
+  {
+    "id": "jamaica",
+    "section": "one",
+    "base": "files/visualFiles/INDROOM",
+    "name": "Jamaica Room",
+    "source": "https://virtualtour.mbconventioncentre.com/one/index.html"
+  },
+  {
+    "id": "courtyard",
+    "section": "two",
+    "base": "files/visualFiles/OUTMIDDLE",
+    "name": "Open courtyard",
+    "source": "https://virtualtour.mbconventioncentre.com/two/index.html"
+  }
+]

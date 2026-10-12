@@ -18,7 +18,7 @@ async function recordState(page){return page.evaluate(()=>({snapshot:window.Atla
 async function closeControl(page){return page.locator(await page.locator('#atlas-menu-close').isVisible()?'#atlas-menu-close':'#atlas-menu-toggle');}
 async function closed(page){if(await page.locator('#atlas-sidebar').isVisible())await(await closeControl(page)).click();await page.waitForFunction(()=>document.querySelector('#atlas-toolbar').getBoundingClientRect().left<.1);}
 async function labels(page,section,title){await page.waitForFunction(({section,title})=>document.querySelector('#atlas-current-section')?.textContent===section&&document.querySelector('#atlas-current-page')?.textContent===title,{section,title});}
-async function arrive(page,route){await page.goto(base+'/'+route,{waitUntil:'domcontentloaded'});await page.locator('#atlas-menu-toggle').waitFor();if(/walkthrough|venue\/index/.test(route)){const scene=route.startsWith('venue/')?page.locator('#scene option'):page.frameLocator('.venue-window iframe').locator('#scene option');await scene.first().waitFor({state:'attached'});}}
+async function arrive(page,route){await page.goto(base+'/'+route,{waitUntil:'domcontentloaded'});await page.locator('#atlas-menu-toggle').waitFor();if(/walkthrough|venue\/index/.test(route)){const scene=route.startsWith('venue/')?page.locator('#scene option'):page.locator('#map-shapes [data-place]');await scene.first().waitFor({state:'attached'});}}
 async function check(page,width,route,section,title,href){
  await labels(page,section,title);await closed(page);
  assert.equal(await page.locator('#atlas-current-section').getAttribute('href'),href);

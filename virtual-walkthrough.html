@@ -10,5 +10,55 @@
 <script src="scripts/ui-icons.js"></script>
 <script src="scripts/visuals.js"></script><script src="scripts/theme.js"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>Virtual walkthrough · Atlas</title>
 
-</head><body><main id="app"><section id="journey-venue" class="venue-journey" data-tour-mode="manual"><div class="venue-sticky"><header class="venue-heading"><span>09 / EXPLORE THE VENUE</span><h1>Virtual walkthrough</h1><p>Choose a space or use Previous / Next · Drag to look around · <a href="index.html">Back to Atlas ↗</a></p><button type="button" id="venue-mode">Switch to scroll tour</button></header><div class="venue-window"><iframe title="Montego Bay Convention Centre 360 degree walkthrough" src="venue/index.html?embedded=1" loading="lazy"></iframe><div class="venue-hint" role="status">Drag to look around. Choose a space or use Previous / Next.<button type="button" aria-label="Dismiss drag hint">Got it</button></div></div><p class="venue-progress">Historic venue photography · <a href="https://virtualtour.mbconventioncentre.com/" target="_blank" rel="noopener">Original tour ↗</a> · <span>1 / 25</span></p></div></section><div id="venue-end"></div><footer class="tour-end"><a href="#journey-venue">Explore again ↑</a><a href="index.html">Return to Atlas ↗</a></footer></main><script src="scripts/venue.js"></script><script src="scripts/tutorial.js"></script><script src="scripts/readable.js"></script><script src="scripts/member-account.js"></script>
+<link rel="stylesheet" href="venue/map/vendor/pannellum.css">
+<link rel="stylesheet" href="venue/map/style.css">
+<script src="venue/map/vendor/pannellum.js" defer></script>
+<script src="venue/map/app.js" defer></script>
+</head><body><main id="app"><section class="mbcc-explorer" aria-label="MBCC clickable venue map">
+<header class="mbcc-header">
+<a class="mbcc-brand" href="index.html" aria-label="Return to Atlas home"><span class="mbcc-brand-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 30V15L20 7l15 8v15M5 18h30M14 18v12m12-12v12"/></svg></span><span><strong>MBCC</strong><small>VENUE EXPLORER</small></span></a>
+<div class="mbcc-header-place"><span class="mbcc-location-dot"></span> MONTEGO BAY, JAMAICA</div>
+<button id="sources-open" class="mbcc-text-button">About this map <span aria-hidden="true">↗</span></button>
+</header>
+<div class="mbcc-main">
+<section class="mbcc-intro"><div><p class="mbcc-eyebrow">MONTEGO BAY CONVENTION CENTRE</p><h1>Virtual walkthrough</h1></div><p class="mbcc-intro-note">Choose a building on the map.<br>Take a look inside, in 360°.</p></section>
+<section class="mbcc-explorer" aria-label="Interactive convention centre explorer">
+<div class="mbcc-map-column">
+<div class="mbcc-map-top"><div class="mbcc-view-label"><span class="mbcc-tiny-square"></span> CAMPUS OVERVIEW</div><div class="mbcc-legend"><span><i class="mbcc-event-dot"></i>Event spaces</span><span><i class="mbcc-outdoor-dot"></i>Outdoor & access</span></div></div>
+<div id="map-viewport" class="mbcc-map-viewport" aria-label="Venue map. Drag to pan, use controls to zoom." tabindex="0">
+<div class="mbcc-map-wash"></div>
+<div id="map-stage" class="mbcc-map-stage">
+<svg id="venue-map" viewBox="52 225 995 485" xmlns="http://www.w3.org/2000/svg" aria-label="Official archival MBCC campus illustration">
+<image href="venue/map/assets/site-map.png" x="0" y="0" width="1100" height="850"/>
+<g id="map-shapes"></g>
+</svg>
+</div>
+<div class="mbcc-map-hint"><span aria-hidden="true">◎</span> Tap a numbered place to explore</div>
+<div class="mbcc-map-controls" aria-label="Map controls"><button id="zoom-in" aria-label="Zoom in">+</button><button id="zoom-out" aria-label="Zoom out">−</button><span></span><button id="reset-map" aria-label="Reset map view"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M8 8h8v8H8z"/></svg></button></div>
+<div class="mbcc-map-caption"><span class="mbcc-archive-indicator"></span> OFFICIAL ARCHIVAL ILLUSTRATION</div>
+</div>
+<div class="mbcc-map-bottom"><span id="selection-status" aria-live="polite">11 places to discover</span><span>Illustrative positions · not for navigation</span></div>
+</div>
+<aside id="sidebar" class="mbcc-sidebar" aria-label="Locations and details">
+<div id="directory">
+<div class="mbcc-sidebar-heading"><span class="mbcc-eyebrow">FIND YOUR PLACE</span><h2>Explore the centre <span>↘</span></h2></div>
+<label class="mbcc-search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="place-search" type="search" placeholder="Search halls, rooms, parking…" aria-label="Search locations"></label>
+<div class="mbcc-filters" aria-label="Filter places"><button class="mbcc-active" data-filter="all" aria-pressed="true">All places</button><button data-filter="space" aria-pressed="false">Event spaces</button><button data-filter="outside" aria-pressed="false">Outdoor</button></div>
+<div id="place-list" class="mbcc-place-list"></div>
+<p id="no-results" class="mbcc-no-results" hidden>No matching places. Try “hall”, “meeting” or “entrance”.</p>
+<div class="mbcc-directory-foot"><span class="mbcc-small-orbit">360°</span><p>Real venue views,<br><strong>a new way to explore.</strong></p></div>
+</div>
+<div id="details" hidden></div>
+</aside>
+</section>
+<footer><p>Built around the venue’s original tour. Imagery is archival; current layouts may differ.</p><a href="https://mbconventioncentre.com/" target="_blank" rel="noopener noreferrer">Official venue website <span aria-hidden="true">↗</span></a></footer>
+</div>
+<dialog id="tour-dialog" aria-labelledby="tour-title">
+<div class="mbcc-tour-header"><div><span class="mbcc-eyebrow">STEP INSIDE · ARCHIVAL 360°</span><h2 id="tour-title">Grand Ballroom</h2></div><button id="tour-close" class="mbcc-round-button" aria-label="Close 360 degree view">×</button></div>
+<div class="mbcc-tour-body"><div id="panorama" aria-label="Interactive panorama. Drag to look around; use arrow keys when focused." tabindex="0"></div><div id="panorama-fallback" hidden><p>This device can’t display the interactive panorama.</p><img id="fallback-preview" alt="Archival venue still"><a id="fallback-image" target="_blank" rel="noopener">Open a still view ↗</a></div><div class="mbcc-tour-drag-hint" id="tour-hint">Drag to look around <span>↔</span></div></div>
+<div class="mbcc-tour-footer"><div id="scene-options" class="mbcc-scene-options"></div><div class="mbcc-tour-source"><span>Original MBCC tour imagery · date not specified</span><a id="tour-source-link" target="_blank" rel="noopener noreferrer">View source ↗</a></div></div>
+</dialog>
+<dialog id="sources-dialog" class="mbcc-sources-dialog" aria-labelledby="sources-title"><button id="sources-close" class="mbcc-round-button" aria-label="Close about this map">×</button><p class="mbcc-eyebrow">ABOUT THE EXPLORER</p><h2 id="sources-title">A familiar place.<br>A fresh perspective.</h2><p>This Atlas venue explorer uses the actual campus illustration and original panoramic photographs from Montego Bay Convention Centre’s official virtual tour. The old tour relied on Flash; these images are presented in a modern 360° viewer.</p><p>Images are archival and their capture dates are not specified. They may differ from the venue today. Hotspots and building outlines are approximate visual guides, not survey boundaries, routes or live availability. No interior image is supplied where one has not been verified.</p><div class="mbcc-source-links"><a href="https://virtualtour.mbconventioncentre.com/" target="_blank" rel="noopener">Original map & virtual tour ↗</a><a href="https://mbconventioncentre.com/about-us/the-centre/" target="_blank" rel="noopener">Official venue descriptions ↗</a><a href="https://mbconventioncentre.com/wp-content/uploads/2021/02/EPG-Revised-Oct-2021.pdf" target="_blank" rel="noopener">Official event planning guide (2021) ↗</a><a href="https://mbconventioncentre.com/about-us/centre-accessibility/" target="_blank" rel="noopener">Official accessibility information ↗</a></div><p class="mbcc-credit">Venue imagery © its respective owners. This is an Atlas exploratory guide, not an official MBCC service. Panorama viewer: <a href="https://pannellum.org/" target="_blank" rel="noopener">Pannellum</a>, MIT licensed. Sources checked 12 October 2026.</p></dialog>
+<noscript><p class="mbcc-noscript">JavaScript is needed for this interactive map. You can still visit the <a href="https://mbconventioncentre.com/about-us/the-centre/">official venue guide</a>.</p></noscript>
+</section><details class="mbcc-legacy-tour"><summary>Original 25-view venue tour · manual or scroll</summary><section id="journey-venue" class="venue-journey" data-tour-mode="manual"><div class="venue-sticky"><header class="venue-heading"><span>09 / EXPLORE THE VENUE</span><h2>Original venue tour</h2><p>Choose a space or use Previous / Next · Drag to look around · <a href="index.html">Back to Atlas ↗</a></p><button type="button" id="venue-mode">Switch to scroll tour</button></header><div class="venue-window"><iframe title="Montego Bay Convention Centre 360 degree walkthrough" src="venue/index.html?embedded=1" loading="lazy"></iframe><div class="venue-hint" role="status">Drag to look around. Choose a space or use Previous / Next.<button type="button" aria-label="Dismiss drag hint">Got it</button></div></div><p class="venue-progress">Historic venue photography · <a href="https://virtualtour.mbconventioncentre.com/" target="_blank" rel="noopener">Original tour ↗</a> · <span>1 / 25</span></p></div></section><div id="venue-end"></div><footer class="tour-end"><a href="#journey-venue">Explore again ↑</a><a href="index.html">Return to Atlas ↗</a></footer></details></main><script src="scripts/venue.js"></script><script src="scripts/tutorial.js"></script><script src="scripts/readable.js"></script><script src="scripts/member-account.js"></script>
 <script src="scripts/firebase-auth.js"></script><script src="scripts/account-pages.js"></script><script src="scripts/sidebar.js"></script></body></html>

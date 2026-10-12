@@ -23,7 +23,7 @@ async function context(browser,width,fixture){
 async function home(page){await page.goto(base+'/index.html');await page.locator('.home-section-grid').waitFor();}
 async function arrived(page,href){
  await page.waitForURL(base+'/'+href);await page.locator('#atlas-menu-toggle').waitFor();
- if(href==='virtual-walkthrough.html')await page.frameLocator('.venue-window iframe').locator('#scene option').first().waitFor({state:'attached'});
+ if(href==='virtual-walkthrough.html')await page.locator('#map-shapes [data-place]').first().waitFor({state:'attached'});
 }
 async function closeMenu(page){if(await page.locator('#atlas-sidebar').isVisible())await page.locator(await page.locator('#atlas-menu-close').isVisible()?'#atlas-menu-close':'#atlas-menu-toggle').click();}
 (async()=>{

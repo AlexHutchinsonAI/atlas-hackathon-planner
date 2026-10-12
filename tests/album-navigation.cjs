@@ -9,7 +9,7 @@ const destinations = [
   ['People directory', 'atlas-reference.html#people/directory', '#peopleSearch'],
   ['Operations register', 'atlas-reference.html#notebook', '[aria-label="Selected operations workstream"]'],
   ['Transport planning', 'atlas-reference.html#transport', '#map-category'],
-  ['Venue walkthrough', 'virtual-walkthrough.html', '.venue-window iframe'],
+  ['Venue walkthrough', 'virtual-walkthrough.html', '.mbcc-explorer'],
   ['Atlas Tech assistant', 'assistant.html', '.open-bot']
 ];
 const results = [], evidence = process.env.ATLAS_EVIDENCE || '/tmp/atlas-album-verification.json';
