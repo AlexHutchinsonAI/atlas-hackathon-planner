@@ -70,6 +70,7 @@ function mount() {
   const holder = root.querySelector(".sphere-canvas");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const mobile = matchMedia("(max-width: 700px)").matches;
+  const depthJourney = root.dataset.depthJourney === "true";
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({
@@ -156,6 +157,7 @@ function mount() {
     clearcoat: 1,
     clearcoatRoughness: 0.04,
     envMapIntensity: 1.2,
+    side: depthJourney ? THREE.DoubleSide : THREE.FrontSide,
   });
   sphere.add(
     new THREE.Mesh(
@@ -517,6 +519,37 @@ function mount() {
   }
   scene.add(atomic);
 
+  // Reuse the existing orbit geometry for a real three-dimensional arrival beyond the tunnel.
+  const arrival = new THREE.Group();
+  arrival.position.set(center.x, center.y, -27.2);
+  const arrivalMaterial = new THREE.MeshBasicMaterial({color: "#90c8ff", transparent: true, opacity: .7});
+  if (depthJourney) {
+    for (const scale of [4.2, 4.8, 5.5]) {
+      const ring = new THREE.Mesh(orbitGeo, arrivalMaterial);
+      ring.scale.setScalar(scale);
+      arrival.add(ring);
+    }
+    scene.add(arrival);
+  }
+  const journeyCamera = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(mobile ? 1.5 : 0, mobile ? 2.8 : 1.8, mobile ? 15 : 12.8),
+    new THREE.Vector3(3.0, 1.35, 5.0),
+    new THREE.Vector3(3.44, 1.08, 2.65),
+    new THREE.Vector3(3.96, .96, -1.35),
+    new THREE.Vector3(3.06, 1.28, -10.2),
+    new THREE.Vector3(3.43, 1.1, -23.2),
+  ], false, "centripetal");
+  const journeyLook = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(mobile ? 2.8 : 0, mobile ? 1.5 : 1.15, 0),
+    new THREE.Vector3(3.4, .95, -.2),
+    new THREE.Vector3(3.4, .85, -.8),
+    new THREE.Vector3(3.45, 1.05, -5.0),
+    new THREE.Vector3(3.4, 1.3, -16.0),
+    new THREE.Vector3(3.4, 1.1, -30.0),
+  ], false, "centripetal");
+  const interiorColor = new THREE.Color("#0b203a"), exteriorColor = new THREE.Color("#e9f4fc"), arrivalColor = new THREE.Color("#f5f9fd"), atmosphere = new THREE.Color();
+  let lastRenderedProgress = -1, renderMs = 0;
+
   let progress = 0,
     lastDraw = 0,
     disposed = false,
@@ -533,13 +566,13 @@ function mount() {
   // Inactive phase controls are inert, not merely transparent, so keyboard focus never disappears.
   function setPhase(p) {
     const phase =
-      p < 0.18
+      p < (depthJourney ? .16 : .18)
         ? "overview"
-        : p < 0.4
+        : p < (depthJourney ? .34 : .4)
           ? "enter"
-          : p < 0.62
+          : p < (depthJourney ? .5 : .62)
             ? "inside"
-            : p < 0.84
+            : p < (depthJourney ? .78 : .84)
               ? "atoms"
               : "field";
     root.dataset.phase = phase;
@@ -569,20 +602,21 @@ function mount() {
   function updateProgress() {
     const rect = root.getBoundingClientRect(),
       travel = root.offsetHeight - stage.offsetHeight;
-    progress = (isStatic || root.dataset.compact === "true")
+    if (!(depthJourney && document.body.classList.contains("motion-paused") && !reduced.matches && !contextLost)) progress = ((depthJourney ? reduced.matches || contextLost : isStatic) || root.dataset.compact === "true")
       ? 0
       : clamp(
           (parseFloat(getComputedStyle(stage).top) - rect.top) /
             Math.max(travel, 1),
         );
     setPhase(progress);
-    if (isStatic) draw(performance.now(), true);
+    if (isStatic && (!depthJourney || progress !== lastRenderedProgress)) draw(performance.now(), true);
   }
   function resize() {
     const width = stage.clientWidth,
       height = stage.clientHeight;
     if (!width || !height) return;
     renderer.setSize(width, height, false);
+    lastRenderedProgress = -1;
     camera.aspect = width / height;
     camera.fov = width < 700 ? 51 : 42;
     camera.updateProjectionMatrix();
@@ -592,9 +626,11 @@ function mount() {
     if (disposed || contextLost || document.hidden || (!visible && !force))
       return;
     if (!force && now - lastDraw < (mobile ? 32 : 16)) return;
+    if (depthJourney && !force && progress === lastRenderedProgress) return;
     const delta = Math.min(0.05, (now - lastDraw) / 1000 || 0);
     lastDraw = now;
-    if (!isStatic) time += delta;
+    if (depthJourney) time = progress * 70;
+    else if (!isStatic) time += delta;
     satellites.forEach(({planet, radius, phase, index}) => {
       const angle = phase + time * (0.045 - index * 0.009);
       planet.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius * 0.31, Math.sin(angle) * radius * 0.95);
@@ -616,19 +652,33 @@ function mount() {
     const depth = smooth(0.6, 1, progress);
     camera.position.z -= depth * 19;
     look.z -= depth * 24;
+    if (depthJourney) {
+      camera.position.copy(journeyCamera.getPoint(progress));
+      look.copy(journeyLook.getPoint(progress));
+      const inside = smooth(.20, .40, progress), arriving = smooth(.88, .995, progress);
+      atmosphere.copy(exteriorColor).lerp(interiorColor, inside).lerp(arrivalColor, arriving);
+      renderer.setClearColor(atmosphere, inside);
+      scene.fog.color.copy(atmosphere);
+      glass.opacity = .12 - inside * .07;
+      arrival.rotation.z = progress * .4;
+      arrivalMaterial.opacity = .2 + smooth(.72, .93, progress) * .65;
+    }
     camera.lookAt(look);
     atomic.visible = progress > 0.52;
-    atomic.rotation.z = isStatic ? 0 : Math.sin(time * 0.16) * 0.08;
+    atomic.rotation.z = isStatic && !depthJourney ? 0 : Math.sin(time * 0.16) * 0.08;
 
-    ribbons.rotation.y = isStatic ? 0 : Math.sin(time * 0.13) * 0.045;
+    ribbons.rotation.y = isStatic && !depthJourney ? 0 : Math.sin(time * 0.13) * 0.045;
     coreHalo.material.opacity =
-      0.7 + (isStatic ? 0 : Math.sin(time * 1.1) * 0.13);
+      0.7 + (isStatic && !depthJourney ? 0 : Math.sin(time * 1.1) * 0.13);
     city.visible = false; // An open orbital space replaces the architectural backdrop.
     platform.visible = false;
     floor.visible = false;
     deepMaterial.opacity = 0.07 + smooth(0.4, 0.8, progress) * 0.25;
     scene.fog.density = 0.023 + progress * 0.007;
+    const renderStart = performance.now();
     renderer.render(scene, camera);
+    renderMs = performance.now() - renderStart;
+    lastRenderedProgress = progress;
   }
   function syncMotion() {
     isStatic =
@@ -704,6 +754,17 @@ function mount() {
       progress,
       static: isStatic,
       camera: camera.position.toArray(),
+      look: look.toArray(),
+      insideSphere: camera.position.distanceTo(center) < 3.25,
+      pastCore: camera.position.z < center.z + core.z,
+      near: camera.near,
+      depthJourney,
+      renderMs,
+      frame: renderer.info.render.frame,
+      glassSide: glass.side,
+      glassOpacity: glass.opacity,
+      geometries: renderer.info.memory.geometries,
+      textures: renderer.info.memory.textures,
       calls: renderer.info.render.calls,
     }),
     dispose() {

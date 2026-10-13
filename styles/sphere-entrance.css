@@ -1,6 +1,9 @@
 /* Separate sphere entrance. The planning dashboard's styles and structure are untouched. */
 html{scroll-behavior:auto}
-body.sphere-landing{margin:0;padding:0;background:#f5f9fd;color:#142c50;font:400 14px/1.6 Inter,system-ui,sans-serif;--entrance-progress:0}
+body.sphere-landing{margin:0;padding:0;background:#f5f9fd;color:#142c50;font:400 14px/1.6 Inter,system-ui,sans-serif;--entrance-progress:0;--journey-distance:0px;--journey-ink:#142c50;--journey-muted:#607b9a;--journey-line:#142c5024}
+body.sphere-landing[data-enhanced-journey="true"]{--journey-distance:clamp(3200px,500svh,5200px)}
+body.sphere-landing[data-static-journey="true"]{--journey-distance:620px}
+body.sphere-landing[data-depth-tone="deep"]{--journey-ink:#e2f0ff;--journey-muted:#a6c6e7;--journey-line:#b8d9ff40}
 .sphere-landing *{box-sizing:border-box}
 .sphere-landing a{color:inherit;text-decoration:none;touch-action:manipulation}
 .sphere-landing :is(a,button):focus-visible{outline:2px solid #142c50;outline-offset:5px}
@@ -13,11 +16,11 @@ body.sphere-landing{margin:0;padding:0;background:#f5f9fd;color:#142c50;font:400
 .landing-header-actions a{display:flex;align-items:center;gap:18px;min-height:44px;font-size:12px;font-weight:550}
 .landing-header-actions button{font:500 11px Inter,system-ui,sans-serif;color:#657b97;background:transparent;border:1px solid #142c5030;border-radius:6px;padding:10px 14px;min-height:44px;cursor:pointer}
 .landing-header-actions button:hover{background:#e4edf8}
-.sphere-landing .sphere-journey,.sphere-landing .sphere-journey.sphere-enhanced:not(.sphere-static),.sphere-landing .sphere-journey.sphere-static{height:calc(100svh + 620px);min-height:calc(600px + 620px);background:#f5f9fd}
-.sphere-landing .sphere-stage{position:sticky;top:0;height:100svh;min-height:600px;background:radial-gradient(ellipse at 73% 48%,#c3e6ff 0,#e9f4fc 42%,#f5f9fd 78%);overflow:hidden}
-.sphere-landing .sphere-canvas{inset:0;transform-origin:72% 50%}
-.landing-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#f5f9fde6 0,#f5f9fd30 40%,transparent 65%)}
-.landing-copy{position:absolute;z-index:2;top:24%;left:8%;max-width:440px;opacity:clamp(0,calc(1 - var(--entrance-progress)*2.4),1);transform:translateY(calc(var(--entrance-progress)*-45px));pointer-events:none}
+.sphere-landing .sphere-journey,.sphere-landing .sphere-journey.sphere-enhanced:not(.sphere-static),.sphere-landing .sphere-journey.sphere-static{height:calc(100svh + var(--journey-distance));min-height:0;background:#f5f9fd}
+.sphere-landing .sphere-stage{position:sticky;top:0;height:100svh;min-height:0;background:radial-gradient(ellipse at 73% 48%,#c3e6ff 0,#e9f4fc 42%,#f5f9fd 78%);overflow:hidden}
+.sphere-landing .sphere-canvas{inset:0;transform:none}
+.landing-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#f5f9fde6 0,#f5f9fd30 40%,transparent 65%);opacity:clamp(0,calc(1 - var(--entrance-progress)*4),1)}
+.landing-copy{position:absolute;z-index:2;top:24%;left:8%;max-width:440px;opacity:clamp(0,calc(1 - var(--entrance-progress)*6),1);transform:translateY(calc(var(--entrance-progress)*-45px));pointer-events:none}
 .landing-eyebrow{font-size:9px;letter-spacing:.18em;font-weight:600;color:#667d99;margin:0 0 24px}
 .landing-copy h1{font-size:clamp(68px,7.7vw,116px);font-weight:550;line-height:.98;letter-spacing:-.065em;color:#142c50;margin:0 0 24px}
 .landing-copy h1 em{font-style:normal;font-weight:400;color:#4176b2}
@@ -28,26 +31,41 @@ body.sphere-landing{margin:0;padding:0;background:#f5f9fd;color:#142c50;font:400
 .landing-orbit-label{position:absolute;z-index:2;top:18%;right:6%;color:#5e7ca2;font-size:11px;opacity:clamp(0,calc(1 - var(--entrance-progress)*2.4),1)}
 .landing-orbit-label>span{font-size:9px;letter-spacing:.2em}
 .landing-orbit-label p{margin:7px 0 0}
-.landing-footer{position:absolute;bottom:34px;left:5%;right:5%;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;border-top:1px solid #142c5020;padding-top:18px;color:#5c7695}
+.landing-footer{position:absolute;bottom:24px;left:5%;right:5%;z-index:3;display:grid;gap:10px;border-top:1px solid var(--journey-line);padding-top:10px;color:var(--journey-muted)}
 .landing-footer p{margin:0;font-size:11px;line-height:1.7}
 .landing-footer p:first-child{display:grid;gap:3px}
-.landing-footer strong{font-weight:500;color:#2b496e}
+.landing-footer strong{font-weight:500;color:var(--journey-ink)}
+.journey-meta{display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+.journey-stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.journey-stages button{display:flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:8px 12px;border:1px solid transparent;background:transparent;border-radius:5px;color:var(--journey-muted);font:500 11px Inter,system-ui,sans-serif;cursor:pointer}
+.journey-stages button span{font-size:9px;opacity:.65}
+.journey-stages button:hover,.journey-stages button[aria-current="step"]{color:var(--journey-ink);border-color:var(--journey-line);background:#809bc012}
+.journey-stages button:focus-visible{outline-color:var(--journey-ink)!important}
+.journey-track{height:2px;background:var(--journey-line)}
+.journey-track span{display:block;width:calc(var(--entrance-progress)*100%);height:100%;background:var(--journey-ink)}
+.landing-depth-copy{position:absolute;z-index:2;left:5%;bottom:174px;max-width:370px;color:var(--journey-ink);pointer-events:none;padding:16px 18px;background:#f5f9fdf2;border:1px solid var(--journey-line);border-radius:6px;opacity:clamp(0,calc((var(--entrance-progress) - .15)*14),1)}
+body[data-depth-tone="deep"] .landing-depth-copy{background:#0b203af2}
+body[data-depth-tone="deep"] .landing-footer{background:#0b203ae8;padding:10px 16px 12px;border:1px solid var(--journey-line);border-radius:6px}
+.landing-depth-copy>p:first-child{font-size:9px;letter-spacing:.17em;color:var(--journey-muted);margin:0 0 10px}
+.landing-depth-copy h2{font-size:25px;letter-spacing:-.035em;line-height:1.25;font-weight:550;margin:0 0 8px}
+.landing-depth-copy>p:last-child{font-size:12px;line-height:1.65;color:var(--journey-muted);margin:0}
 .landing-scroll-cue{display:flex;gap:20px;align-items:center}
-.landing-scroll-arrow{display:grid;place-items:center;border:1px solid #142c5030;border-radius:50%;width:36px;height:36px;font-size:18px}
+.landing-scroll-arrow{display:grid;place-items:center;border:1px solid var(--journey-line);border-radius:50%;width:32px;height:32px;font-size:17px}
 .sphere-landing .sphere-fallback-note{position:absolute;bottom:122px;right:6%;max-width:270px;z-index:3;color:#546e8c;font-size:11px}
 .sphere-landing .fallback-orb{opacity:.5;left:65%;top:28%;width:min(34vw,430px);transform:translateX(-50%)}
-.landing-flash{position:fixed;inset:0;z-index:20;pointer-events:none;background:#fff;opacity:0;transition:opacity 180ms ease}
-body[data-entering="true"] .landing-flash{opacity:1}
-body[data-entering="true"] .sphere-canvas{transform:scale(1.16);transition:transform 180ms ease-out}
+.landing-transition{position:fixed;inset:0;z-index:20;pointer-events:none;background:#f5f9fd;opacity:0;transition:opacity 120ms ease}
+body[data-entering="true"] .landing-transition{opacity:1}
 .landing-status,.landing-skip{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .landing-skip:focus{position:fixed;top:12px;left:12px;z-index:30;clip:auto;width:auto;height:auto;padding:12px 18px;background:white;border:2px solid #142c50}
 @media(max-width:900px){.landing-copy{left:6%;max-width:380px}.landing-copy h1{font-size:76px}.landing-description{font-size:14px}}
 @media(max-width:700px){
+ body.sphere-landing[data-enhanced-journey="true"]{--journey-distance:clamp(2600px,420svh,4000px)}body.sphere-landing[data-static-journey="true"]{--journey-distance:620px}
  .landing-header{height:72px;padding-inline:20px;gap:12px}.landing-brand{gap:8px}.landing-brand strong{font-size:14px}.landing-mark{width:28px;height:28px}.landing-mark img{height:18px;top:5px}
  .landing-header-actions{gap:12px}.landing-header-actions a{font-size:10px;gap:10px}.landing-header-actions button{font-size:0;width:40px;padding:8px}.landing-header-actions button::before{content:'Ⅱ';font-size:15px}.landing-header-actions button[aria-pressed="true"]::before{content:'▶';font-size:12px}
  .landing-copy{top:16%;left:24px;max-width:85%}.landing-copy h1{font-size:64px;margin-bottom:18px}.landing-eyebrow{font-size:8px;letter-spacing:.13em;margin-bottom:18px}.landing-event{font-size:11px}.landing-description{font-size:13px;margin-bottom:18px}.landing-enter{font-size:11px;min-height:44px;padding:11px 16px;gap:22px}
- .landing-orbit-label{display:none}.landing-footer{left:24px;right:24px;bottom:26px;padding-top:16px}.landing-footer p{font-size:10px}.landing-scroll-cue{gap:10px}.landing-scroll-arrow{width:30px;height:30px;font-size:15px}
+ .landing-orbit-label{display:none}.landing-footer{left:20px;right:20px;bottom:20px;padding-top:8px;gap:8px}.landing-footer p{font-size:9px}.landing-scroll-cue{gap:8px}.landing-scroll-arrow{width:26px;height:26px;font-size:14px}.journey-stages{gap:3px}.journey-stages button{font-size:9px;gap:4px;padding:8px 2px}.journey-stages button span{display:none}.journey-meta{gap:8px}.landing-depth-copy{left:24px;right:24px;bottom:166px;max-width:290px}.landing-depth-copy h2{font-size:21px}.landing-depth-copy>p:last-child{font-size:11px}
  .landing-vignette{background:linear-gradient(180deg,#f5f9fd80 0,transparent 57%,#f5f9fd40)}.sphere-landing .sphere-fallback-note{left:24px;right:24px;bottom:110px;max-width:none;font-size:10px}.sphere-landing .fallback-orb{left:55%;top:39%;width:300px}
 }
 @media(max-height:700px){.landing-copy{top:19%}.landing-copy h1{font-size:64px;margin-bottom:16px}.landing-eyebrow{margin-bottom:14px}.landing-description{margin-bottom:18px}.landing-footer{bottom:24px}}
-@media(prefers-reduced-motion:reduce){.sphere-landing *,body[data-entering="true"] .sphere-canvas{animation:none!important;transition:none!important}.landing-copy,.landing-orbit-label{opacity:1;transform:none}.landing-flash{display:none}}
+@media(max-height:600px){.landing-header{height:62px}.landing-copy{top:23%;max-width:44%}.landing-copy h1{font-size:46px;margin-bottom:12px}.landing-eyebrow{font-size:7px;margin-bottom:10px}.landing-event{font-size:10px}.landing-description{font-size:11px;margin-bottom:12px}.landing-enter{min-height:40px;padding:10px 14px;font-size:10px}.landing-footer{bottom:12px;gap:4px;padding-top:4px}.journey-meta p:first-child{display:none}.journey-meta{justify-content:flex-end}.journey-stages button{min-height:40px}.landing-depth-copy{bottom:122px}.landing-depth-copy h2{font-size:19px}.landing-orbit-label{display:none}}
+@media(prefers-reduced-motion:reduce){.sphere-landing *{animation:none!important;transition:none!important}.landing-copy,.landing-orbit-label,.landing-vignette{opacity:1;transform:none}.landing-depth-copy{display:none}.landing-transition{display:none}}

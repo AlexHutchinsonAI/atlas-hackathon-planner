@@ -18,7 +18,7 @@
     <div class="landing-header-actions"><button id="landing-motion" type="button" aria-pressed="false">Pause motion</button><a href="index.html" data-dashboard-entry>Enter dashboard <span aria-hidden="true">↗</span></a></div>
   </header>
   <main>
-    <section class="sphere-journey" id="atlas-entrance" aria-label="Atlas sphere entrance" data-phase="overview">
+    <section class="sphere-journey" id="atlas-entrance" aria-label="Atlas sphere scroll journey" data-phase="overview" data-depth-journey="true">
       <div class="sphere-stage">
         <div class="sphere-canvas" aria-hidden="true"></div>
         <div class="sphere-fallback" aria-hidden="true"><div class="fallback-orb"><i></i><i></i><i></i><b></b></div></div>
@@ -31,12 +31,23 @@
           <a class="landing-enter" href="index.html" data-dashboard-entry>Enter dashboard <span aria-hidden="true">↗</span></a>
         </div>
         <div class="landing-orbit-label" aria-hidden="true"><span>ATLAS / 01</span><p>A world of connections.</p></div>
-        <footer class="landing-footer"><p><strong>23–24 January 2027</strong><span>Montego Bay, Jamaica</span></p><p class="landing-scroll-cue"><span>Scroll to enter</span><span class="landing-scroll-arrow" aria-hidden="true">↑</span></p></footer>
+        <div class="landing-depth-copy"><p id="journey-stage-number">01 / 05</p><h2 id="journey-stage-title">A world of connections.</h2><p id="journey-stage-description">Scroll to approach the sphere.</p></div>
+        <footer class="landing-footer">
+          <nav class="journey-stages" aria-label="Sphere journey stages">
+            <button type="button" data-journey-step="0" aria-current="step"><span>01</span>Overview</button>
+            <button type="button" data-journey-step=".23"><span>02</span>Approach</button>
+            <button type="button" data-journey-step=".42"><span>03</span>Inside</button>
+            <button type="button" data-journey-step=".64"><span>04</span>Core</button>
+            <button type="button" data-journey-step=".92"><span>05</span>Arrive</button>
+          </nav>
+          <div class="journey-track" role="progressbar" aria-label="Journey depth" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <div class="journey-meta"><p><strong>23–24 January 2027</strong><span>Montego Bay, Jamaica</span></p><p class="landing-scroll-cue"><span id="journey-scroll-note">Scroll to travel inside</span><span class="landing-scroll-arrow" aria-hidden="true">↑</span></p></div>
+        </footer>
         <p class="sphere-fallback-note" hidden>Your dashboard is ready. Use Enter dashboard to continue.</p>
       </div>
     </section>
   </main>
-  <div class="landing-flash" aria-hidden="true"></div>
+  <div class="landing-transition" aria-hidden="true"></div>
   <p class="landing-status" role="status" aria-live="polite"></p>
 </body>
 </html>

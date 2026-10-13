@@ -1,15 +1,17 @@
-/* One intentional entrance-to-dashboard navigation. No planning state, storage or API access. */
+/* Continuous native-scroll 3D journey and one final navigation. No planning state, storage or API access. */
 (() => {
   const root=document.getElementById('atlas-entrance');
   if(!root)return;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),motion=document.getElementById('landing-motion');
+  const stages=[['overview',0,'A world of connections.','Scroll to approach the sphere.'],['approach',.16,'Approach the surface.','The glass sphere draws closer with each scroll.'],['inside',.34,'Inside the sphere.','Travel between the connections. Scroll back to retrace your path.'],['core',.5,'Through the core.','Follow the neural paths deeper into Atlas.'],['arrive',.78,'Your plan is ahead.','Keep scrolling to arrive at the planning dashboard.']];
+  document.body.dataset.enhancedJourney='true';
   let armed=false,entering=false,progress=0,navigations=0,timer=null,lastInput=0,guardUntil=0,freshRequired=false,lastScroll=0,forwardIntent=false,touchOrigin=null;
   const now=()=>performance.now();
   function enter(){
     if(entering)return;
     entering=true;armed=false;navigations++;document.body.dataset.entering='true';
     document.querySelector('.landing-status').textContent='Opening dashboard…';
-    timer=setTimeout(()=>location.assign('index.html'),reduced.matches?0:190);
+    timer=setTimeout(()=>location.assign('index.html'),reduced.matches?0:130);
   }
   function arm(kind){
     const time=now(),gap=time-lastInput;lastInput=time;
@@ -22,7 +24,16 @@
     const forward=scrollY>lastScroll+.5;lastScroll=scrollY;
     progress=Math.max(0,Math.min(1,scrollY/travel));
     document.body.style.setProperty('--entrance-progress',progress);
-    if(armed&&progress>=.45&&(forward||forwardIntent))enter();
+    const index=stages.findLastIndex(s=>progress>=s[1]),[id,,title,description]=stages[index];
+    document.body.dataset.depthStage=id;
+    document.body.dataset.depthTone=progress>=.28&&progress<.94?'deep':'light';
+    document.getElementById('journey-stage-number').textContent=String(index+1).padStart(2,'0')+' / 05';
+    document.getElementById('journey-stage-title').textContent=title;document.getElementById('journey-stage-description').textContent=description;
+    root.querySelectorAll('[data-journey-step]').forEach((button,i)=>button.setAttribute('aria-current',i===index?'step':'false'));
+    const track=root.querySelector('.journey-track');track.setAttribute('aria-valuenow',String(Math.round(progress*100)));track.setAttribute('aria-valuetext',Math.round(progress*100)+'% · '+title);
+    const paused=document.body.classList.contains('motion-paused');
+    document.getElementById('journey-scroll-note').textContent=paused?'Motion paused · Enter anytime':progress>=.92?'Continue into dashboard':'Scroll to travel inside';
+    if(armed&&progress>=.995&&(forward||forwardIntent)&&!paused)enter();
     forwardIntent=false;
   }
   addEventListener('wheel',event=>{
@@ -49,15 +60,23 @@
     if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
     event.preventDefault();enter();
   }));
+  root.querySelectorAll('[data-journey-step]').forEach(button=>button.addEventListener('click',()=>{
+    armed=false;forwardIntent=false;
+    const stage=root.querySelector('.sphere-stage'),travel=root.offsetHeight-stage.offsetHeight;
+    scrollTo({top:travel*Number(button.dataset.journeyStep),behavior:'instant'});update();
+  }));
   function syncMotion(){
     const paused=document.body.classList.contains('motion-paused')||reduced.matches;
-    motion.textContent=reduced.matches?'Reduced motion':'Pause motion';
-    if(paused&&!reduced.matches)motion.textContent='Resume motion';
+    motion.textContent=reduced.matches?'Static view':'Pause journey';
+    if(paused&&!reduced.matches)motion.textContent='Resume journey';
     motion.setAttribute('aria-pressed',String(paused));motion.disabled=reduced.matches;
-    motion.setAttribute('aria-label',reduced.matches?'Reduced motion is active':paused?'Resume sphere motion':'Pause sphere motion');
+    motion.setAttribute('aria-label',reduced.matches?'Reduced motion static view is active':paused?'Resume sphere journey':'Pause sphere journey');
+    document.body.dataset.staticJourney=String(reduced.matches||root.dataset.renderer==='fallback');update();
   }
   motion.addEventListener('click',()=>{document.body.classList.toggle('motion-paused');syncMotion()});
   reduced.addEventListener('change',syncMotion);syncMotion();
+  new MutationObserver(syncMotion).observe(root,{attributes:true,attributeFilter:['data-renderer']});
+  addEventListener('error',event=>{if(event.target?.tagName==='SCRIPT'&&event.target.src.endsWith('/scripts/sphere.js')){root.dataset.renderer='fallback';}},{capture:true});
   addEventListener('pagehide',()=>{clearTimeout(timer);window.AtlasSphere?.dispose();});
   addEventListener('pageshow',event=>{
     const returned=event.persisted||['back_forward','reload'].includes(performance.getEntriesByType('navigation')[0]?.type);
