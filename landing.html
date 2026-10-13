@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Atlas · Sphere entrance</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/sphere.css">
+  <link rel="stylesheet" href="styles/sphere-entrance.css">
+  <script src="scripts/sphere-entrance.js" defer></script>
+  <script type="module" src="scripts/sphere.js"></script>
+</head>
+<body class="sphere-landing">
+  <a class="landing-skip" href="index.html">Skip to dashboard</a>
+  <header class="landing-header">
+    <a class="landing-brand" href="index.html" aria-label="Atlas dashboard"><span class="landing-mark"><img src="assets/intellibus-logo.svg" alt="Intellibus" width="166" height="31"></span><strong>ATLAS</strong></a>
+    <div class="landing-header-actions"><button id="landing-motion" type="button" aria-pressed="false">Pause motion</button><a href="index.html" data-dashboard-entry>Enter dashboard <span aria-hidden="true">↗</span></a></div>
+  </header>
+  <main>
+    <section class="sphere-journey" id="atlas-entrance" aria-label="Atlas sphere entrance" data-phase="overview">
+      <div class="sphere-stage">
+        <div class="sphere-canvas" aria-hidden="true"></div>
+        <div class="sphere-fallback" aria-hidden="true"><div class="fallback-orb"><i></i><i></i><i></i><b></b></div></div>
+        <div class="landing-vignette" aria-hidden="true"></div>
+        <div class="landing-copy">
+          <p class="landing-eyebrow">INTELLIBUS PRESENTS / JAMAICA 2027</p>
+          <h1>Inside<br><em>Atlas.</em></h1>
+          <p class="landing-event">Atlas Agentic AI Hackathon 2027</p>
+          <p class="landing-description">Your people. Your plans.<br>Everything connected.</p>
+          <a class="landing-enter" href="index.html" data-dashboard-entry>Enter dashboard <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="landing-orbit-label" aria-hidden="true"><span>ATLAS / 01</span><p>A world of connections.</p></div>
+        <footer class="landing-footer"><p><strong>23–24 January 2027</strong><span>Montego Bay, Jamaica</span></p><p class="landing-scroll-cue"><span>Scroll to enter</span><span class="landing-scroll-arrow" aria-hidden="true">↑</span></p></footer>
+        <p class="sphere-fallback-note" hidden>Your dashboard is ready. Use Enter dashboard to continue.</p>
+      </div>
+    </section>
+  </main>
+  <div class="landing-flash" aria-hidden="true"></div>
+  <p class="landing-status" role="status" aria-live="polite"></p>
+</body>
+</html>

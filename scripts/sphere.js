@@ -681,6 +681,7 @@ function mount() {
   reduced.addEventListener("change", syncMotion);
   document.addEventListener("visibilitychange", syncMotion);
   renderer.domElement.addEventListener("webglcontextlost", (event) => {
+    if (disposed) return;
     event.preventDefault();
     contextLost = true;
     isStatic = true;
@@ -740,5 +741,13 @@ function mount() {
       document.getElementById("workspace")?.scrollIntoView({ block: "start" }),
     );
 }
-window.AtlasSphere = { mount, state: () => active?.state() || null };
+window.AtlasSphere = {
+  mount,
+  state: () => active?.state() || null,
+  dispose: () => {
+    active?.dispose();
+    active?.root.classList.remove("scene-ready", "sphere-enhanced");
+    active = null;
+  },
+};
 mount();
