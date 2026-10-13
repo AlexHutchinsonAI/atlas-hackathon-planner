@@ -1,61 +1,54 @@
 <!doctype html>
 <html lang="en">
-  <head>
-<meta charset="utf-8">
-<link rel="stylesheet" href="styles/tokens.css">
-<link rel="stylesheet" href="styles/members.css">
-<link rel="stylesheet" href="styles/command-domain.css">
-<link rel="stylesheet" href="styles/components.css">
-<link rel="stylesheet" href="styles/shell.css">
-<link rel="stylesheet" href="styles/planner-pages.css">
-<link rel="stylesheet" href="styles/content.css">
-<link rel="stylesheet" href="styles/info-pages.css">
-<link rel="stylesheet" href="styles/dashboard-enterprise.css">
-<script src="scripts/ui-icons.js"></script>
-<script src="scripts/visuals.js"></script><script src="scripts/theme.js"></script>
-
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Atlas Agentic AI Hackathon 2027 · Home</title>
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="styles/premium-preview.css">
+<head>
+  <meta charset="utf-8">
+  <script src="scripts/entry-routing.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Atlas · Sphere entrance</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/sphere.css">
+  <link rel="stylesheet" href="styles/sphere-entrance.css">
+  <script src="scripts/sphere-entrance.js" defer></script>
+  <script type="module" src="scripts/sphere.js"></script>
 </head>
-  <body data-atlas-layout="premium">
-    <main id="app"></main>
-
-    <!-- Data loads before the behavior that reads it. -->
-    <script src="data/command-seed.js"></script>
-<script src="data/destini-plan.js"></script>
-<script src="scripts/saved-plan.js"></script>
-
-    <script src="scripts/home-readable.js"></script>
-<script src="scripts/premium-preview.js"></script>
-    <script src="scripts/review-workspace.js"></script>
-    <script src="scripts/save-status.js"></script>
-<script src="scripts/cloud-queue.js"></script>
-<script src="scripts/member-account.js"></script>
-<script src="scripts/firebase-auth.js"></script>
-<script src="scripts/activity.js"></script>
-<script src="scripts/team.js"></script>
-    <script src="data/prizes.js"></script>
-<script src="scripts/prizes.js"></script>
-<script src="scripts/command.js"></script>
-
-
-
-
-    <script src="scripts/journey.js"></script>
-
-
-<script src="scripts/tutorial.js"></script><script src="scripts/readable.js"></script><script src="scripts/sidebar.js"></script></body>
+<body class="sphere-landing">
+  <a class="landing-skip" href="dashboard.html">Skip to dashboard</a>
+  <header class="landing-header">
+    <a class="landing-brand" href="dashboard.html" aria-label="Atlas dashboard"><span class="landing-mark"><img src="assets/intellibus-logo.svg" alt="Intellibus" width="166" height="31"></span><strong>ATLAS</strong></a>
+    <div class="landing-header-actions"><button id="landing-motion" type="button" aria-pressed="false">Pause motion</button><a href="dashboard.html" data-dashboard-entry>Enter dashboard <span aria-hidden="true">↗</span></a></div>
+  </header>
+  <main>
+    <section class="sphere-journey" id="atlas-entrance" aria-label="Atlas sphere scroll journey" data-phase="overview" data-depth-journey="true">
+      <div class="sphere-stage">
+        <div class="sphere-canvas" aria-hidden="true"></div>
+        <div class="sphere-fallback" aria-hidden="true"><div class="fallback-orb"><i></i><i></i><i></i><b></b></div></div>
+        <div class="landing-vignette" aria-hidden="true"></div>
+        <div class="landing-copy">
+          <p class="landing-eyebrow">INTELLIBUS PRESENTS / JAMAICA 2027</p>
+          <h1>Inside<br><em>Atlas.</em></h1>
+          <p class="landing-event">Atlas Agentic AI Hackathon 2027</p>
+          <p class="landing-description">Your people. Your plans.<br>Everything connected.</p>
+          <a class="landing-enter" href="dashboard.html" data-dashboard-entry>Enter dashboard <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="landing-orbit-label" aria-hidden="true"><span>ATLAS / 01</span><p>A world of connections.</p></div>
+        <div class="landing-depth-copy"><p id="journey-stage-number">01 / 05</p><h2 id="journey-stage-title">A world of connections.</h2><p id="journey-stage-description">Scroll to approach the sphere.</p></div>
+        <footer class="landing-footer">
+          <nav class="journey-stages" aria-label="Sphere journey stages">
+            <button type="button" data-journey-step="0" aria-current="step"><span>01</span>Overview</button>
+            <button type="button" data-journey-step=".23"><span>02</span>Approach</button>
+            <button type="button" data-journey-step=".42"><span>03</span>Inside</button>
+            <button type="button" data-journey-step=".64"><span>04</span>Core</button>
+            <button type="button" data-journey-step=".92"><span>05</span>Arrive</button>
+          </nav>
+          <div class="journey-track" role="progressbar" aria-label="Journey depth" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <div class="journey-meta"><p><strong>23–24 January 2027</strong><span>Montego Bay, Jamaica</span></p><p class="landing-scroll-cue"><span id="journey-scroll-note">Scroll to travel inside</span><span class="landing-scroll-arrow" aria-hidden="true">↑</span></p></div>
+        </footer>
+        <p class="sphere-fallback-note" hidden>Your dashboard is ready. Use Enter dashboard to continue.</p>
+      </div>
+    </section>
+  </main>
+  <div class="landing-transition" aria-hidden="true"></div>
+  <p class="landing-status" role="status" aria-live="polite"></p>
+</body>
 </html>

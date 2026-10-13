@@ -11,7 +11,7 @@
     if(entering)return;
     entering=true;armed=false;navigations++;document.body.dataset.entering='true';
     document.querySelector('.landing-status').textContent='Opening dashboard…';
-    timer=setTimeout(()=>location.assign('index.html'),reduced.matches?0:130);
+    timer=setTimeout(()=>location.assign('dashboard.html'),reduced.matches?0:130);
   }
   function arm(kind){
     const time=now(),gap=time-lastInput;lastInput=time;
